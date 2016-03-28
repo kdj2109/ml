@@ -16,8 +16,16 @@ microc.native :
 clean :
 	ocamlbuild -clean
 	rm -rf testall.log *.diff microc scanner.ml parser.ml parser.mli
-	rm -rf *.cmx *.cmi *.cmo *.cmx *.o *.ll *.err
+	rm -rf *.cmx *.cmi *.cmo *.cmx *.o *.ll *.err *.out
 
+# "make pretty" generates pretty print ast generator
+
+POBJS = parser.cmo scanner.cmo pretty.cmo
+
+.PHONY : pretty
+pretty : $(POBJS)
+	ocamlc -o pretty
+	
 # More detailed: build using ocamlc/ocamlopt + ocamlfind to locate LLVM
 
 OBJS = ast.cmx codegen.cmx parser.cmx scanner.cmx semant.cmx microc.cmx

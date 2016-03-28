@@ -1,5 +1,5 @@
 int main() { 
-	print("Hello, World!");
+	printf(44.0 + 42.0);
 
 	return 0; 
 }

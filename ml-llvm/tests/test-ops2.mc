@@ -1,5 +1,8 @@
 int main()
 {
+  bool b;
+  b = true;  
+  printb(b);
   printb(true);
   printb(false);
   printb(true && true);

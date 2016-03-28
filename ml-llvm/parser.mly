@@ -11,8 +11,8 @@
 %token INT FLOAT BOOL STRING VOID
 %token INCLUDE
 %token <int> LITERAL 
-%token <float> FLITERAL
-%token <string> SLITERAL
+%token <float> FLOATLIT
+%token <string> STRINGLIT
 %token <string> ID
 %token EOF
 
@@ -57,16 +57,21 @@ formal_list:
   | formal_list COMMA typ ID { ($3,$4) :: $1 }
 
 typ:
-    INT { Int }
-  | BOOL { Bool }
-  | VOID { Void }
+    INT   { Int }
+  | FLOAT { Float }
+  | BOOL  { Bool }
+  | VOID  { Void }
 
 vdecl_list:
     /* nothing */    { [] }
   | vdecl_list vdecl { $2 :: $1 }
+  | vdecl_list vinit { $2 :: $1 }
 
 vdecl:
-   typ ID SEMI { ($1, $2) }
+    typ ID SEMI { ($1, $2) }
+
+vinit: 
+    typ ID ASSIGN expr SEMI { ($1, $2) }
 
 stmt_list:
     /* nothing */  { [] }
@@ -89,6 +94,7 @@ expr_opt:
 
 expr:
     LITERAL          { Literal($1) }
+  | FLOATLIT         { FloatLit($1) }
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
   | ID               { Id($1) }
