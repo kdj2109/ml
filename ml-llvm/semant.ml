@@ -92,6 +92,7 @@ let check (globals, functions) =
     let rec expr = function
 	Literal _ -> Int
       | FloatLit _ -> Float 
+      | StrLit _ -> String 
       | BoolLit _ -> Bool
       | Id s -> type_of_identifier s
       | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in

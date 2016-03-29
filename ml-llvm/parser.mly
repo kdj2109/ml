@@ -95,6 +95,7 @@ expr_opt:
 expr:
     LITERAL          { Literal($1) }
   | FLOATLIT         { FloatLit($1) }
+  | STRINGLIT        { StrLit($1) }
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
   | ID               { Id($1) }
