@@ -44,14 +44,18 @@ let check (globals, functions) =
   then raise (Failure ("function print may not be defined")) else ();
 
   report_duplicate (fun n -> "duplicate function " ^ n)
-    (List.map (fun fd -> fd.fname) functions);
+    (List.map (fun fd -> fd.fname) functions); 
 
   (* Function declaration for a named function *)
   let built_in_decls =  StringMap.add "print"
      { typ = Void; fname = "print"; formals = [(Int, "x")];
-       locals = []; body = [] } (StringMap.singleton "printb"
+       locals = []; body = [] } (StringMap.add "printb"
      { typ = Void; fname = "printb"; formals = [(Bool, "x")];
-       locals = []; body = [] })
+       locals = []; body = [] } (StringMap.add "prints" 
+     { typ = Void; fname = "prints"; formals = [(String, "s")];
+       locals = []; body = [] } (StringMap.singleton "printf" 
+     { typ = Void; fname = "printf"; formals = [(Float, "x")]; 
+       locals = []; body = [] })))
    in
      
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
@@ -101,6 +105,7 @@ let check (globals, functions) =
   | Add | Sub | Mult | Div when t1 = Float && t2 = Float -> Float 
 	| Equal | Neq when t1 = t2 -> Bool
 	| Less | Leq | Greater | Geq when t1 = Int && t2 = Int -> Bool
+  | Less | Leq | Greater | Geq when t1 = Float && t2 = Float -> Float 
 	| And | Or when t1 = Bool && t2 = Bool -> Bool
         | _ -> raise (Failure ("illegal binary operator " ^
               string_of_typ t1 ^ " " ^ string_of_op op ^ " " ^
@@ -108,7 +113,8 @@ let check (globals, functions) =
         )
       | Unop(op, e) as ex -> let t = expr e in
 	 (match op with
-	   Neg when t = Int -> Int
+	   Neg when t = Int -> Int 
+   | Neg when t = Float -> Float 
 	 | Not when t = Bool -> Bool
          | _ -> raise (Failure ("illegal unary operator " ^ string_of_uop op ^
 	  		   string_of_typ t ^ " in " ^ string_of_expr ex)))

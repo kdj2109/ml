@@ -65,13 +65,9 @@ typ:
 vdecl_list:
     /* nothing */    { [] }
   | vdecl_list vdecl { $2 :: $1 }
-  | vdecl_list vinit { $2 :: $1 }
 
 vdecl:
     typ ID SEMI { ($1, $2) }
-
-vinit: 
-    typ ID ASSIGN expr SEMI { ($1, $2) }
 
 stmt_list:
     /* nothing */  { [] }

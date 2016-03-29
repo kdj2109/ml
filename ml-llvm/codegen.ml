@@ -15,15 +15,13 @@ http://llvm.moe/ocaml/
 module L = Llvm
 module A = Ast
 
-
-
 module StringMap = Map.Make(String)
 
 let translate (globals, functions) =
   let context = L.global_context () in
   let the_module = L.create_module context "MicroC"
   and i32_t     = L.i32_type   context
-  and float_t   = L.float_type context 
+  and float_t   = L.double_type context 
   and i8_t      = L.i8_type    context
   and pointer_t = L.pointer_type 
   and i1_t      = L.i1_type    context
@@ -62,7 +60,9 @@ let translate (globals, functions) =
     let (the_function, _) = StringMap.find fdecl.A.fname function_decls in
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
-    let int_format_str = L.build_global_stringptr "%d\n" "fmt" builder in
+    let int_format_str   = L.build_global_stringptr "%d\n" "fmt" builder
+    and str_format_str   = L.build_global_stringptr "%s\n" "fmt" builder 
+    and float_format_str = L.build_global_stringptr "%f\n" "fmt" builder in
     
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
@@ -121,6 +121,12 @@ let translate (globals, functions) =
       | A.Call ("print", [e]) | A.Call ("printb", [e]) ->
 	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
 	    "printf" builder
+      | A.Call ("prints", [e]) -> 
+    L.build_call printf_func [| str_format_str ; (expr builder e) |]
+      "printf" builder 
+      | A.Call ("printf", [e]) -> 
+    L.build_call printf_func [| float_format_str ; (expr builder e) |]
+      "printf" builder 
       | A.Call (f, act) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
 	 let actuals = List.rev (List.map (expr builder) (List.rev act)) in
