@@ -24,6 +24,9 @@ globalerror=0
 
 keep=0
 
+filecount=0 
+failurecount=0
+
 Usage() {
     echo "Usage: testall.sh [options] [.mc files]"
     echo "-k    Keep intermediate files"
@@ -97,10 +100,13 @@ Check() {
 	    rm -f $generatedfiles
 	fi
 	echo "OK"
+    filecount=$(expr $filecount + 1)
 	echo "###### SUCCESS" 1>&2
     else
 	echo "###### FAILED" 1>&2
 	globalerror=$error
+    filecount=$(expr $filecount + 1)
+    failurecount=$(expr $failurecount + 1)
     fi
 }
 
@@ -130,9 +136,12 @@ CheckFail() {
 	fi
 	echo "OK"
 	echo "###### SUCCESS" 1>&2
+    filecount=$(expr $filecount + 1)
     else
 	echo "###### FAILED" 1>&2
 	globalerror=$error
+    filecount=$(expr $filecount + 1)
+    failurecount=$(expr $failurecount + 1)
     fi
 }
 
@@ -181,4 +190,8 @@ do
     esac
 done
 
+successcount=$(($filecount-$failurecount))
+echo "$successcount $filecount" | awk '{printf "PASS RATE: (%.4f1) \n", $1/$2}'
+
 exit $globalerror
+
