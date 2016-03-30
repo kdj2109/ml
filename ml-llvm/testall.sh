@@ -191,7 +191,7 @@ do
 done
 
 successcount=$(($filecount-$failurecount))
-echo "$successcount $filecount" | awk '{printf "PASS RATE: (%.4f1) \n", $1/$2}'
+echo "$successcount $filecount" | awk '{printf "PASS RATE: (%.4f) \n", $1/$2}'
 
 exit $globalerror
 

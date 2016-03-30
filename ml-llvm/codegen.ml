@@ -61,7 +61,6 @@ let translate (globals, functions) =
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
     let int_format_str   = L.build_global_stringptr "%d\n" "fmt" builder
-    and str_format_str   = L.build_global_stringptr "%s\n" "fmt" builder 
     and float_format_str = L.build_global_stringptr "%f\n" "fmt" builder in
     
     (* Construct the function's "locals": formal arguments and locally
@@ -90,7 +89,7 @@ let translate (globals, functions) =
     let rec expr builder = function
 	A.Literal i -> L.const_int i32_t i
       | A.FloatLit f -> L.const_float float_t f 
-      | A.StrLit s ->  L.const_string context s 
+      | A.StrLit s -> L.const_stringz context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
@@ -121,8 +120,9 @@ let translate (globals, functions) =
       | A.Call ("print", [e]) | A.Call ("printb", [e]) ->
 	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
 	    "printf" builder
-      | A.Call ("prints", [e]) -> 
-    L.build_call printf_func [| str_format_str ; (expr builder e) |]
+      | A.Call ("prints", [e]) -> let get_string = function A.StrLit s -> s | _ -> "" in 
+      let s_ptr = L.build_global_stringptr ((get_string e) ^ "\n") ".str" builder in 
+    L.build_call printf_func [| s_ptr |]
       "printf" builder 
       | A.Call ("printf", [e]) -> 
     L.build_call printf_func [| float_format_str ; (expr builder e) |]
