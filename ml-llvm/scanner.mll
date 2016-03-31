@@ -1,15 +1,23 @@
 (* Ocamllex scanner for ML *)
 
-{ open Parser }
+{ open Parser 
+
+  let un_esc s = 
+	Scanf.sscanf ("\"" ^ s ^ "\"") "%S%!" (fun x -> x)
+
+}
 
 let whitespace = [' ' '\t' '\r' '\n']
+let esc = '\\' ['\\' ''' '"' 'n' 'r' 't']
+let esc_ch = ''' (esc)'''
+let ascii = ([' '-'!' '#'-'[' ']'-'~'])
 let digits = ['0'-'9']
 let alphabet = ['a'-'z' 'A'-'Z']
 let alphanumund = alphabet | digits | '_'
 let integer = digits+
 let decimal = ['.']
 let float = digits* decimal digits+ | digits+ decimal digits*
-let string = '\"'[^'\"']*'\"'
+let string = '"' ( (ascii | esc)* as s) '"'
 let id = alphabet alphanumund*
 
 rule token = parse
@@ -59,7 +67,7 @@ rule token = parse
 | "#include" { INCLUDE }
 | integer as lxm { LITERAL(int_of_string lxm) }
 | float   as lxm { FLOATLIT(float_of_string lxm) } 
-| string  as lxm { STRINGLIT(lxm) }
+| string      { STRINGLIT(un_esc s) }
 | id      as lxm { ID(lxm) }
 | eof { EOF }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
