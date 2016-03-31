@@ -1,3 +1,8 @@
+Important Links for LLVM: 
+
+http://llvm.org/releases/2.6/docs/LangRef.html
+http://llvm.moe/ocaml/Llvm.html
+
 The MicroC compiler
 
 Coded in OCaml, this takes a highly stripped-down subset of C (ints,
