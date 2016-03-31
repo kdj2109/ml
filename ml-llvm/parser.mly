@@ -57,10 +57,11 @@ formal_list:
   | formal_list COMMA typ ID { ($3,$4) :: $1 }
 
 typ:
-    INT   { Int }
-  | FLOAT { Float }
-  | BOOL  { Bool }
-  | VOID  { Void }
+    INT    { Int }
+  | FLOAT  { Float }
+  | STRING { String }
+  | BOOL   { Bool }
+  | VOID   { Void }
 
 vdecl_list:
     /* nothing */    { [] }
