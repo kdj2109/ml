@@ -1,0 +1,7 @@
+int main() { 
+	float y;
+	y = 49.5 + 50.5; 
+	printf(y); 
+
+	return 0; 
+}
