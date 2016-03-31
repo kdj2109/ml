@@ -48,7 +48,6 @@ rule token = parse
 | "for"      { FOR }
 | "pfor"     { PFOR }
 | "while"    { WHILE }
-| "func"     { FUNC }
 | "async"    { ASYNC } 
 | "wait"     { WAIT }
 | "return"   { RETURN }
