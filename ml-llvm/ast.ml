@@ -74,19 +74,24 @@ let rec string_of_expr = function
       f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Noexpr -> ""
 
-let rec string_of_stmt = function
-    Block(stmts) ->
-      "{\n" ^ String.concat "" (List.map string_of_stmt stmts) ^ "}\n"
-  | Expr(expr) -> string_of_expr expr ^ ";\n";
-  | Return(expr) -> "return " ^ string_of_expr expr ^ ";\n";
-  | If(e, s, Block([])) -> "if (" ^ string_of_expr e ^ ")\n" ^ string_of_stmt s
-  | If(e, s1, s2) ->  "if (" ^ string_of_expr e ^ ")\n" ^
-      string_of_stmt s1 ^ "else\n" ^ string_of_stmt s2
-  | For(e1, e2, e3, s) ->
-      "for (" ^ string_of_expr e1  ^ " ; " ^ string_of_expr e2 ^ " ; " ^
-      string_of_expr e3  ^ ") " ^ string_of_stmt s
-  | While(e, s) -> "while (" ^ string_of_expr e ^ ") " ^ string_of_stmt s
+let appendToTupleList tupleList item= List.map(fun (a,b) -> (a,b,item)) tupleList;;
+let makeTupleList tupleList item= List.map(fun a -> (a,item)) tupleList;;
 
+
+
+let rec string_of_stmt (x,numtabs) = 
+  match x with
+  Block(stmts) -> let myTupleList=makeTupleList stmts numtabs in
+      "{\n" ^ String.concat "" (List.map string_of_stmt myTupleList) ^ "}\n"
+  | Expr(expr) -> numtabs ^ string_of_expr expr ^ ";\n";
+  | Return(expr) -> numtabs ^ "return " ^ string_of_expr expr ^ ";\n";
+  | If(e, s, Block([])) -> let myStmt=(s,numtabs^"\t") in numtabs ^ "if (" ^ string_of_expr e ^ ")\n" ^ string_of_stmt myStmt
+  | If(e, s1, s2) ->  numtabs ^ "if (" ^ string_of_expr e ^ ")\n" ^
+      string_of_stmt (s1,numtabs ^ "\t") ^ numtabs ^ "else\n" ^ string_of_stmt (s2,numtabs ^ "\t")
+  | For(e1, e2, e3, s) ->
+      numtabs ^ "for (" ^ string_of_expr e1  ^ " ; " ^ string_of_expr e2 ^ " ; " ^
+      string_of_expr e3  ^ ") " ^ string_of_stmt (s,numtabs)
+  | While(e, s) -> numtabs ^ "while (" ^ string_of_expr e ^ ") " ^ string_of_stmt (s,numtabs)
 let string_of_typ = function
     Int -> "int"
   | String -> "str"
@@ -94,19 +99,24 @@ let string_of_typ = function
   | Bool -> "bool"
   | Void -> "void"
 
-let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
+let string_of_vdecl (t, id,numtabs)= numtabs ^ string_of_typ t ^ " " ^ id ^ ";\n"
 
-let string_of_fdecl fdecl =
-  string_of_typ fdecl.typ ^ " " ^
+let string_of_fdecl (fdecl,numtabs) =
+  let newNumTabs=numtabs ^ "\t" in 
+  let myLocals= appendToTupleList fdecl.locals newNumTabs in 
+  let myBody = makeTupleList fdecl.body newNumTabs in 
+  numtabs ^ string_of_typ fdecl.typ ^ " " ^
   fdecl.fname ^ "(" ^ String.concat ", " (List.map snd fdecl.formals) ^
-  ")\n{\n" ^
-  String.concat "" (List.map string_of_vdecl fdecl.locals) ^
-  String.concat "" (List.map string_of_stmt fdecl.body) ^
-  "}\n"
+  ")\n" ^ numtabs ^ "{\n" ^
+  String.concat "" (List.map string_of_vdecl myLocals) ^ 
+  String.concat "" (List.map string_of_stmt myBody) ^ 
+  numtabs ^ "}\n"
 
 let string_of_program (vars, funcs) =
-  String.concat "" (List.map string_of_vdecl vars) ^ "\n" ^
-  String.concat "\n" (List.map string_of_fdecl funcs)
+  let myList=appendToTupleList vars "\t" in
+  let funcList=makeTupleList funcs "\t" in
+  String.concat "" (List.map string_of_vdecl myList) ^ "program\n" ^ 
+  String.concat "\n" (List.map string_of_fdecl funcList)
 
 (* Pretty printing tree functions *)
 
