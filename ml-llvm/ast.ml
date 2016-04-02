@@ -81,17 +81,17 @@ let makeTupleList tupleList item= List.map(fun a -> (a,item)) tupleList;;
 
 let rec string_of_stmt (x,numtabs) = 
   match x with
-  Block(stmts) -> let myTupleList=makeTupleList stmts numtabs in
-      "{\n" ^ String.concat "" (List.map string_of_stmt myTupleList) ^ "}\n"
+  Block(stmts) -> let extraTab=numtabs^"\t" in let myTupleList=makeTupleList stmts extraTab in
+      numtabs ^ "{\n" ^ String.concat "" (List.map string_of_stmt myTupleList) ^ numtabs^ "}\n"
   | Expr(expr) -> numtabs ^ string_of_expr expr ^ ";\n";
   | Return(expr) -> numtabs ^ "return " ^ string_of_expr expr ^ ";\n";
-  | If(e, s, Block([])) -> let myStmt=(s,numtabs^"\t") in numtabs ^ "if (" ^ string_of_expr e ^ ")\n" ^ string_of_stmt myStmt
-  | If(e, s1, s2) ->  numtabs ^ "if (" ^ string_of_expr e ^ ")\n" ^
+  | If(e, s, Block([])) -> let myStmt=(s,numtabs^"\t") in numtabs ^ "if\n\t " ^ numtabs^ "(" ^ string_of_expr e ^ ")\n" ^ string_of_stmt myStmt
+  | If(e, s1, s2) ->  numtabs ^ "if\n\t" ^ numtabs ^ "(" ^ string_of_expr e ^ ")\n" ^
       string_of_stmt (s1,numtabs ^ "\t") ^ numtabs ^ "else\n" ^ string_of_stmt (s2,numtabs ^ "\t")
   | For(e1, e2, e3, s) ->
-      numtabs ^ "for (" ^ string_of_expr e1  ^ " ; " ^ string_of_expr e2 ^ " ; " ^
-      string_of_expr e3  ^ ") " ^ string_of_stmt (s,numtabs)
-  | While(e, s) -> numtabs ^ "while (" ^ string_of_expr e ^ ") " ^ string_of_stmt (s,numtabs)
+      numtabs ^ "for\n\t" ^ numtabs ^ "(" ^ string_of_expr e1  ^ " ; " ^ string_of_expr e2 ^ " ; " ^
+      string_of_expr e3  ^ ")\n " ^ string_of_stmt (s,numtabs^"\t")
+  | While(e, s) -> numtabs ^ "while\n\t" ^ numtabs ^ "(" ^ string_of_expr e ^ ") \n" ^ string_of_stmt (s,numtabs^"\t")
 let string_of_typ = function
     Int -> "int"
   | String -> "str"
