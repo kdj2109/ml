@@ -14,6 +14,7 @@ http://llvm.moe/ocaml/
 
 module L = Llvm
 module A = Ast
+open Exceptions 
 
 module StringMap = Map.Make(String)
 
@@ -94,22 +95,76 @@ let translate (globals, functions) =
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
-	  let e1' = expr builder e1
-	  and e2' = expr builder e2 in
-	  (match op with
-	    A.Add     -> L.build_add
-	  | A.Sub     -> L.build_sub
-	  | A.Mult    -> L.build_mul
-          | A.Div     -> L.build_sdiv
-	  | A.And     -> L.build_and
-	  | A.Or      -> L.build_or
-	  | A.Equal   -> L.build_icmp L.Icmp.Eq
-	  | A.Neq     -> L.build_icmp L.Icmp.Ne
-	  | A.Less    -> L.build_icmp L.Icmp.Slt
-	  | A.Leq     -> L.build_icmp L.Icmp.Sle
-	  | A.Greater -> L.build_icmp L.Icmp.Sgt
-	  | A.Geq     -> L.build_icmp L.Icmp.Sge
-	  ) e1' e2' "tmp" builder
+      let e1' = expr builder e1  
+      and e2' = expr builder e2 in 
+
+      let float_ops operator = 
+        match operator with 
+          A.Add     -> L.build_fadd e1' e2' "tmp" builder
+        | A.Sub     -> L.build_fsub e1' e2' "tmp" builder
+        | A.Mult    -> L.build_fmul e1' e2' "tmp" builder
+        | A.Div     -> L.build_fdiv e1' e2' "tmp" builder
+        | A.And     -> L.build_and e1' e2' "tmp" builder
+        | A.Or      -> L.build_or e1' e2' "tmp" builder
+        | A.Equal   -> L.build_fcmp L.Fcmp.Oeq e1' e2' "tmp" builder
+        | A.Neq     -> L.build_fcmp L.Fcmp.One e1' e2' "tmp" builder
+        | A.Less    -> L.build_fcmp L.Fcmp.Olt e1' e2' "tmp" builder
+        | A.Leq     -> L.build_fcmp L.Fcmp.Ole e1' e2' "tmp" builder
+        | A.Greater -> L.build_fcmp L.Fcmp.Ogt e1' e2' "tmp" builder
+        | A.Geq     -> L.build_fcmp L.Fcmp.Oge e1' e2' "tmp" builder
+      in 
+
+      let int_ops operator = 
+        match operator with 
+          A.Add     -> L.build_add e1' e2' "tmp" builder 
+        | A.Sub     -> L.build_sub e1' e2' "tmp" builder
+        | A.Mult    -> L.build_mul e1' e2' "tmp" builder
+        | A.Div     -> L.build_sdiv e1' e2' "tmp" builder
+        | A.And     -> L.build_and e1' e2' "tmp" builder
+        | A.Or      -> L.build_or e1' e2' "tmp" builder
+        | A.Equal   -> L.build_icmp L.Icmp.Eq e1' e2' "tmp" builder
+        | A.Neq     -> L.build_icmp L.Icmp.Ne e1' e2' "tmp" builder
+        | A.Less    -> L.build_icmp L.Icmp.Slt e1' e2' "tmp" builder
+        | A.Leq     -> L.build_icmp L.Icmp.Sle e1' e2' "tmp" builder
+        | A.Greater -> L.build_icmp L.Icmp.Sgt e1' e2' "tmp" builder
+        | A.Geq     -> L.build_icmp L.Icmp.Sge e1' e2' "tmp" builder
+      in 
+
+      let string_of_e1'_llvalue = L.string_of_llvalue e1'
+      and string_of_e2'_llvalue = L.string_of_llvalue e2' in 
+
+      let space = Str.regexp " " in 
+
+      let list_of_e1'_llvalue = Str.split space string_of_e1'_llvalue 
+      and list_of_e2'_llvalue = Str.split space string_of_e2'_llvalue in 
+
+      let i32_re = Str.regexp "i32\\|i32*\\|i8\\|i8*\\|i1\\|i1*" 
+      and float_re = Str.regexp "double\\|double*" in 
+
+      let rec match_string regexp str_list i = 
+         let length = List.length str_list in 
+         match (Str.string_match regexp (List.nth str_list i) 0) with 
+           true -> true 
+         | false -> if (i > length - 2) then false else match_string regexp str_list (succ i) in 
+
+      let get_type llvalue = 
+         match (match_string i32_re llvalue 0) with 
+           true  -> "int" 
+         | false -> (match (match_string float_re llvalue 0) with 
+                       true -> "float"
+                     | false -> "") in 
+
+      let e1'_type = get_type list_of_e1'_llvalue 
+      and e2'_type = get_type list_of_e2'_llvalue in 
+
+      let build_ops_with_types typ1 typ2 = 
+        match (typ1, typ2) with 
+          "int", "int" -> int_ops op
+        | "float" , "float" -> float_ops op 
+        | _, _ -> raise(UnsupportedBinaryOperationOnTypes (typ1, typ2))
+      in
+
+      build_ops_with_types e1'_type e2'_type
       | A.Unop(op, e) ->
 	  let e' = expr builder e in
 	  (match op with
