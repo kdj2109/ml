@@ -9,10 +9,10 @@
 LLI="lli"
 #LLI="/usr/local/opt/llvm/bin/lli"
 
-# Path to the microc compiler.  Usually "./microc.native"
-# Try "_build/microc.native" if ocamlbuild was unable to create a symbolic link.
-MICROC="./microc.native"
-#MICROC="_build/microc.native"
+# Path to the ml compiler.  Usually "./ml.native"
+# Try "_build/ml.native" if ocamlbuild was unable to create a symbolic link.
+ML="./ml.native"
+#ML="_build/ml.native"
 
 # Set time limit for all operations
 ulimit -t 30
@@ -89,7 +89,7 @@ Check() {
     generatedfiles=""
 
     generatedfiles="$generatedfiles ${basename}.ll ${basename}.out" &&
-    Run "$MICROC" "<" $1 ">" "${basename}.ll" &&
+    Run "$ML" "<" $1 ">" "${basename}.ll" &&
     Run "$LLI" "${basename}.ll" ">" "${basename}.out" &&
     Compare ${basename}.out ${reffile}.out ${basename}.diff
 
@@ -125,7 +125,7 @@ CheckFail() {
     generatedfiles=""
 
     generatedfiles="$generatedfiles ${basename}.err ${basename}.diff" &&
-    RunFail "$MICROC" "<" $1 "2>" "${basename}.err" ">>" $globallog &&
+    RunFail "$ML" "<" $1 "2>" "${basename}.err" ">>" $globallog &&
     Compare ${basename}.err ${reffile}.err ${basename}.diff
 
     # Report the status and clean up the generated files
