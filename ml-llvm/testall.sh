@@ -28,7 +28,7 @@ filecount=0
 failurecount=0
 
 Usage() {
-    echo "Usage: testall.sh [options] [.mc files]"
+    echo "Usage: testall.sh [options] [.mxl files]"
     echo "-k    Keep intermediate files"
     echo "-h    Print this help"
     exit 1
@@ -77,8 +77,8 @@ RunFail() {
 Check() {
     error=0
     basename=`echo $1 | sed 's/.*\\///
-                             s/.mc//'`
-    reffile=`echo $1 | sed 's/.mc$//'`
+                             s/.mxl//'`
+    reffile=`echo $1 | sed 's/.mxl$//'`
     basedir="`echo $1 | sed 's/\/[^\/]*$//'`/."
 
     echo -n "$basename..."
@@ -113,8 +113,8 @@ Check() {
 CheckFail() {
     error=0
     basename=`echo $1 | sed 's/.*\\///
-                             s/.mc//'`
-    reffile=`echo $1 | sed 's/.mc$//'`
+                             s/.mxl//'`
+    reffile=`echo $1 | sed 's/.mxl$//'`
     basedir="`echo $1 | sed 's/\/[^\/]*$//'`/."
 
     echo -n "$basename..."
@@ -171,7 +171,7 @@ if [ $# -ge 1 ]
 then
     files=$@
 else
-    files="tests/test-*.mc tests/fail-*.mc"
+    files="tests/test-*.mxl tests/fail-*.mxl"
 fi
 
 for file in $files
