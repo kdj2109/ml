@@ -87,7 +87,7 @@ let translate (globals, functions) =
 
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
-	A.Literal i -> L.const_int i32_t i
+	      A.IntLit i -> L.const_int i32_t i
       | A.FloatLit f -> L.const_float float_t f 
       | A.StrLit s -> L.const_string context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
@@ -130,7 +130,7 @@ let translate (globals, functions) =
       | A.Call (f, act) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
 	 let actuals = List.rev (List.map (expr builder) (List.rev act)) in
-	 let result = (match fdecl.A.typ with A.Void -> ""
+	 let result = (match fdecl.A.datatype with A.Void -> ""
                                             | _ -> f ^ "_result") in
          L.build_call fdef (Array.of_list actuals) result builder
     in
@@ -147,7 +147,7 @@ let translate (globals, functions) =
     let rec stmt builder = function
 	A.Block sl -> List.fold_left stmt builder sl
       | A.Expr e -> ignore (expr builder e); builder
-      | A.Return e -> ignore (match fdecl.A.typ with
+      | A.Return e -> ignore (match fdecl.A.datatype with
 	  A.Void -> L.build_ret_void builder
 	| _ -> L.build_ret (expr builder e) builder); builder
       | A.If (predicate, then_stmt, else_stmt) ->
@@ -188,7 +188,7 @@ let translate (globals, functions) =
     let builder = stmt builder (A.Block fdecl.A.body) in
 
     (* Add a return if the last block falls off the end *)
-    add_terminal builder (match fdecl.A.typ with
+    add_terminal builder (match fdecl.A.datatype with
         A.Void -> L.build_ret_void
       | t -> L.build_ret (L.const_int (ltype_of_typ t) 0))
   in
