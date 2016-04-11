@@ -10,7 +10,7 @@
 %token TRUE FALSE 
 %token INT FLOAT BOOL STRING VOID
 %token INCLUDE
-%token <int> LITERAL 
+%token <int> INTLIT
 %token <float> FLOATLIT
 %token <string> STRINGLIT
 %token <string> ID
@@ -41,8 +41,8 @@ decls:
  | decls fdecl { fst $1, ($2 :: snd $1) }
 
 fdecl:
-   typ ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
-     { { typ = $1;
+   datatype ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+     { { datatype = $1;
 	 fname = $2;
 	 formals = $4;
 	 locals = List.rev $7;
@@ -53,10 +53,14 @@ formals_opt:
   | formal_list   { List.rev $1 }
 
 formal_list:
-    typ ID                   { [($1,$2)] }
-  | formal_list COMMA typ ID { ($3,$4) :: $1 }
+    datatype ID                   { [($1,$2)] }
+  | formal_list COMMA datatype ID { ($3,$4) :: $1 }
 
-typ:
+datatype:
+  | primitive { $1 }
+  | primitive LPAREN INTLIT RPAREN { Tuptype($1, $3) }
+
+primitive:
     INT    { Int }
   | FLOAT  { Float }
   | STRING { String }
@@ -68,7 +72,7 @@ vdecl_list:
   | vdecl_list vdecl { $2 :: $1 }
 
 vdecl:
-    typ ID SEMI { ($1, $2) }
+    datatype ID SEMI { ($1, $2) }
 
 stmt_list:
     /* nothing */  { [] }
@@ -90,11 +94,7 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    LITERAL          { Literal($1) }
-  | FLOATLIT         { FloatLit($1) }
-  | STRINGLIT        { StrLit($1) }
-  | TRUE             { BoolLit(true) }
-  | FALSE            { BoolLit(false) }
+    literals         { $1 }
   | ID               { Id($1) }
   | expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
@@ -113,6 +113,19 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | LPAREN expr RPAREN { $2 }
+
+literals:
+    INTLIT           { IntLit($1) }
+  | FLOATLIT         { FloatLit($1) }
+  | STRINGLIT        { StrLit($1) }
+  | TRUE             { BoolLit(true) }
+  | FALSE            { BoolLit(false) }
+  | LPAREN tup_prim RPAREN { TupPrimitive($2) }
+
+tup_prim:
+      expr                 { [$1] }
+    | tup_prim COMMA expr  { $3 :: $1 } 
+
 
 actuals_opt:
     /* nothing */ { [] }
