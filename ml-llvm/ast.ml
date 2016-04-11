@@ -5,15 +5,17 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type typ = Int | Float | String | Bool | Void
+type datatype = Tuptype of datatype * int | Int | Float | String | Bool | Void 
 
-type bind = typ * string
+
+type bind = datatype * string
 
 type expr =
-    Literal of int
+    IntLit of int
   | FloatLit of float
   | StrLit of string 
   | BoolLit of bool
+  | TupPrimitive of expr list
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -30,7 +32,7 @@ type stmt =
   | While of expr * stmt
 
 type func_decl = {
-    typ : typ;
+    datatype : datatype;
     fname : string;
     formals : bind list;
     locals : bind list;
@@ -60,7 +62,7 @@ let string_of_uop = function
   | Not -> "!"
 
 let rec string_of_expr = function
-    Literal(l) -> string_of_int l
+    IntLit(l) -> string_of_int l
   | FloatLit(l) -> string_of_float l
   | StrLit(l) -> l 
   | BoolLit(true) -> "true"
@@ -87,17 +89,21 @@ let rec string_of_stmt = function
       string_of_expr e3  ^ ") " ^ string_of_stmt s
   | While(e, s) -> "while (" ^ string_of_expr e ^ ") " ^ string_of_stmt s
 
+
 let string_of_typ = function
     Int -> "int"
   | String -> "str"
   | Float -> "float"
   | Bool -> "bool"
   | Void -> "void"
+  
+  (* Tuptype(t, size) ->
+    string_of_typ t ^ "[" ^ string_of_int size ^ "]" *)
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
 let string_of_fdecl fdecl =
-  string_of_typ fdecl.typ ^ " " ^
+  string_of_typ fdecl.datatype ^ " " ^
   fdecl.fname ^ "(" ^ String.concat ", " (List.map snd fdecl.formals) ^
   ")\n{\n" ^
   String.concat "" (List.map string_of_vdecl fdecl.locals) ^
