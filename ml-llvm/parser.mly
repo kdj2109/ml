@@ -120,13 +120,15 @@ literals:
   | STRINGLIT        { StrLit($1) }
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
+
+/*
   | LPAREN tup_prim RPAREN { TupPrimitive($2) }
 
 tup_prim:
       expr                 { [$1] }
     | tup_prim COMMA expr  { $3 :: $1 } 
 
-
+*/
 actuals_opt:
     /* nothing */ { [] }
   | actuals_list  { List.rev $1 }
