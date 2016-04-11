@@ -65,7 +65,7 @@ rule token = parse
 | "str"      { STRING }
 | "void"     { VOID }
 | "#include" { INCLUDE }
-| integer as lxm { LITERAL(int_of_string lxm) }
+| integer as lxm { INTLIT(int_of_string lxm) }
 | float   as lxm { FLOATLIT(float_of_string lxm) } 
 | string      { STRINGLIT(un_esc s) }
 | id      as lxm { ID(lxm) }
