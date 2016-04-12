@@ -8,7 +8,7 @@
 %token RETURN IF ELSE ELSEIF FOR PFOR WHILE 
 %token FUNC ASYNC WAIT 
 %token TRUE FALSE 
-%token INT FLOAT BOOL STRING VOID
+%token INT FLOAT BOOL STRING VOID TUPLE 
 %token INCLUDE
 %token <int> INTLIT
 %token <float> FLOATLIT
@@ -57,8 +57,8 @@ formal_list:
   | formal_list COMMA datatype ID { ($3,$4) :: $1 }
 
 datatype:
-  | primitive { $1 }
-  | primitive LPAREN INTLIT RPAREN { Tuptype($1, $3) }
+    primitive { $1 }
+  | primitive LT INTLIT GT { Tupletype($1, $3) }
 
 primitive:
     INT    { Int }
@@ -94,9 +94,14 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    literals         { $1 }
-  | ID               { Id($1) }
-  | expr PLUS   expr { Binop($1, Add,   $3) }
+    literals             { $1 }
+  | tuple                { $1 }
+  | ID                   { Id($1) }
+  | opexpr               { $1 }
+  | LPAREN opexpr RPAREN { $2 }
+
+opexpr: 
+    expr PLUS   expr { Binop($1, Add,   $3) }
   | expr MINUS  expr { Binop($1, Sub,   $3) }
   | expr TIMES  expr { Binop($1, Mult,  $3) }
   | expr DIVIDE expr { Binop($1, Div,   $3) }
@@ -112,23 +117,21 @@ expr:
   | NOT expr         { Unop(Not, $2) }
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
-  | LPAREN expr RPAREN { $2 }
 
 literals:
-    INTLIT           { IntLit($1) }
-  | FLOATLIT         { FloatLit($1) }
-  | STRINGLIT        { StrLit($1) }
-  | TRUE             { BoolLit(true) }
-  | FALSE            { BoolLit(false) }
+    INTLIT    { IntLit($1) }
+  | FLOATLIT  { FloatLit($1) }
+  | STRINGLIT { StrLit($1) }
+  | TRUE      { BoolLit(true) }
+  | FALSE     { BoolLit(false) }
 
-/*
-  | LPAREN tup_prim RPAREN { TupPrimitive($2) }
+tuple:
+    LPAREN tuple_list RPAREN { Tuple($2) }
 
-tup_prim:
-      expr                 { [$1] }
-    | tup_prim COMMA expr  { $3 :: $1 } 
+tuple_list: 
+    literals { [$1] }
+  | tuple_list COMMA literals { $3 :: $1 } 
 
-*/
 actuals_opt:
     /* nothing */ { [] }
   | actuals_list  { List.rev $1 }

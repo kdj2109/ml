@@ -19,11 +19,12 @@ module StringMap = Map.Make(String)
 
 let translate (globals, functions) =
   let context = L.global_context () in
-  let the_module = L.create_module context "MicroC"
+  let the_module = L.create_module context "ML"
   and i32_t     = L.i32_type   context
   and float_t   = L.double_type context 
   and i8_t      = L.i8_type    context
   and pointer_t = L.pointer_type 
+  and array_t   = L.array_type 
   and i1_t      = L.i1_type    context
   and void_t    = L.void_type  context in
 
@@ -32,7 +33,14 @@ let translate (globals, functions) =
     | A.Float -> float_t
     | A.String -> pointer_t i8_t
     | A.Bool  -> i1_t
-    | A.Void  -> void_t in
+    | A.Void  -> void_t 
+    | A.Tupletype(typ, size) -> (match typ with 
+                                   A.Int -> array_t i32_t size 
+                                 | A.Float -> array_t float_t size 
+                                 | A.String -> array_t (pointer_t i8_t) size 
+                                 | A.Bool -> array_t i1_t size 
+                                 | A.Void -> array_t void_t size
+                                 | A.Tupletype(_, _) -> raise(UnsupportedTupleOfTuples)) in 
 
   (* Declare each global variable; remember its value in a map *)
   let global_vars =
@@ -209,7 +217,7 @@ let translate (globals, functions) =
         in
 
         build_ops_with_type e'_type
-      | A.Assign (s, e) -> let e' = expr builder e in
+      | A.Assign (s, e) -> let e' = expr builder e in 
 	                   ignore (L.build_store e' (lookup s) builder); e'
       | A.Call ("print", [e]) | A.Call ("printb", [e]) ->
 	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
