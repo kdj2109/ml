@@ -92,7 +92,12 @@ let translate (globals, functions) =
     let lookup n = try StringMap.find n local_vars
                    with Not_found -> StringMap.find n global_vars
     in
-
+    let create_tuple el d builder = 
+          let t = d in 
+          let size = (const_int i32_t ((List.length el))) in 
+          let t = ltype_of_typ t in
+          let arr = build_array_malloc t size "tmp" builder in
+          let arr = build_pointercast arr t "tmp" builder in
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -101,10 +106,10 @@ let translate (globals, functions) =
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
+      | A.Tuple(el, d) -> create_tuple el d builder
       | A.Binop (e1, op, e2) ->
       let e1' = expr builder e1  
       and e2' = expr builder e2 in 
-
       let float_bops operator = 
         match operator with 
           A.Add     -> L.build_fadd e1' e2' "tmp" builder
