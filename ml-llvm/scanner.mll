@@ -51,7 +51,7 @@ rule token = parse
 | "||"       { OR }
 | "!"        { NOT }
 | "if"       { IF }
-| "elseif"   { ELSEIF}
+| "elseif"   { ELSEIF }
 | "else"     { ELSE }
 | "for"      { FOR }
 | "pfor"     { PFOR }
@@ -64,6 +64,7 @@ rule token = parse
 | "bool"     { BOOL }
 | "str"      { STRING }
 | "void"     { VOID }
+| "tuple"    { TUPLE }
 | "#include" { INCLUDE }
 | integer as lxm { INTLIT(int_of_string lxm) }
 | float   as lxm { FLOATLIT(float_of_string lxm) } 

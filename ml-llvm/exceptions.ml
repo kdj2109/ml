@@ -6,3 +6,7 @@ exception UnsupportedBinaryOperationOnTypes of string * string
 
 exception UnsupportedUnaryOperationOnType of string 
 exception UnsupportedUnaryOperationOnFloat
+
+(* Tuple Exceptions *)
+
+exception UnsupportedTupleOfTuples

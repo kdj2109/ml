@@ -5,17 +5,22 @@ type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
 
 type uop = Neg | Not
 
-type datatype = Tuptype of datatype * int | Int | Float | String | Bool | Void 
-
+type datatype = 
+    Tupletype of datatype * int 
+  | Int 
+  | Float 
+  | String 
+  | Bool 
+  | Void 
 
 type bind = datatype * string
 
 type expr =
-    IntLit of int
-  | FloatLit of float
+    IntLit of int 
+  | FloatLit of float 
   | StrLit of string 
-  | BoolLit of bool
- (* | TupPrimitive of expr list *)
+  | BoolLit of bool 
+  | Tuple of expr list 
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -61,12 +66,17 @@ let string_of_uop = function
     Neg -> "-"
   | Not -> "!"
 
+let string_of_tuple = function 
+    [] -> "()"
+  | _::_ -> "()"
+
 let rec string_of_expr = function
     IntLit(l) -> string_of_int l
   | FloatLit(l) -> string_of_float l
   | StrLit(l) -> l 
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
+  | Tuple(l) -> string_of_tuple l 
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -101,7 +111,7 @@ let rec string_of_typ = function
   | Float -> "float"
   | Bool -> "bool"
   | Void -> "void"
-  | Tuptype(t, size) ->
+  | Tupletype(t, size) ->
     string_of_typ t ^ "[" ^ string_of_int size ^ "]"
 
 let string_of_vdecl (t, id,numtabs)= numtabs ^ string_of_typ t ^ " " ^ id ^ ";\n"

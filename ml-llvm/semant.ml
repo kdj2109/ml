@@ -1,4 +1,4 @@
-(* Semantic checking for the MicroC compiler *)
+(* Semantic checking for the ML compiler *)
 
 open Ast
 
@@ -98,10 +98,11 @@ let check (globals, functions) =
   | FloatLit _ -> Float 
   | StrLit _ -> String 
   | BoolLit _ -> Bool
+  | Tuple _ -> Tupletype(Int, 0)
   | Id s -> type_of_identifier s
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
-    Add | Sub | Mult | Div when t1 = Int && t2 = Int -> Int
+      Add | Sub | Mult | Div when t1 = Int && t2 = Int -> Int
     | Add | Sub | Mult | Div when t1 = Float && t2 = Float -> Float 
     | Equal | Neq when t1 = t2 -> Bool
     | Less | Leq | Greater | Geq when t1 = Int && t2 = Int -> Bool
@@ -113,7 +114,7 @@ let check (globals, functions) =
   )
   | Unop(op, e) as ex -> let t = expr e in
   (match op with
-    Neg when t = Int -> Int 
+      Neg when t = Int -> Int 
     | Neg when t = Float -> Float 
     | Not when t = Bool -> Bool
     | _ -> raise (Failure ("illegal unary operator " ^ string_of_uop op ^
