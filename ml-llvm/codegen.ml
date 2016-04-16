@@ -94,10 +94,10 @@ let translate (globals, functions) =
     in
     let create_tuple el d builder = 
           let t = d in 
-          let size = (const_int i32_t ((List.length el))) in 
-          let t = ltype_of_typ t in
-          let arr = build_array_malloc t size "tmp" builder in
-          let arr = build_pointercast arr t "tmp" builder in
+          let size = (L.const_int i32_t ((List.length el))) in 
+          let t = ltype_of_typ t in 
+          let arr = L.build_array_malloc t size "tmp" builder in 
+          arr = L.build_pointercast arr t "tmp" builder in  
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -106,7 +106,7 @@ let translate (globals, functions) =
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
-      | A.Tuple(el, d) -> create_tuple el d builder
+      (*| A.Tuple(el, d) -> create_tuple el d builder*)
       | A.Binop (e1, op, e2) ->
       let e1' = expr builder e1  
       and e2' = expr builder e2 in 
