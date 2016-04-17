@@ -8,7 +8,7 @@
 %token RETURN IF ELSE ELSEIF FOR PFOR WHILE 
 %token FUNC ASYNC WAIT 
 %token TRUE FALSE 
-%token INT FLOAT BOOL STRING VOID TUPLE 
+%token INT FLOAT BOOL STRING VOID TUPLE MATRIX
 %token INCLUDE
 %token <int> INTLIT
 %token <float> FLOATLIT
@@ -59,6 +59,7 @@ formal_list:
 datatype:
     primitive { $1 }
   | primitive LT INTLIT GT { Tupletype($1, $3) }
+  | primitive LBRACK INTLIT RBRACK LBRACK INTLIT RBRACK {Matrixtype($1,$3,$6)}
 
 primitive:
     INT    { Int }
@@ -96,6 +97,7 @@ expr_opt:
 expr:
     literals             { $1 }
   | tuple                { $1 }
+  | matrix               { $1 }
   | ID                   { Id($1) }
   | opexpr               { $1 }
   | LPAREN opexpr RPAREN { $2 }
@@ -127,6 +129,13 @@ literals:
 
 tuple:
     LPAREN tuple_list RPAREN { Tuple($2) }
+
+matrix:
+    LBRACE matrix_list RBRACE {Matrix($2)}
+
+matrix_list:
+    INTLIT { [$1] }
+    | matrix_list COMMA INTLIT {$3 :: $1}
 
 tuple_list: 
     literals { [$1] }

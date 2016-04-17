@@ -29,7 +29,7 @@ let check (globals, functions) =
   (* Raise an exception of the given rvalue type cannot be assigned to
      the given lvalue type *)
   let check_assign lvaluet rvaluet err =
-     if lvaluet == rvaluet then lvaluet else raise err
+     if lvaluet = rvaluet then lvaluet else raise err
   in
    
   (**** Checking Global Variables ****)
@@ -99,6 +99,7 @@ let check (globals, functions) =
   | StrLit _ -> String 
   | BoolLit _ -> Bool
   | Tuple _ -> Tupletype(Int, 0)
+  | Matrix m -> let a=List.length m in Matrixtype(Int,1,a) (*TODO: Change this so multiple dimensions supported*)
   | Id s -> type_of_identifier s
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
