@@ -2,7 +2,7 @@
 
 %{ open Ast %}
 
-%token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK COMMA
+%token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK COMMA BAR
 %token PLUS MINUS TIMES DIVIDE MOD ASSIGN
 %token EQ NEQ LT LEQ GT GEQ AND OR NOT 
 %token RETURN IF ELSE ELSEIF FOR PFOR WHILE 
@@ -131,11 +131,16 @@ tuple:
     LPAREN tuple_list RPAREN { Tuple($2) }
 
 matrix:
-    LBRACE matrix_list RBRACE {Matrix($2)}
+    LBRACE multiple_matrix RBRACE {Matrix($2)}
 
-matrix_list:
+matrix_list:     
     INTLIT { [$1] }
     | matrix_list COMMA INTLIT {$3 :: $1}
+    /*1 shift-reduce error. Not sure where though*/
+
+multiple_matrix:
+    | matrix_list {[$1]}
+    | multiple_matrix BAR matrix_list {$3 :: $1}
 
 tuple_list: 
     literals { [$1] }

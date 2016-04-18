@@ -99,7 +99,7 @@ let check (globals, functions) =
   | StrLit _ -> String 
   | BoolLit _ -> Bool
   | Tuple _ -> Tupletype(Int, 0)
-  | Matrix m -> let a=List.length m in Matrixtype(Int,1,a) (*TODO: Change this so multiple dimensions supported*)
+  | Matrix m -> let a=List.length m in let b = List.length (List.hd m) in Matrixtype(Int,a,b) (*TODO: Change this so multiple dimensions supported*)
   | Id s -> type_of_identifier s
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with

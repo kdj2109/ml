@@ -44,7 +44,6 @@ let translate (globals, functions) =
                                  | A.Tupletype(_, _) -> raise(UnsupportedTupleOfTuples)) 
     | A.Matrixtype(typ,sizeOne,sizeTwo) -> (match typ with
                                    A.Int -> array_t (array_t i32_t sizeTwo) sizeOne 
-                                   (*A.Int -> array_t i32_t sizeOne 1d workaround worked*)
                                  | A.Float -> array_t (array_t float_t sizeTwo) sizeOne 
                                  | A.String -> array_t (array_t (pointer_t i8_t) sizeTwo) sizeOne
                                  | A.Bool -> array_t (array_t i1_t sizeTwo) sizeOne 
@@ -111,7 +110,7 @@ let translate (globals, functions) =
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
-      | A.Matrix m -> let i32List=List.map (L.const_int i32_t) m in let i32Arr=Array.of_list i32List in let arrOfArrs=[|L.const_array i32_t i32Arr|] in L.const_array (array_t i32_t (List.length m)) arrOfArrs
+      | A.Matrix m -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) (List.rev realOrder) in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
       | A.Binop (e1, op, e2) ->
       let e1' = expr builder e1  
       and e2' = expr builder e2 in 

@@ -22,7 +22,7 @@ type expr =
   | StrLit of string 
   | BoolLit of bool 
   | Tuple of expr list
-  | Matrix of int list (*NOTE: NEED TO CHANGE TO EXPR, just changed to try to get matrix working *)
+  | Matrix of int list list(*NOTE: NEED TO CHANGE TO EXPR, just changed to try to get matrix working *)
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -90,7 +90,7 @@ let rec string_of_expr = function
   | Noexpr -> ""
 and string_of_matrix = function
     [] -> "[]"
-  | y -> "[" ^ String.concat ", " (List.map string_of_int (List.rev y)) ^ "]"
+  | y -> "[" ^ String.concat ", " (List.map string_of_int (List.rev (List.hd y))) ^ "]"
 
 
 

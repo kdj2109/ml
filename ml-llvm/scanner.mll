@@ -30,6 +30,7 @@ rule token = parse
 | '}'        { RBRACE }
 | '['        { LBRACK } 
 | ']'        { RBRACK } 
+| '|'		 { BAR }
 | ';'        { SEMI }
 | ':'		 { COLON } 
 | ','        { COMMA }
