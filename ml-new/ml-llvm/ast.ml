@@ -9,6 +9,7 @@ type primitive = Int | Float | String | Bool | Char | Void
 
 type datatype = 
    TupleType of primitive * int 
+ | MatrixType of primitive * int * int 
  | DataType of primitive
 
 type var_dec = datatype * string
@@ -22,11 +23,12 @@ type expr =
   | StrLit of string 
   | BoolLit of bool 
   | TupleAccess of string * int 
-  | TuplePrimitive of expr list 
+  | MatrixAccess of string * int * int 
+  | ArrayPrimitive of expr list 
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
-  | Assign of string * expr
+  | Assign of expr * expr
   | Call of string * expr list
   | Noexpr
 
@@ -100,12 +102,13 @@ let rec string_of_expr = function
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
   | Id(s) -> s
-  | TuplePrimitive(l) -> string_of_tuple l
+  | ArrayPrimitive(l) -> string_of_tuple l
   | TupleAccess(s, i) -> s ^ "[" ^ string_of_int i ^ "]"
+  | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
-  | Assign(v, e) -> v ^ " = " ^ string_of_expr e
+  | Assign(e1, e2) -> string_of_expr e1 ^ " = " ^ string_of_expr e2
   | Call(f, el) ->
       f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   | Noexpr -> ""
@@ -131,12 +134,19 @@ let string_of_typ = function
   | DataType(Bool) -> "bool"
   | DataType(Void) -> "void"
   | TupleType(p, l) -> (match p with
-                          Int -> "int" ^ "[" ^ (string_of_int l) ^ "]"
-                        | Float -> "float" ^ "[" ^ (string_of_int l) ^ "]"
-                        | Char -> "char" ^ "[" ^ (string_of_int l) ^ "]"
-                        | String -> "string" ^ "[" ^ (string_of_int l) ^ "]"
-                        | Bool -> "bool" ^ "[" ^ (string_of_int l) ^ "]"
-                        | Void -> "void" ^ "[" ^ (string_of_int l) ^ "]")
+                          Int -> "int" ^ "[" ^ string_of_int l ^ "]"
+                        | Float -> "float" ^ "[" ^ string_of_int l ^ "]"
+                        | Char -> "char" ^ "[" ^ string_of_int l ^ "]"
+                        | String -> "string" ^ "[" ^ string_of_int l ^ "]"
+                        | Bool -> "bool" ^ "[" ^ string_of_int l ^ "]"
+                        | Void -> "void" ^ "[" ^ string_of_int l ^ "]")
+  | MatrixType(p, l1, l2) -> (match p with 
+                                Int -> "int" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | Float -> "float" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | Char -> "char" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | String -> "string" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | Bool -> "bool" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | Void -> "void" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]")
 
 let string_of_include_stmts = function 
   Include(filename) -> "#include" ^ " " ^ filename ^ ";\n"

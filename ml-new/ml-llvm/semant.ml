@@ -117,6 +117,8 @@ let check (includes, globals, functions) =
                           | _ -> raise (Failure ("illegal tuple type"))), List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
+
+
   (* Return the type of an expression or throw an exception *)
   let rec expr = function
     IntLit _ -> DataType(Int)
@@ -125,7 +127,8 @@ let check (includes, globals, functions) =
   | StrLit _ -> DataType(String) 
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
-  | TuplePrimitive t -> type_of_tuple t
+  | ArrayPrimitive t -> type_of_tuple t
+  | TupleAccess(s, _) -> type_of_identifier s 
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)
@@ -146,8 +149,30 @@ let check (includes, globals, functions) =
     | _ -> raise (Failure ("illegal unary operator " ^ string_of_uop op ^
       string_of_typ t ^ " in " ^ string_of_expr ex)))
   | Noexpr -> DataType(Void)
-  | Assign(var, e) as ex -> let lt = type_of_identifier var
-  and rt = expr e in
+  | Assign(e1, e2) as ex -> let lt = (match e1 with
+                                        TupleAccess(s, i) -> (match (type_of_identifier s) with 
+                                                               TupleType(p, l) -> (match p with
+                                                                                      Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                    | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                    | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
+                                                                                    | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                    | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                    | _ -> raise ( Failure ("illegal tuple type") )
+                                                                                  )
+                                                             ) 
+                                      | _ -> expr e1)
+                            and rt = (match e2 with
+                                        TupleAccess(s, i) -> (match (type_of_identifier s) with 
+                                                               TupleType(p, l) -> (match p with
+                                                                                      Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                    | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                    | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
+                                                                                    | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                    | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                    | _ -> raise ( Failure ("illegal tuple type") )
+                                                                                  )
+                                                             ) 
+                                      | _ -> expr e2) in
   check_assign lt rt (Failure ("illegal assignment " ^ string_of_typ lt ^
     " = " ^ string_of_typ rt ^ " in " ^ 
   string_of_expr ex))

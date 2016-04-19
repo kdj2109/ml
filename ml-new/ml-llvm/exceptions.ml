@@ -13,3 +13,7 @@ exception UnsupportedUnaryOperationOnFloat
 exception UnsupportedTupleOfTuples
 exception UnsupportedTupleType
 exception InvalidTuplePointerType
+
+(* Assignment Exceptions *)
+
+exception IllegalAssignment

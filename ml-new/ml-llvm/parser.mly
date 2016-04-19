@@ -71,9 +71,13 @@ formal_list:
 datatype:
     primitive   { DataType($1) }
   | tuple_type  { $1 } 
+  | matrix_type { $1 } 
 
 tuple_type: 
-    primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
+  primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
+
+matrix_type: 
+  primitive LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
 
 primitive:
     INT    { Int }
@@ -110,26 +114,27 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    literals                     { $1 }
-  | ID                           { Id($1) }
-  | expr PLUS   expr             { Binop($1, Add,   $3) }
-  | expr MINUS  expr             { Binop($1, Sub,   $3) }
-  | expr TIMES  expr             { Binop($1, Mult,  $3) }
-  | expr DIVIDE expr             { Binop($1, Div,   $3) }
-  | expr EQ     expr             { Binop($1, Equal, $3) }
-  | expr NEQ    expr             { Binop($1, Neq,   $3) }
-  | expr LT     expr             { Binop($1, Less,  $3) }
-  | expr LEQ    expr             { Binop($1, Leq,   $3) }
-  | expr GT     expr             { Binop($1, Greater, $3) }
-  | expr GEQ    expr             { Binop($1, Geq,   $3) }
-  | expr AND    expr             { Binop($1, And,   $3) }
-  | expr OR     expr             { Binop($1, Or,    $3) }
-  | MINUS expr %prec NEG         { Unop(Neg, $2) }
-  | NOT expr                     { Unop(Not, $2) }
-  | ID ASSIGN expr               { Assign($1, $3) }
-  | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
-  | LPAREN expr RPAREN           { $2 } 
-  | ID LBRACK INTLIT RBRACK      { TupleAccess($1, $3)} 
+    literals                             { $1 }
+  | ID                                   { Id($1) }
+  | expr PLUS   expr                     { Binop($1, Add,   $3) }
+  | expr MINUS  expr                     { Binop($1, Sub,   $3) }
+  | expr TIMES  expr                     { Binop($1, Mult,  $3) }
+  | expr DIVIDE expr                     { Binop($1, Div,   $3) }
+  | expr EQ     expr                     { Binop($1, Equal, $3) }
+  | expr NEQ    expr                     { Binop($1, Neq,   $3) }
+  | expr LT     expr                     { Binop($1, Less,  $3) }
+  | expr LEQ    expr                     { Binop($1, Leq,   $3) }
+  | expr GT     expr                     { Binop($1, Greater, $3) }
+  | expr GEQ    expr                     { Binop($1, Geq,   $3) }
+  | expr AND    expr                     { Binop($1, And,   $3) }
+  | expr OR     expr                     { Binop($1, Or,    $3) }
+  | MINUS expr %prec NEG                 { Unop(Neg, $2) }
+  | NOT expr                             { Unop(Not, $2) }
+  | expr ASSIGN expr                     { Assign($1, $3) }
+  | ID LPAREN actuals_opt RPAREN         { Call($1, $3) }
+  | LPAREN expr RPAREN                   { $2 } 
+  | ID LBRACK INTLIT RBRACK              { TupleAccess($1, $3)} 
+  | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
 
 primitives:
     INTLIT    { IntLit($1) }
@@ -141,11 +146,11 @@ primitives:
 
 literals:
     primitives { $1 }
-  | LBRACK tuple_primitive RBRACK { TuplePrimitive(List.rev $2) } 
+  | LBRACK array_primitive RBRACK { ArrayPrimitive(List.rev $2) } 
 
-tuple_primitive: 
+array_primitive: 
     expr                       { [$1] }
-  | tuple_primitive COMMA expr { $3 :: $1 } 
+  | array_primitive COMMA expr { $3 :: $1 } 
 
 actuals_opt:
     /* nothing */ { [] }

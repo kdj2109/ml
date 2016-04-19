@@ -103,6 +103,13 @@ let translate (includes, globals, functions) =
       | A.BoolLit _ -> ltype_of_typ (A.DataType(A.Bool))
       | _ -> raise (UnsupportedTupleType) in 
 
+    let build_tuple_access s i builder isAssign = 
+      if isAssign 
+        then L.build_gep (lookup s) [| i |] "tmp" builder 
+      else 
+        L.build_load (L.build_gep (lookup s) [| i |] "tmp" builder) "tmp" builder 
+    in 
+
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -110,12 +117,13 @@ let translate (includes, globals, functions) =
       | A.CharLit c -> L.const_int i8_t (Char.code c)
       | A.StrLit s -> L.const_string context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
-      | A.TuplePrimitive t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
+      | A.ArrayPrimitive t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
+      | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder false 
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
       let e1' = expr builder e1 
-      and e2' = expr builder e2 in
+      and e2' = expr builder e2 in 
 
       let float_bops operator = 
         match operator with 
@@ -250,8 +258,12 @@ let translate (includes, globals, functions) =
         in
 
         build_ops_with_type e'_type
-      | A.Assign (s, e) -> let e' = expr builder e in 
-	                   ignore (L.build_store e' (lookup s) builder); e'
+      | A.Assign (e1, e2) -> let e1' = (match e1 with 
+                                            Id s -> lookup s
+                                          | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder true  
+                                          | _ -> raise (IllegalAssignment))
+                             and e2' = expr builder e2 in 
+	                   ignore (L.build_store e2' e1' builder); e2'
       | A.Call ("print", [e]) | A.Call ("printb", [e]) ->
 	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
 	    "printf" builder
