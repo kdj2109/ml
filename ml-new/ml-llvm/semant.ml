@@ -129,6 +129,7 @@ let check (includes, globals, functions) =
   | Id s -> type_of_identifier s
   | ArrayPrimitive t -> type_of_tuple t
   | TupleAccess(s, _) -> type_of_identifier s 
+  | MatrixAccess(s, _, _) -> type_of_identifier s 
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)
@@ -151,27 +152,55 @@ let check (includes, globals, functions) =
   | Noexpr -> DataType(Void)
   | Assign(e1, e2) as ex -> let lt = (match e1 with
                                         TupleAccess(s, i) -> (match (type_of_identifier s) with 
-                                                               TupleType(p, l) -> (match p with
-                                                                                      Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
-                                                                                    | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                    | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
-                                                                                    | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
-                                                                                    | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                    | _ -> raise ( Failure ("illegal tuple type") )
-                                                                                  )
+                                                                  TupleType(p, l) -> (match p with
+                                                                                          Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                        | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                        | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
+                                                                                        | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                        | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                        | Void -> if i > l -1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void)
+                                                                                      )
+                                                                | _ -> raise ( Failure ("cannot access a primitive") )
                                                              ) 
+                                      | MatrixAccess(s, i1, i2) -> (match (type_of_identifier s) with 
+                                                                      MatrixType(t, l1, l2) -> (match t with 
+                                                                                                    DataType(Int) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                                  | DataType(Float) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float) 
+                                                                                                  | DataType(Char) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char) 
+                                                                                                  | DataType(String) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                                  | DataType(Bool) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Bool) 
+                                                                                                  | DataType(Void) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void) 
+                                                                                                  | TupleType(p, l) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else TupleType(p, l)
+                                                                                                  | _ -> raise ( Failure ("illegal matrix of matrices") )
+                                                                                                )
+                                                                      | _ -> raise ( Failure ("cannot access a primitive") )
+                                                                   )
                                       | _ -> expr e1)
                             and rt = (match e2 with
                                         TupleAccess(s, i) -> (match (type_of_identifier s) with 
-                                                               TupleType(p, l) -> (match p with
-                                                                                      Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
-                                                                                    | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                    | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
-                                                                                    | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
-                                                                                    | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                    | _ -> raise ( Failure ("illegal tuple type") )
-                                                                                  )
+                                                                  TupleType(p, l) -> (match p with
+                                                                                          Int -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                        | Float -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                        | Char -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
+                                                                                        | String -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                        | Bool -> if i > l - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
+                                                                                        | Void -> if i > l -1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void)
+                                                                                      )
+                                                                | _ -> raise ( Failure ("cannot access a primitive") )
                                                              ) 
+                                      | MatrixAccess(s, i1, i2) -> (match (type_of_identifier s) with 
+                                                                      MatrixType(t, l1, l2) -> (match t with 
+                                                                                                  DataType(Int) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int) 
+                                                                                                | DataType(Float) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float) 
+                                                                                                | DataType(Char) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char) 
+                                                                                                | DataType(String) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String) 
+                                                                                                | DataType(Bool) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Bool) 
+                                                                                                | DataType(Void) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void) 
+                                                                                                | TupleType(p, l) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else TupleType(p, l)
+                                                                                                | _ -> raise ( Failure ("illegal matrix of matrices") )
+                                                                                              )
+                                                                      | _ -> raise ( Failure ("cannot access a primitive") )
+                                                                   )
                                       | _ -> expr e2) in
   check_assign lt rt (Failure ("illegal assignment " ^ string_of_typ lt ^
     " = " ^ string_of_typ rt ^ " in " ^ 

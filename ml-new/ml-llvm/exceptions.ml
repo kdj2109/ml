@@ -14,6 +14,10 @@ exception UnsupportedTupleOfTuples
 exception UnsupportedTupleType
 exception InvalidTuplePointerType
 
+(* Matrix Exceptions *)
+
+exception UnsupportedMatrixofMatrices
+
 (* Assignment Exceptions *)
 
 exception IllegalAssignment

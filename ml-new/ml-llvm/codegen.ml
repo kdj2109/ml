@@ -41,7 +41,25 @@ let translate (includes, globals, functions) =
                                  | A.Char   -> array_t i8_t size 
                                  | A.String -> array_t (pointer_t i8_t) size 
                                  | A.Bool   -> array_t i1_t size 
-                                 | A.Void   -> array_t void_t size) in 
+                                 | A.Void   -> array_t void_t size)
+    | A.MatrixType(typ, size1, size2) -> (match typ with 
+                                            A.DataType(A.Int) -> array_t i32_t (size1 * size2) 
+                                          | A.DataType(A.Float) -> array_t float_t (size1 * size2)
+                                          | A.DataType(A.Char) -> array_t i8_t (size1 * size2)
+                                          | A.DataType(A.String) -> array_t (pointer_t i8_t) (size1 * size2) 
+                                          | A.DataType(A.Bool) -> array_t i1_t (size1 * size2) 
+                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)
+                                          | A.TupleType(typ1, size3) -> (match typ1 with 
+                                                                         | A.Int -> array_t (array_t i32_t size3) (size1 * size2)
+                                                                         | A.Float -> array_t (array_t float_t size3) (size1 * size2)
+                                                                         | A.Char -> array_t (array_t i8_t size3) (size1 * size2) 
+                                                                         | A.String -> array_t (array_t (pointer_t i8_t) size3) (size1 * size2)
+                                                                         | A.Bool -> array_t (array_t i1_t size3) (size1 * size2)
+                                                                         | A.Void -> array_t (array_t void_t size3) (size1 * size2)
+                                                                        )
+                                          | _ -> raise ( UnsupportedMatrixofMatrices )
+                                         ) 
+    in 
 
   (* Declare each global variable; remember its value in a map *)
   let global_vars =

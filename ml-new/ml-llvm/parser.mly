@@ -77,7 +77,8 @@ tuple_type:
   primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
 
 matrix_type: 
-  primitive LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
+    primitive LBRACK INTLIT COLON INTLIT RBRACK { MatrixType(DataType($1), $3, $5) }
+  | tuple_type LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
 
 primitive:
     INT    { Int }

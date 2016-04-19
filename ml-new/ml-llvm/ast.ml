@@ -9,7 +9,7 @@ type primitive = Int | Float | String | Bool | Char | Void
 
 type datatype = 
    TupleType of primitive * int 
- | MatrixType of primitive * int * int 
+ | MatrixType of datatype * int * int 
  | DataType of primitive
 
 type var_dec = datatype * string
@@ -140,13 +140,23 @@ let string_of_typ = function
                         | String -> "string" ^ "[" ^ string_of_int l ^ "]"
                         | Bool -> "bool" ^ "[" ^ string_of_int l ^ "]"
                         | Void -> "void" ^ "[" ^ string_of_int l ^ "]")
-  | MatrixType(p, l1, l2) -> (match p with 
-                                Int -> "int" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | Float -> "float" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | Char -> "char" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | String -> "string" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | Bool -> "bool" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | Void -> "void" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]")
+  | MatrixType(t, l1, l2) -> (match t with 
+                                DataType(Int) -> "int" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(Float) -> "float" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(Char) -> "char" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(String) -> "string" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(Bool) -> "bool" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(Void) -> "void" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | TupleType(p, l) ->  (match p with
+                                                        Int -> "int" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | Float -> "float" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | Char -> "char" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | String -> "string" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | Bool -> "bool" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | Void -> "void" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                    )
+                              | _ -> raise ( Failure ("Illegal matrix of matrices") )
+                            )
 
 let string_of_include_stmts = function 
   Include(filename) -> "#include" ^ " " ^ filename ^ ";\n"
