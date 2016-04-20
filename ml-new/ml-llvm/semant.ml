@@ -33,11 +33,24 @@ let check (includes, globals, functions) =
     | (DataType(Char), DataType(Char)) -> lvaluet 
     | (DataType(String), DataType(String)) -> lvaluet 
     | (DataType(Bool), DataType(Bool)) -> lvaluet
+    | (DataType(Void), DataType(Void)) -> lvaluet 
     | (TupleType(Int, l1), TupleType(Int, l2)) -> if l1 == l2 then lvaluet else raise err 
     | (TupleType(Float, l1), TupleType(Float, l2)) -> if l1 == l2 then lvaluet else raise err
     | (TupleType(Char, l1), TupleType(Char, l2)) -> if l1 == l2 then lvaluet else raise err
     | (TupleType(String, l1), TupleType(String, l2)) -> if l1 == l2 then lvaluet else raise err
     | (TupleType(Bool, l1), TupleType(Bool, l2)) -> if l1 == l2 then lvaluet else raise err
+    | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else raise err
+    | (MatrixType(DataType(Int), r1, c1), MatrixType(DataType(Int), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(DataType(Float), r1, c1), MatrixType(DataType(Float), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(DataType(Char), r1, c1), MatrixType(DataType(Char), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(DataType(String), r1, c1), MatrixType(DataType(String), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(DataType(Void), r1, c1), MatrixType(DataType(Void), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(Int, d1), r1, c1), MatrixType(TupleType(Int, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(Float, d1), r1, c1), MatrixType(TupleType(Float, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(Char, d1), r1, c1), MatrixType(TupleType(Char, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(String, d1), r1, c1), MatrixType(TupleType(String, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(Bool, d1), r1, c1), MatrixType(TupleType(Bool, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (MatrixType(TupleType(Void, d1), r1, c1), MatrixType(TupleType(Void, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
     | _ -> raise err 
   in 
    
@@ -117,6 +130,23 @@ let check (includes, globals, functions) =
                           | _ -> raise (Failure ("illegal tuple type"))), List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
+  let type_of_matrix m d r c = 
+    match (List.hd m) with 
+        IntLit _ -> if d == 0 then MatrixType(DataType(Int), r, c) else MatrixType(TupleType(Int, d), r, c) 
+      | FloatLit _ -> if d == 0 then MatrixType(DataType(Float), r, c) else MatrixType(TupleType(Float, d), r, c) 
+      | CharLit _ -> if d == 0 then MatrixType(DataType(Char), r, c) else MatrixType(TupleType(Char, d), r, c) 
+      | StrLit _ -> if d == 0 then MatrixType(DataType(String), r, c) else MatrixType(TupleType(String, d), r, c) 
+      | BoolLit _ -> if d == 0 then MatrixType(DataType(Bool), r, c) else MatrixType(TupleType(Bool, d), r, c) 
+      | Id s -> (match (type_of_identifier s) with 
+                    DataType(Int) -> if d == 0 then MatrixType(DataType(Int), r, c) else MatrixType(TupleType(Int, d), r, c) 
+                  | DataType(Float) -> if d == 0 then MatrixType(DataType(Float), r, c) else MatrixType(TupleType(Float, d), r, c) 
+                  | DataType(Char) -> if d == 0 then MatrixType(DataType(Char), r, c) else MatrixType(TupleType(Char, d), r, c) 
+                  | DataType(String) -> if d == 0 then MatrixType(DataType(String), r, c) else MatrixType(TupleType(String, d), r, c)
+                  | DataType(Bool) -> if d == 0 then MatrixType(DataType(Bool), r, c) else MatrixType(TupleType(Bool, d), r, c) 
+                  | _ -> raise (Failure ("illegal matrix type"))
+                )
+      | _ -> raise (Failure ("illegal matrix type"))
+  in 
 
 
   (* Return the type of an expression or throw an exception *)
@@ -127,7 +157,8 @@ let check (includes, globals, functions) =
   | StrLit _ -> DataType(String) 
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
-  | ArrayPrimitive t -> type_of_tuple t
+  | TuplePrimitive t -> type_of_tuple t
+  | MatrixPrimitive(m, d, r, c) -> type_of_matrix m d r c 
   | TupleAccess(s, _) -> type_of_identifier s 
   | MatrixAccess(s, _, _) -> type_of_identifier s 
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in

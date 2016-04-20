@@ -135,7 +135,7 @@ let translate (includes, globals, functions) =
       | A.CharLit c -> L.const_int i8_t (Char.code c)
       | A.StrLit s -> L.const_string context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
-      | A.ArrayPrimitive t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
+      | A.TuplePrimitive t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
       | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder false 
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder

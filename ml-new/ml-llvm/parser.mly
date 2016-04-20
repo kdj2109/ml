@@ -2,7 +2,7 @@
 
 %{ open Ast %}
 
-%token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK COMMA
+%token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK BAR COMMA
 %token PLUS MINUS TIMES DIVIDE MOD ASSIGN
 %token EQ NEQ LT LEQ GT GEQ AND OR NOT 
 %token RETURN IF ELSE ELSEIF FOR PFOR WHILE 
@@ -147,7 +147,8 @@ primitives:
 
 literals:
     primitives { $1 }
-  | LBRACK array_primitive RBRACK { ArrayPrimitive(List.rev $2) } 
+  | LBRACK array_primitive RBRACK                                          { TuplePrimitive(List.rev $2) } 
+  | LBRACK BAR array_primitive BAR INTLIT COMMA INTLIT COMMA INTLIT RBRACK { MatrixPrimitive(List.rev $3, $5, $7, $9) }
 
 array_primitive: 
     expr                       { [$1] }
