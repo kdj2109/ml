@@ -24,8 +24,8 @@ type expr =
   | BoolLit of bool 
   | TupleAccess of string * int 
   | MatrixAccess of string * int * int 
-  | TuplePrimitive of expr list 
-  | MatrixPrimitive of expr list * int * int * int 
+  | TupleLiteral of expr list 
+  | MatrixLiteral of expr list * int * int 
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -72,7 +72,7 @@ let string_of_uop = function
   | Not -> "!"
 
 let string_of_tuple t = 
-  let rec string_of_tuple_primitive = function 
+  let rec string_of_tuple_literal = function 
       [] -> "]"
     | [hd] -> (match hd with 
                 IntLit(i) -> string_of_int i
@@ -82,7 +82,7 @@ let string_of_tuple t =
               | BoolLit(true) -> "true"
               | BoolLit(false) -> "false"
               | Id(s) -> s
-              | _ -> raise( Failure("Illegal expression in tuple primitive") )) ^ string_of_tuple_primitive []
+              | _ -> raise( Failure("Illegal expression in tuple primitive") )) ^ string_of_tuple_literal []
     | hd::tl -> (match hd with 
                     IntLit(i) -> string_of_int i ^ ", "
                   | FloatLit(f) -> string_of_float f ^ ", "
@@ -91,13 +91,13 @@ let string_of_tuple t =
                   | BoolLit(true) -> "true" ^ ", "
                   | BoolLit(false) -> "false" ^ ", "
                   | Id(s) -> s
-                  | _ -> raise( Failure("Illegal expression in tuple primitive") )) ^ string_of_tuple_primitive tl 
+                  | _ -> raise( Failure("Illegal expression in tuple primitive") )) ^ string_of_tuple_literal tl 
   in 
-  "[" ^ string_of_tuple_primitive t
+  "[" ^ string_of_tuple_literal t
 
-let string_of_matrix m d r c = 
-  let rec string_of_matrix_primitive = function 
-      [] -> "| " ^ string_of_int d ^ ", " ^ string_of_int r ^ ", " ^ string_of_int c ^ "]"
+let string_of_matrix m r c = 
+  let rec string_of_matrix_literal = function 
+      [] -> "| " ^ string_of_int r ^ ", " ^ string_of_int c ^ "]"
     | [hd] -> (match hd with 
                 IntLit(i) -> string_of_int i
               | FloatLit(f) -> string_of_float f
@@ -106,7 +106,8 @@ let string_of_matrix m d r c =
               | BoolLit(true) -> "true"
               | BoolLit(false) -> "false"
               | Id(s) -> s
-              | _ -> raise( Failure("Illegal expression in matrix primitive") )) ^ string_of_matrix_primitive []
+              | TupleLiteral(t) -> string_of_tuple t 
+              | _ -> raise( Failure("Illegal expression in matrix primitive") )) ^ string_of_matrix_literal []
     | hd::tl -> (match hd with 
                     IntLit(i) -> string_of_int i ^ ", "
                   | FloatLit(f) -> string_of_float f ^ ", "
@@ -115,9 +116,10 @@ let string_of_matrix m d r c =
                   | BoolLit(true) -> "true" ^ ", "
                   | BoolLit(false) -> "false" ^ ", "
                   | Id(s) -> s
-                  | _ -> raise( Failure("Illegal expression in matrix primitive") )) ^ string_of_matrix_primitive tl 
+                  | TupleLiteral(t) -> string_of_tuple t ^ ", "
+                  | _ -> raise( Failure("Illegal expression in matrix primitive") )) ^ string_of_matrix_literal tl 
   in 
-  "[|" ^ string_of_matrix_primitive m
+  "[|" ^ string_of_matrix_literal m
 
 let rec string_of_expr = function
     IntLit(i) -> string_of_int i
@@ -127,8 +129,8 @@ let rec string_of_expr = function
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
   | Id(s) -> s
-  | TuplePrimitive(t) -> string_of_tuple t
-  | MatrixPrimitive(m, d, r, c) -> string_of_matrix m d r c
+  | TupleLiteral(t) -> string_of_tuple t
+  | MatrixLiteral(m, r, c) -> string_of_matrix m r c
   | TupleAccess(s, i) -> s ^ "[" ^ string_of_int i ^ "]"
   | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
   | Binop(e1, o, e2) ->

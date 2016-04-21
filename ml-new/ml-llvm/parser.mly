@@ -77,7 +77,7 @@ tuple_type:
   primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
 
 matrix_type: 
-    primitive LBRACK INTLIT COLON INTLIT RBRACK { MatrixType(DataType($1), $3, $5) }
+    primitive LBRACK INTLIT COLON INTLIT RBRACK  { MatrixType(DataType($1), $3, $5) }
   | tuple_type LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
 
 primitive:
@@ -146,13 +146,21 @@ primitives:
   | CHARLIT   { CharLit($1) } 
 
 literals:
-    primitives { $1 }
-  | LBRACK array_primitive RBRACK                                          { TuplePrimitive(List.rev $2) } 
-  | LBRACK BAR array_primitive BAR INTLIT COMMA INTLIT COMMA INTLIT RBRACK { MatrixPrimitive(List.rev $3, $5, $7, $9) }
+    primitives                                                   { $1 }
+  | LBRACK array_literal RBRACK                                  { TupleLiteral(List.rev $2) }
+  | LBRACK BAR array_literal BAR INTLIT COMMA INTLIT RBRACK      { MatrixLiteral(List.rev $3, $5, $7) }
+  | LBRACK BAR tuple_literal_list BAR INTLIT COMMA INTLIT RBRACK { MatrixLiteral(List.rev $3, $5, $7) }
 
-array_primitive: 
-    expr                       { [$1] }
-  | array_primitive COMMA expr { $3 :: $1 } 
+tuple_literal:  
+  LPAREN array_literal RPAREN { TupleLiteral(List.rev $2) }
+
+tuple_literal_list: 
+    tuple_literal                          { [$1] } 
+  | tuple_literal_list COMMA tuple_literal { $3 :: $1 }
+
+array_literal: 
+    literals                     { [$1] }
+  | array_literal COMMA literals { $3 :: $1 } 
 
 actuals_opt:
     /* nothing */ { [] }

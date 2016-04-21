@@ -130,24 +130,33 @@ let check (includes, globals, functions) =
                           | _ -> raise (Failure ("illegal tuple type"))), List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
-  let type_of_matrix m d r c = 
+  let type_of_matrix m r c = 
     match (List.hd m) with 
-        IntLit _ -> if d == 0 then MatrixType(DataType(Int), r, c) else MatrixType(TupleType(Int, d), r, c) 
-      | FloatLit _ -> if d == 0 then MatrixType(DataType(Float), r, c) else MatrixType(TupleType(Float, d), r, c) 
-      | CharLit _ -> if d == 0 then MatrixType(DataType(Char), r, c) else MatrixType(TupleType(Char, d), r, c) 
-      | StrLit _ -> if d == 0 then MatrixType(DataType(String), r, c) else MatrixType(TupleType(String, d), r, c) 
-      | BoolLit _ -> if d == 0 then MatrixType(DataType(Bool), r, c) else MatrixType(TupleType(Bool, d), r, c) 
+        IntLit _ -> MatrixType(DataType(Int), r, c) 
+      | FloatLit _ -> MatrixType(DataType(Float), r, c)
+      | CharLit _ -> MatrixType(DataType(Char), r, c)
+      | StrLit _ -> MatrixType(DataType(String), r, c)
+      | BoolLit _ -> MatrixType(DataType(Bool), r, c) 
       | Id s -> (match (type_of_identifier s) with 
-                    DataType(Int) -> if d == 0 then MatrixType(DataType(Int), r, c) else MatrixType(TupleType(Int, d), r, c) 
-                  | DataType(Float) -> if d == 0 then MatrixType(DataType(Float), r, c) else MatrixType(TupleType(Float, d), r, c) 
-                  | DataType(Char) -> if d == 0 then MatrixType(DataType(Char), r, c) else MatrixType(TupleType(Char, d), r, c) 
-                  | DataType(String) -> if d == 0 then MatrixType(DataType(String), r, c) else MatrixType(TupleType(String, d), r, c)
-                  | DataType(Bool) -> if d == 0 then MatrixType(DataType(Bool), r, c) else MatrixType(TupleType(Bool, d), r, c) 
+                    DataType(Int) -> MatrixType(DataType(Int), r, c) 
+                  | DataType(Float) -> MatrixType(DataType(Float), r, c)
+                  | DataType(Char) -> MatrixType(DataType(Char), r, c)  
+                  | DataType(String) -> MatrixType(DataType(String), r, c)
+                  | DataType(Bool) -> MatrixType(DataType(Bool), r, c)
+                  | DataType(Void) -> MatrixType(DataType(Void), r, c)
+                  | TupleType(p, l) -> (match p with
+                                            Int -> MatrixType(TupleType(Int, l), r, c)
+                                          | Float -> MatrixType(TupleType(Float, l), r, c)
+                                          | Char -> MatrixType(TupleType(Char, l), r, c) 
+                                          | String -> MatrixType(TupleType(String, l), r, c) 
+                                          | Bool -> MatrixType(TupleType(Bool, l), r, c) 
+                                          | Void -> MatrixType(TupleType(Void, l), r, c)
+                                       )
                   | _ -> raise (Failure ("illegal matrix type"))
                 )
+      | TupleLiteral t -> MatrixType((type_of_tuple) t, r, c)
       | _ -> raise (Failure ("illegal matrix type"))
   in 
-
 
   (* Return the type of an expression or throw an exception *)
   let rec expr = function
@@ -157,8 +166,8 @@ let check (includes, globals, functions) =
   | StrLit _ -> DataType(String) 
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
-  | TuplePrimitive t -> type_of_tuple t
-  | MatrixPrimitive(m, d, r, c) -> type_of_matrix m d r c 
+  | TupleLiteral t -> type_of_tuple t
+  | MatrixLiteral(m, r, c) -> type_of_matrix m r c 
   | TupleAccess(s, _) -> type_of_identifier s 
   | MatrixAccess(s, _, _) -> type_of_identifier s 
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
