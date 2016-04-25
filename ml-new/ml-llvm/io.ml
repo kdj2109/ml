@@ -8,7 +8,7 @@ let read_ppm ppmname =
     third_line;
     while true; do
       let ppm_line = input_line ppm_chan in
-
+      let pixels = Str.split (Str.regexp " ") ppm_line in
       print_endline ppm_line;
   done;
 with End_of_file ->
