@@ -1,0 +1,5 @@
+int mail(){
+	m1 = open(pic.ppm);
+	
+	return 0;
+}
