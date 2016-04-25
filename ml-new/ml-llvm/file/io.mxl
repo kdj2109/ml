@@ -1,0 +1,4 @@
+int main(){
+  open("pic.ppm");
+  return 0;
+}
