@@ -15,7 +15,7 @@ with End_of_file ->
   close_in ppm_chan
 in
 let has_open l = 
-  let r = Str.regexp "open" in
+  let r = Str.regexp "((a-z)+((a-z)|(A-Z)|(0-9))*(‘ ‘)*=(' ')*open\\((.)*\\))" in
   try ignore (Str.search_forward r l 0); true
   with Not_found -> false
 in
