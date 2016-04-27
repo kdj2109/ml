@@ -121,11 +121,11 @@ let translate (includes, globals, functions) =
       | A.BoolLit _ -> ltype_of_typ (A.DataType(A.Bool))
       | _ -> raise (UnsupportedTupleType) in 
 
-    let build_tuple_access s i builder isAssign = 
+    let build_tuple_access s i1 i2 builder isAssign = 
       if isAssign 
-        then L.build_gep (lookup s) [| i |] "tmp" builder 
+        then L.build_gep (lookup s) [| i1; i2 |] s builder 
       else 
-        L.build_load (L.build_gep (lookup s) [| i |] "tmp" builder) "tmp" builder 
+         L.build_load (L.build_gep (lookup s) [| i1; i2 |] s builder) s builder 
     in 
 
     (* Construct code for an expression; return its value *)
@@ -136,7 +136,7 @@ let translate (includes, globals, functions) =
       | A.StrLit s -> L.const_string context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.TupleLiteral t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
-      | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder false 
+      | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder false
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
@@ -278,7 +278,7 @@ let translate (includes, globals, functions) =
         build_ops_with_type e'_type
       | A.Assign (e1, e2) -> let e1' = (match e1 with 
                                             Id s -> lookup s
-                                          | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder true  
+                                          | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder true
                                           | _ -> raise (IllegalAssignment))
                              and e2' = expr builder e2 in 
 	                   ignore (L.build_store e2' e1' builder); e2'
