@@ -287,6 +287,7 @@ let translate (includes, globals, functions) =
       | A.Assign (e1, e2) -> let e1' = (match e1 with 
                                             Id s -> lookup s
                                           | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder true
+                                          | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO) (L.const_int i32_t iT) builder true
                                           | _ -> raise (IllegalAssignment))
                              and e2' = expr builder e2 in 
 	                   ignore (L.build_store e2' e1' builder); e2'
