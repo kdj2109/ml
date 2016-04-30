@@ -45,19 +45,20 @@ let translate (includes, globals, functions) =
     | A.MatrixType(typ, size1, size2) -> (match typ with 
                                             A.DataType(A.Int) -> array_t (array_t i32_t size2) size1
                                           | A.DataType(A.Float) -> array_t (array_t float_t size2) size1
-                                          | A.DataType(A.Char) -> array_t i8_t (size1 * size2)
+                                          (*| A.DataType(A.Char) -> array_t i8_t (size1 * size2)
                                           | A.DataType(A.String) -> array_t (pointer_t i8_t) (size1 * size2) 
                                           | A.DataType(A.Bool) -> array_t i1_t (size1 * size2) 
-                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)
+                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)*)
                                           | A.TupleType(typ1, size3) -> (match typ1 with 
-                                                                         | A.Int -> array_t i32_t (size1 * size2 * size3)
-                                                                         | A.Float -> array_t float_t (size1 * size2 * size3)
-                                                                         | A.Char -> array_t i8_t (size1 * size2 * size3) 
+                                                                         | A.Int -> array_t (array_t (array_t i32_t size3) size2) size1
+                                                                         | A.Float -> array_t (array_t (array_t float_t size3) size2) size1
+                                                                         | _ -> raise (UnsupportedMatrixType)
+                                                                         (*| A.Char -> array_t i8_t (size1 * size2 * size3) 
                                                                          | A.String -> array_t (pointer_t i8_t) (size1 * size2 * size3)
                                                                          | A.Bool -> array_t i1_t (size1 * size2 * size3)
-                                                                         | A.Void -> array_t void_t (size1 * size2 * size3)
+                                                                         | A.Void -> array_t void_t (size1 * size2 * size3)*)
                                                                         )
-                                          | _ -> raise ( UnsupportedMatrixofMatrices )
+                                          | _ -> raise ( UnsupportedMatrixType )
                                          ) 
     in 
 
@@ -144,8 +145,9 @@ let translate (includes, globals, functions) =
       | A.TupleLiteral t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
       | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder false
       | A.MatrixLiteral m -> (match (List.hd (List.hd m)) with 
-                                A.FloatLit f -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (List.length (List.hd m))) arrayOfArrays
-                              | A.IntLit i -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
+                                A.FloatLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (List.length (List.hd m))) arrayOfArrays
+                              | A.IntLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
+                              | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
                               )
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false  
       | A.Noexpr -> L.const_int i32_t 0
