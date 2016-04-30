@@ -55,10 +55,10 @@ decls:
 fdecl:
    datatype ID LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
      { { datatype = $1;
-	       fname = $2;
-	       formals = $4;
-	       locals = List.rev $7;
-	       body = List.rev $8 } }
+         fname = $2;
+         formals = $4;
+         locals = List.rev $7;
+         body = List.rev $8 } }
 
 formals_opt:
     /* nothing */ { [] }
@@ -148,8 +148,16 @@ primitives:
 literals:
     primitives                                                   { $1 }
   | LBRACK array_literal RBRACK                                  { TupleLiteral(List.rev $2) }
-  | LBRACK BAR array_literal BAR INTLIT COMMA INTLIT RBRACK      { MatrixLiteral(List.rev $3, $5, $7) }
-  | LBRACK BAR tuple_literal_list BAR INTLIT COMMA INTLIT RBRACK { MatrixLiteral(List.rev $3, $5, $7) }
+  | LBRACK BAR multiple_matrix BAR RBRACK      { MatrixLiteral(List.rev $3) }
+  /*| LBRACK BAR tuple_literal_list BAR RBRACK { MatrixLiteral(List.rev $3) }*/
+
+matrix_list:     
+    literals { [$1] }
+    | matrix_list COMMA literals {$3 :: $1}
+
+multiple_matrix:
+    | matrix_list {[$1]}
+    | multiple_matrix BAR matrix_list {$3 :: $1}
 
 tuple_literal:  
   LPAREN array_literal RPAREN { TupleLiteral(List.rev $2) }

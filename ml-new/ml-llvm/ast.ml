@@ -25,7 +25,7 @@ type expr =
   | TupleAccess of string * int 
   | MatrixAccess of string * int * int 
   | TupleLiteral of expr list 
-  | MatrixLiteral of expr list * int * int 
+  | MatrixLiteral of expr list list 
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -130,7 +130,7 @@ let rec string_of_expr = function
   | BoolLit(false) -> "false"
   | Id(s) -> s
   | TupleLiteral(t) -> string_of_tuple t
-  | MatrixLiteral(m, r, c) -> string_of_matrix m r c
+  | MatrixLiteral(m) -> "string_of_matrix m r c"
   | TupleAccess(s, i) -> s ^ "[" ^ string_of_int i ^ "]"
   | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
   | Binop(e1, o, e2) ->
