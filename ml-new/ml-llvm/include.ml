@@ -5,8 +5,8 @@ let read_inc incname =
     while true; do
       inc_lines := input_line inc_chan :: !inc_lines;
     done;
-    String.concat "" (List.map (fun i -> i) (List.rev !inc_lines)) 
-  with End_of_file -> ignore(close_in inc_chan); String.concat "" (List.map (fun i -> i) (List.rev !inc_lines))
+    String.concat "" (List.map (fun i -> i ^ String.make 1 '\n') (List.rev !inc_lines)) 
+  with End_of_file -> ignore(close_in inc_chan); String.concat "" (List.map (fun i -> i ^ String.make 1 '\n') (List.rev !inc_lines))
 in
 let file_regex = Str.regexp "<.+\.mxl"  in
 let open_regex = Str.regexp "#include[ ]+<.+>;" in
