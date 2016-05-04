@@ -22,9 +22,9 @@ let read_ppm ppmname =
       ppm_lines := (clean_string (input_line ppm_chan)) :: !ppm_lines;
     done;
     "(|" ^ (String.concat ","
-    (List.map (fun i -> i) !ppm_lines)) ^ "|" ^ !w ^ "," ^ !h ^ ");"
+    (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^ !w ^ "," ^ !h ^ ");"
   with End_of_file -> ignore(close_in ppm_chan); "(|" ^ (String.concat ","
-    (List.map (fun i -> i) !ppm_lines)) ^ "|" ^ !w ^ "," ^ !h ^ ");"
+    (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^ !w ^ "," ^ !h ^ ");"
 in
 let file_regex = Str.regexp "\".+\.ppm" in
 let open_regex = Str.regexp "open\\(.+*\\)" in 
@@ -37,8 +37,7 @@ let process_string l =
       try ignore(Str.search_forward file_regex l 0); true
       with Not_found -> false
     else false
-  in
-  if (has_file l) then Str.replace_first open_regex (read_ppm (Str.string_after
+  in if (has_file l) then Str.replace_first open_regex (read_ppm (Str.string_after
   (Str.matched_string l) 1)) l else l
 in
 let filename = "file/io.mxl" in
