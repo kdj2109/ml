@@ -1,4 +1,4 @@
-int main(){
-  m1 = open("file/pic.ppm");
+#include <file/for.mxl>;
+int in(){
   return 0;
 }
