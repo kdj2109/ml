@@ -42,6 +42,7 @@ rule token = parse
 | '-'        { MINUS }
 | '*'        { TIMES }
 | '/'        { DIVIDE }
+| '@'        { AT }
 | "true"     { TRUE }
 | "false"    { FALSE }
 | '='        { ASSIGN }

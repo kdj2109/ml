@@ -25,6 +25,8 @@ int main() {
 
 	c = addTuples(a, b);
 
+	addTuples2(@a, @b);
+
 	for (i = 0; i < c.length; i = i + 1) {
 		print(c[i]);
 	}

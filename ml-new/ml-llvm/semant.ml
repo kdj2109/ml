@@ -65,6 +65,12 @@ let check (globals, functions) =
     | (MatrixType(TupleType(String, d1), r1, c1), MatrixType(TupleType(String, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Bool, d1), r1, c1), MatrixType(TupleType(Bool, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Void, d1), r1, c1), MatrixType(TupleType(Void, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
+    | (PointerType(Int), PointerType(Int)) -> lvaluet
+    | (PointerType(Float), PointerType(Float)) -> lvaluet
+    | (PointerType(Char), PointerType(Char)) -> lvaluet
+    | (PointerType(String), PointerType(String)) -> lvaluet
+    | (PointerType(Bool), PointerType(Bool)) -> lvaluet
+    | (PointerType(Void), PointerType(Void)) -> lvaluet
     | _ -> raise err
   in
 
@@ -185,6 +191,17 @@ let check (globals, functions) =
       | _ -> raise (Failure ("illegal matrix type"))
   in
 
+  let rec type_of_pointer = function
+      DataType(Int) -> PointerType(Int)
+    | DataType(Float) -> PointerType(Float)
+    | DataType(Char) -> PointerType(Char)
+    | DataType(String) -> PointerType(String)
+    | DataType(Bool) -> PointerType(Bool)
+    | DataType(Void) -> PointerType(Void)
+    | TupleType(t, _) -> type_of_pointer (DataType(t))
+    | MatrixType(t, _, _) -> type_of_pointer t
+    | _ -> raise ( Failure ("illegal pointer type") ) in
+
   (* Return the type of an expression or throw an exception *)
   let rec expr = function
     IntLit _ -> DataType(Int)
@@ -198,6 +215,7 @@ let check (globals, functions) =
   | TupleAccess(s, _) -> access_type (type_of_identifier s)
   | MatrixAccess(s, _, _) -> type_of_identifier s
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
+  | Reference(s) -> type_of_pointer (type_of_identifier s)
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)

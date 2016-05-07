@@ -143,17 +143,22 @@ let translate (globals, functions) =
 
     let build_matrix_access s i1 i2 i3 builder isAssign =
       if isAssign
-        then L.build_gep (lookup s) [| i1; i2; i3|] s builder
+        then L.build_gep (lookup s) [| i1; i2; i3 |] s builder
       else
-         L.build_load (L.build_gep (lookup s) [| i1; i2; i3|] s builder) s builder
+         L.build_load (L.build_gep (lookup s) [| i1; i2; i3 |] s builder) s builder
     in
 
     let build_tuple_access s i1 i2 builder isAssign =
       if isAssign
-        then L.build_gep (lookup s) [| i1; i2|] s builder
+        then L.build_gep (lookup s) [| i1; i2 |] s builder
       else
-         L.build_load (L.build_gep (lookup s) [| i1; i2|] s builder) s builder
+         L.build_load (L.build_gep (lookup s) [| i1; i2 |] s builder) s builder
     in
+
+    let build_tuple_argument s builder =
+      L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0; L.const_int i32_t 0 |] s builder
+    in
+
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -170,6 +175,7 @@ let translate (globals, functions) =
                               )
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
+      | A.Reference (s) -> build_tuple_argument s builder 
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
