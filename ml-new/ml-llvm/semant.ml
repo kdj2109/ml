@@ -197,6 +197,7 @@ let check (globals, functions) =
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, _) -> access_type (type_of_identifier s)
   | MatrixAccess(s, _, _) -> type_of_identifier s
+  | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)

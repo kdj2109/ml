@@ -8,6 +8,7 @@
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
 %token INT FLOAT BOOL STRING CHAR VOID
+%token LENGTH
 %token <int> INTLIT
 %token <float> FLOATLIT
 %token <char> CHARLIT
@@ -127,6 +128,7 @@ expr:
   | LPAREN expr RPAREN                   { $2 }
   | ID LBRACK expr RBRACK                { TupleAccess($1, $3)}
   | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
+  | LENGTH LPAREN ID RPAREN              { Length($3) }
 
 primitives:
     INTLIT    { IntLit($1) }
