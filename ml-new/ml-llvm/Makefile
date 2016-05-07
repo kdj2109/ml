@@ -28,7 +28,7 @@ pretty : $(POBJS)
 	
 # More detailed: build using ocamlc/ocamlopt + ocamlfind to locate LLVM
 
-OBJS = ast.cmx codegen.cmx parser.cmx scanner.cmx semant.cmx ml.cmx
+OBJS = ast.cmx codegen.cmx parser.cmx scanner.cmx semant.cmx ml.cmx prep.cmx
 
 ml : $(OBJS)
 	ocamlfind ocamlopt -linkpkg -package llvm -package llvm.analysis $(OBJS) -o ml
@@ -53,8 +53,8 @@ ast.cmo :
 ast.cmx :
 codegen.cmo : ast.cmo  
 codegen.cmx : ast.cmx 
-ml.cmo : semant.cmo scanner.cmo parser.cmi codegen.cmo ast.cmo
-ml.cmx : semant.cmx scanner.cmx parser.cmx codegen.cmx ast.cmx
+ml.cmo : semant.cmo scanner.cmo parser.cmi codegen.cmo ast.cmo prep.cmo
+ml.cmx : semant.cmx scanner.cmx parser.cmx codegen.cmx ast.cmx prep.cmx
 parser.cmo : ast.cmo parser.cmi
 parser.cmx : ast.cmx parser.cmi
 scanner.cmo : parser.cmi
@@ -62,6 +62,8 @@ scanner.cmx : parser.cmx
 semant.cmo : ast.cmo
 semant.cmx : ast.cmx
 parser.cmi : ast.cmo
+prep.cmo:
+prep.cmx:
 
 # Building the tarball
 
