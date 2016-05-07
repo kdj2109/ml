@@ -1,10 +1,10 @@
 let process filename =
     let rec read_file filename =
-      let file_regex = Str.regexp "<.+\.mxl"  in
-      let open_regex = Str.regexp "#include[ ]+<.+>;" in
+      let file_regex = Str.regexp "<.+\\.mxl"  in
+      let inc_regex = Str.regexp "#include[ ]+<.+>;" in
       let has_file l =
         let has_inc l = 
-          try ignore (Str.search_forward open_regex l 0); true
+          try ignore (Str.search_forward inc_regex l 0); true
           with Not_found -> false
         in
         if has_inc l then
@@ -17,15 +17,16 @@ let process filename =
     try
       while true; do
         let l = input_line ic in
-        lines:= (if (has_file l) then (Str.replace_first open_regex (read_file
-        (Str.string_after (Str.matched_string l) 1)) l ) else l)  :: !lines;
+        let l = (if (has_file l) then ( Str.replace_first inc_regex
+        (read_file (Str.string_after (Str.matched_string l) 1) )l ) else l) in
+        lines:=  l :: !lines;
       done;
       String.concat "" (List.map (fun i -> i ^ String.make 1 '\n') (List.rev !lines)) 
     with End_of_file -> ignore(close_in ic); 
     String.concat "" (List.map (fun i -> i ^ String.make 1 '\n') (List.rev !lines))
-  in
+  in 
   let process_string l =
-    let read_ppm ppmname =
+    let read_ppm ppmname id=
       let is_decimal e = 
         try ignore(Str.search_forward (Str.regexp "[0-9]+") e 0); true
         with Not_found -> false
