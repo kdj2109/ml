@@ -36,6 +36,7 @@ let process filename =
                                               else if i mod 3 = 0 then ("(" ^ x) else x) only_digits)) 
       in
       let ppm_chan = open_in ppmname in
+      print_endline ppmname;
       let w = ref "" in
       let h = ref "" in 
       let ppm_lines = ref [] in
@@ -49,13 +50,13 @@ let process filename =
         while true; do
           ppm_lines := (clean_string (input_line ppm_chan)) :: !ppm_lines;
         done;
-        "(|" ^ (String.concat ","
-        (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^ !w ^ "," ^ !h ^ ");"
-      with End_of_file -> ignore(close_in ppm_chan); "(|" ^ (String.concat ","
-        (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^ !w ^ "," ^ !h ^ ");"
+        "(|" ^ (String.concat "|"
+        (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^ ");"
+      with End_of_file -> ignore(close_in ppm_chan); "(|" ^ (String.concat "|"
+        (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|" ^  ");"
     in
   let file_regex = Str.regexp "\".+\.ppm" in
-  let open_regex = Str.regexp "open\\(.+*\\)" in 
+  let open_regex = Str.regexp "[0-9A-Za-z_]+[ ]*=[ ]*open\\(.+*\\)" in 
     let has_open l = try ignore (Str.search_forward open_regex l 0); true
       with Not_found -> false
     in 
