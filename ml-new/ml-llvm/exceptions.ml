@@ -17,6 +17,7 @@ exception InvalidTuplePointerType
 (* Matrix Exceptions *)
 
 exception UnsupportedMatrixofMatrices
+exception UnsupportedMatrixType
 
 (* Assignment Exceptions *)
 

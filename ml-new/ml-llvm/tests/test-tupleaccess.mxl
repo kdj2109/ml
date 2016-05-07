@@ -1,8 +1,33 @@
 int main() { 
-	int[2] x; 
-	x = [1, 2]; 
-	x[1] = 5;
+	int[5] x; 
+	int y;
+	int z; 
+	int a; 
+	int b; 
+	int c; 
+	int d;
+
+	x = [50, 750, 1, 44, 33]; 
+
+
+	z = x[1];
+
+	print(z);
+
+	d = x[0];
+	a = x[2]; 
+	b = x[3];
+	c = x[4]; 
 	
-	print(1); 
+	y = 1000;
+	x[1] = y;
+	z = x[1];
+	print(z);
+
+	print(d);
+	print(a); 
+	print(b);
+	print(c);
+
 	return 0; 
 }

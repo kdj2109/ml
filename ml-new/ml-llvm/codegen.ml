@@ -43,21 +43,22 @@ let translate (includes, globals, functions) =
                                  | A.Bool   -> array_t i1_t size 
                                  | A.Void   -> array_t void_t size)
     | A.MatrixType(typ, size1, size2) -> (match typ with 
-                                            A.DataType(A.Int) -> array_t i32_t (size1 * size2) 
-                                          | A.DataType(A.Float) -> array_t float_t (size1 * size2)
-                                          | A.DataType(A.Char) -> array_t i8_t (size1 * size2)
+                                            A.DataType(A.Int) -> array_t (array_t i32_t size2) size1
+                                          | A.DataType(A.Float) -> array_t (array_t float_t size2) size1
+                                          (*| A.DataType(A.Char) -> array_t i8_t (size1 * size2)
                                           | A.DataType(A.String) -> array_t (pointer_t i8_t) (size1 * size2) 
                                           | A.DataType(A.Bool) -> array_t i1_t (size1 * size2) 
-                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)
+                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)*)
                                           | A.TupleType(typ1, size3) -> (match typ1 with 
-                                                                         | A.Int -> array_t i32_t (size1 * size2 * size3)
-                                                                         | A.Float -> array_t float_t (size1 * size2 * size3)
-                                                                         | A.Char -> array_t i8_t (size1 * size2 * size3) 
+                                                                         | A.Int -> array_t (array_t (array_t i32_t size3) size2) size1
+                                                                         | A.Float -> array_t (array_t (array_t float_t size3) size2) size1
+                                                                         | _ -> raise (UnsupportedMatrixType)
+                                                                         (*| A.Char -> array_t i8_t (size1 * size2 * size3) 
                                                                          | A.String -> array_t (pointer_t i8_t) (size1 * size2 * size3)
                                                                          | A.Bool -> array_t i1_t (size1 * size2 * size3)
-                                                                         | A.Void -> array_t void_t (size1 * size2 * size3)
+                                                                         | A.Void -> array_t void_t (size1 * size2 * size3)*)
                                                                         )
-                                          | _ -> raise ( UnsupportedMatrixofMatrices )
+                                          | _ -> raise ( UnsupportedMatrixType )
                                          ) 
     in 
 
@@ -121,13 +122,19 @@ let translate (includes, globals, functions) =
       | A.BoolLit _ -> ltype_of_typ (A.DataType(A.Bool))
       | _ -> raise (UnsupportedTupleType) in 
 
-    let build_tuple_access s i builder isAssign = 
+    let build_matrix_access s i1 i2 i3 builder isAssign = 
       if isAssign 
-        then L.build_gep (lookup s) [| i |] "tmp" builder 
+        then L.build_gep (lookup s) [| i1; i2; i3|] s builder 
       else 
-        L.build_load (L.build_gep (lookup s) [| i |] "tmp" builder) "tmp" builder 
+         L.build_load (L.build_gep (lookup s) [| i1; i2; i3|] s builder) s builder 
     in 
 
+    let build_tuple_access s i1 i2 builder isAssign = 
+      if isAssign 
+        then L.build_gep (lookup s) [| i1; i2|] s builder 
+      else 
+         L.build_load (L.build_gep (lookup s) [| i1; i2|] s builder) s builder 
+    in
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -136,7 +143,13 @@ let translate (includes, globals, functions) =
       | A.StrLit s -> L.const_string context s 
       | A.BoolLit b -> L.const_int i1_t (if b then 1 else 0)
       | A.TupleLiteral t -> L.const_array (get_tuple_type t) (Array.of_list (List.map (expr builder) t)) 
-      | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder false 
+      | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder false
+      | A.MatrixLiteral m -> (match (List.hd (List.hd m)) with 
+                                A.FloatLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (List.length (List.hd m))) arrayOfArrays
+                              | A.IntLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
+                              | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
+                              )
+      | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false  
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
@@ -278,7 +291,8 @@ let translate (includes, globals, functions) =
         build_ops_with_type e'_type
       | A.Assign (e1, e2) -> let e1' = (match e1 with 
                                             Id s -> lookup s
-                                          | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t i) builder true  
+                                          | A.TupleAccess(s, i) -> build_tuple_access s (L.const_int i32_t 0) (L.const_int i32_t i) builder true
+                                          | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO) (L.const_int i32_t iT) builder true
                                           | _ -> raise (IllegalAssignment))
                              and e2' = expr builder e2 in 
 	                   ignore (L.build_store e2' e1' builder); e2'

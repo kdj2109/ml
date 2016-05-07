@@ -131,7 +131,7 @@ let check (includes, globals, functions) =
     | _ -> raise (Failure ("illegal tuple type")) in
 
   let type_of_matrix m r c = 
-    match (List.hd m) with 
+    match (List.hd (List.hd m)) with 
         IntLit _ -> MatrixType(DataType(Int), r, c) 
       | FloatLit _ -> MatrixType(DataType(Float), r, c)
       | CharLit _ -> MatrixType(DataType(Char), r, c)
@@ -167,7 +167,7 @@ let check (includes, globals, functions) =
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
   | TupleLiteral t -> type_of_tuple t
-  | MatrixLiteral(m, r, c) -> type_of_matrix m r c 
+  | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, _) -> type_of_identifier s 
   | MatrixAccess(s, _, _) -> type_of_identifier s 
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
