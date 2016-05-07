@@ -1,4 +1,4 @@
 #include <file/for.mxl>;
-int in(){
+int main(){
   return 0;
 }
