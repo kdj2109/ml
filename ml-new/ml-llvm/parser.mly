@@ -3,13 +3,11 @@
 %{ open Ast %}
 
 %token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK BAR COMMA
-%token PLUS MINUS TIMES DIVIDE MOD ASSIGN
-%token EQ NEQ LT LEQ GT GEQ AND OR NOT 
-%token RETURN IF ELSE ELSEIF FOR PFOR WHILE 
-%token FUNC ASYNC WAIT 
-%token TRUE FALSE 
-%token INT FLOAT BOOL STRING CHAR VOID 
-%token INCLUDE
+%token PLUS MINUS TIMES DIVIDE ASSIGN
+%token EQ NEQ LT LEQ GT GEQ AND OR NOT
+%token RETURN IF ELSE ELSEIF FOR WHILE
+%token TRUE FALSE
+%token INT FLOAT BOOL STRING CHAR VOID
 %token <int> INTLIT
 %token <float> FLOATLIT
 %token <char> CHARLIT
@@ -34,18 +32,7 @@
 %%
 
 program:
-  includes decls EOF { ($1, fst $2, snd $2) }
-
-includes: 
-   /* nothing */ { [] }
- | include_list  { List.rev $1 } 
-
-include_list:
-    include_decl              { [$1] }
-  | include_list include_decl { $2 :: $1 }
-
-include_decl:
-  INCLUDE STRINGLIT SEMI { Include($2) } 
+  decls EOF { (fst $1, snd $1) }
 
 decls:
    /* nothing */ { [], [] }
@@ -69,16 +56,20 @@ formal_list:
   | formal_list COMMA datatype ID { ($3, $4) :: $1 }
 
 datatype:
-    primitive   { DataType($1) }
-  | tuple_type  { $1 } 
-  | matrix_type { $1 } 
+    primitive    { DataType($1) }
+  | tuple_type   { $1 }
+  | matrix_type  { $1 }
+  | pointer_type { $1 }
 
-tuple_type: 
+tuple_type:
   primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
 
-matrix_type: 
+matrix_type:
     primitive LBRACK INTLIT COLON INTLIT RBRACK  { MatrixType(DataType($1), $3, $5) }
   | tuple_type LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
+
+pointer_type:
+    primitive LBRACK RBRACK { PointerType($1) }
 
 primitive:
     INT    { Int }
@@ -133,8 +124,8 @@ expr:
   | NOT expr                             { Unop(Not, $2) }
   | expr ASSIGN expr                     { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN         { Call($1, $3) }
-  | LPAREN expr RPAREN                   { $2 } 
-  | ID LBRACK INTLIT RBRACK              { TupleAccess($1, $3)} 
+  | LPAREN expr RPAREN                   { $2 }
+  | ID LBRACK expr RBRACK                { TupleAccess($1, $3)}
   | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
 
 primitives:
@@ -143,7 +134,7 @@ primitives:
   | STRINGLIT { StrLit($1) }
   | TRUE      { BoolLit(true) }
   | FALSE     { BoolLit(false) }
-  | CHARLIT   { CharLit($1) } 
+  | CHARLIT   { CharLit($1) }
 
 literals:
     primitives                                                   { $1 }
@@ -151,7 +142,7 @@ literals:
   | LBRACK BAR multiple_matrix BAR RBRACK      { MatrixLiteral(List.rev $3) }
   | LBRACK BAR tuple_multiple_matrix BAR RBRACK { MatrixLiteral(List.rev $3) }
 
-/*matrix_list:     
+/*matrix_list:
     literals { [$1] }
     | matrix_list COMMA literals {$3 :: $1}*/
 
@@ -161,21 +152,21 @@ multiple_matrix:
 
 tuple_multiple_matrix:
     | tuple_literal_list {[$1]}
-    | tuple_multiple_matrix BAR tuple_literal_list {$3 :: $1} 
+    | tuple_multiple_matrix BAR tuple_literal_list {$3 :: $1}
 
 
-tuple_literal_list: 
-    tuple_literal                          { [$1] } 
+tuple_literal_list:
+    tuple_literal                          { [$1] }
   | tuple_literal_list COMMA tuple_literal { $3 :: $1 }
 
 
-tuple_literal:  
+tuple_literal:
   LPAREN array_literal RPAREN { TupleLiteral(List.rev $2) }
 
 
-array_literal: 
+array_literal:
     literals                     { [$1] }
-  | array_literal COMMA literals { $3 :: $1 } 
+  | array_literal COMMA literals { $3 :: $1 }
 
 actuals_opt:
     /* nothing */ { [] }

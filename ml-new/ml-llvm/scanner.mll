@@ -1,10 +1,10 @@
 (* Ocamllex scanner for ML *)
 
-{ 
+{
 
-  open Parser 
+  open Parser
 
-  let un_esc s = 
+  let un_esc s =
 	Scanf.sscanf ("\"" ^ s ^ "\"") "%S%!" (fun x -> x)
 
 }
@@ -24,24 +24,24 @@ let char = ''' ( ascii | digits ) '''
 let id = alphabet alphanumund*
 
 rule token = parse
-  whitespace { token lexbuf }  
+  whitespace { token lexbuf }
 | "/*"       { comment lexbuf }          (* Comments *)
 | "//"       { slcomment lexbuf }		 (* Single line comment *)
 | '('        { LPAREN }
 | ')'        { RPAREN }
 | '{'        { LBRACE }
 | '}'        { RBRACE }
-| '['        { LBRACK } 
-| ']'        { RBRACK } 
+| '['        { LBRACK }
+| ']'        { RBRACK }
 | '|'        { BAR }
 | ';'        { SEMI }
-| ':'		 { COLON } 
+| ':'		 { COLON }
 | ','        { COMMA }
 | '+'        { PLUS }
 | '-'        { MINUS }
 | '*'        { TIMES }
 | '/'        { DIVIDE }
-| "true"     { TRUE } 
+| "true"     { TRUE }
 | "false"    { FALSE }
 | '='        { ASSIGN }
 | "=="       { EQ }
@@ -56,17 +56,16 @@ rule token = parse
 | "if"       { IF }
 | "else"     { ELSE }
 | "for"      { FOR }
-| "while"    { WHILE } 
+| "while"    { WHILE }
 | "return"   { RETURN }
-| "int"      { INT } 
-| "float"    { FLOAT } 
+| "int"      { INT }
+| "float"    { FLOAT }
 | "bool"     { BOOL }
 | "char"     { CHAR }
 | "str"      { STRING }
 | "void"     { VOID }
-| "#include" { INCLUDE }
 | integer as lxm { INTLIT(int_of_string lxm) }
-| float   as lxm { FLOATLIT(float_of_string lxm) } 
+| float   as lxm { FLOATLIT(float_of_string lxm) }
 | string         { STRINGLIT(un_esc s) }
 | char    as lxm { CHARLIT(String.get lxm 1) }
 | esc_ch  as lxm { CHARLIT(String.get (un_esc lxm) 1) }
@@ -76,8 +75,8 @@ rule token = parse
 
 and comment = parse
   "*/"  { token lexbuf }
-| _     { comment lexbuf } 
+| _     { comment lexbuf }
 
-and slcomment = parse 
+and slcomment = parse
   '\n'  { token lexbuf }
 | _     { slcomment lexbuf }
