@@ -35,8 +35,9 @@ rule token = parse
 | ']'        { RBRACK }
 | '|'        { BAR }
 | ';'        { SEMI }
-| ':'		 { COLON }
+| ':'		     { COLON }
 | ','        { COMMA }
+| '.'        { PERIOD }
 | '+'        { PLUS }
 | '-'        { MINUS }
 | '*'        { TIMES }
@@ -64,6 +65,7 @@ rule token = parse
 | "char"     { CHAR }
 | "str"      { STRING }
 | "void"     { VOID }
+| "length"   { LENGTH }
 | integer as lxm { INTLIT(int_of_string lxm) }
 | float   as lxm { FLOATLIT(float_of_string lxm) }
 | string         { STRINGLIT(un_esc s) }

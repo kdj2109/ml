@@ -120,6 +120,18 @@ let translate (globals, functions) =
                    with Not_found -> StringMap.find n global_vars
     in
 
+    let check_function func =
+      (* Type of each variable (global, formal, or local *)
+        List.fold_left (fun m (t, n) -> StringMap.add n t m)
+        StringMap.empty (globals @ func.A.formals @ func.A.locals)
+      in
+
+    let rec type_of_identifier s i =
+      let symbols = check_function (List.nth functions i) in
+      try StringMap.find s symbols
+      with Not_found -> type_of_identifier s (succ i)
+    in
+
     let get_tuple_type tuple =
       match (List.hd tuple) with
         A.IntLit _ -> ltype_of_typ (A.DataType(A.Int))
@@ -157,6 +169,7 @@ let translate (globals, functions) =
                               | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
                               )
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
+      | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->

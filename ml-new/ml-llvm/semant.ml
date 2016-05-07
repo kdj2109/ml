@@ -96,7 +96,7 @@ let check (globals, functions) =
         { datatype = DataType(Void); fname = "printf"; formals = [(DataType(Float), "x")];
       locals = []; body = [] } (StringMap.singleton "open"
         { datatype = DataType(Void); fname = "open"; formals= [(DataType(String), "s")];
-      locals = []; body = []} ))))
+      locals = []; body = []}))))
   in
 
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
