@@ -11,7 +11,7 @@ int[3] addTuples(int[3] x, int[3] y) {
 
 // ALEX -- this is what wee need to work on
 int addTuples2(int[] x, int[] y) {
-	return 3;
+	return 0;
 }
 
 int main() {
