@@ -164,9 +164,12 @@ let translate (globals, functions) =
       L.build_in_bounds_gep (lookup s) [|L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0|] s builder
     in
 
-    let build_pointer_dereference s builder =
-      L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0; L.const_int i32_t 0 |] s builder
-    in 
+    let build_pointer_dereference s builder isAssign =
+      if isAssign
+        then L.build_load (lookup s) s builder
+      else
+        L.build_load (L.build_load (lookup s) s builder) s builder
+    in
 
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
@@ -185,7 +188,7 @@ let translate (globals, functions) =
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
       | A.Reference (s) -> build_tuple_argument s builder
-      | A.Dereference (s) -> build_pointer_dereference s builder
+      | A.Dereference (s) -> build_pointer_dereference s builder false
       | A.DoubleReference (s) -> build_matrix_argument s builder
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
@@ -330,6 +333,7 @@ let translate (globals, functions) =
                                             Id s -> lookup s
                                           | A.TupleAccess(s, e) -> let i = (match e with A.IntLit i -> L.const_int i32_t i | A.Id s -> L.build_load (lookup s) s builder) in build_tuple_access s (L.const_int i32_t 0) i builder true
                                           | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO) (L.const_int i32_t iT) builder true
+                                          | A.Dereference(s) -> build_pointer_dereference s builder true 
                                           | _ -> raise (IllegalAssignment))
                              and e2' = expr builder e2 in
 	                   ignore (L.build_store e2' e1' builder); e2'
