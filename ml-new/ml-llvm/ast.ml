@@ -12,6 +12,7 @@ type datatype =
  | MatrixType of datatype * int * int
  | DataType of primitive
  | PointerType of primitive
+ | DoublePointerType of primitive
 
 type var_dec = datatype * string
 
@@ -29,6 +30,7 @@ type expr =
   | MatrixLiteral of expr list list
   | Length of string
   | Reference of string
+  | DoubleReference of string
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -138,6 +140,7 @@ let rec string_of_expr = function
   | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
   | Length(s) -> s ^ "." ^ "length"
   | Reference(s) -> "@" ^ s
+  | DoubleReference(s) -> "@@" ^ s 
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
@@ -196,6 +199,7 @@ let string_of_typ = function
   | PointerType(Char) -> "char[]"
   | PointerType(Bool) -> "bool[]"
   | PointerType(Void) -> "void[]"
+  | DoublePointerType(_) -> "Double pointer fix ast print 201"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 

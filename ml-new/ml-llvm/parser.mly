@@ -61,6 +61,7 @@ datatype:
   | tuple_type   { $1 }
   | matrix_type  { $1 }
   | pointer_type { $1 }
+  | doublepointer_type {$1}
 
 tuple_type:
   primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
@@ -71,6 +72,9 @@ matrix_type:
 
 pointer_type:
     primitive LBRACK RBRACK { PointerType($1) }
+
+doublepointer_type:
+    primitive LBRACK RBRACK LBRACK RBRACK { DoublePointerType($1)}
 
 primitive:
     INT    { Int }
@@ -130,6 +134,7 @@ expr:
   | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
   | ID PERIOD LENGTH                     { Length($1) }
   | AT ID                                { Reference($2) }
+  | AT AT ID                             { DoubleReference($3)}
 
 primitives:
     INTLIT    { IntLit($1) }

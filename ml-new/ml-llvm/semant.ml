@@ -71,6 +71,12 @@ let check (globals, functions) =
     | (PointerType(String), PointerType(String)) -> lvaluet
     | (PointerType(Bool), PointerType(Bool)) -> lvaluet
     | (PointerType(Void), PointerType(Void)) -> lvaluet
+    | (DoublePointerType(Int), DoublePointerType(Int)) -> lvaluet
+    | (DoublePointerType(Float), DoublePointerType(Float)) -> lvaluet
+    | (DoublePointerType(Char), DoublePointerType(Char)) -> lvaluet
+    | (DoublePointerType(String), DoublePointerType(String)) -> lvaluet
+    | (DoublePointerType(Bool), DoublePointerType(Bool)) -> lvaluet
+    | (DoublePointerType(Void), DoublePointerType(Void)) -> lvaluet
     | _ -> raise err
   in
 
@@ -199,7 +205,7 @@ let check (globals, functions) =
     | DataType(Bool) -> PointerType(Bool)
     | DataType(Void) -> PointerType(Void)
     | TupleType(t, _) -> type_of_pointer (DataType(t))
-    | MatrixType(t, _, _) -> type_of_pointer t
+    | MatrixType(t, _, _) ->  DoublePointerType(Int)
     | _ -> raise ( Failure ("illegal pointer type") ) in
 
   (* Return the type of an expression or throw an exception *)
@@ -216,6 +222,7 @@ let check (globals, functions) =
   | MatrixAccess(s, _, _) -> type_of_identifier s
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Reference(s) -> type_of_pointer (type_of_identifier s)
+  | DoubleReference(s) -> DoublePointerType(Int)
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)

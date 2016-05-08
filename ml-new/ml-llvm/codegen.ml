@@ -67,6 +67,7 @@ let translate (globals, functions) =
                            | A.String -> pointer_t (pointer_t i8_t)
                            | A.Bool -> pointer_t i1_t
                            | A.Void -> pointer_t void_t)
+    | A.DoublePointerType(t) -> pointer_t (pointer_t i32_t) 
     in
 
   (* Declare each global variable; remember its value in a map *)
@@ -159,6 +160,9 @@ let translate (globals, functions) =
       L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0; L.const_int i32_t 0 |] s builder
     in
 
+    let build_matrix_argument s builder =
+      L.build_in_bounds_gep (lookup s) [|L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0|] s builder
+    in
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -176,6 +180,7 @@ let translate (globals, functions) =
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
       | A.Reference (s) -> build_tuple_argument s builder
+      | A.DoubleReference (s) -> build_matrix_argument s builder
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
@@ -407,8 +412,12 @@ let translate (globals, functions) =
                               | A.String -> L.build_ret (L.const_array (pointer_t i8_t) [| L.const_string context "" |])
                               | A.Bool -> L.build_ret (L.const_array i1_t [| L.const_int i1_t 0 |])
                               | A.Void -> L.build_ret_void)
+      | A.MatrixType(typ, size1, size2) -> L.build_ret ( match typ with 
+                                A.DataType(A.Float) -> let m= [[0.0;0.0];[0.0;0.0]] in let realOrder= List.map List.rev m in let i32Lists = List.map (List.map (L.const_float float_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (2)) arrayOfArrays
+                              | A.DataType(A.Int) -> let m= [[0;0];[0;0]] in let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
+                            )
       (*| A.MatrixType(t, r, c) -> (match t with
-                                    A.DataType(A.Int) -> L.build_ret (L.const_array (L.const_array i32_t r) c)
+                                    A.DataType(A.Int) -> L.build_ret (array_t (array_t i32_t r) c)
                                   | A.DataType(A.Float) -> L.build_ret (L.const_array (L.const_array float_t r) c)
                                   | A.DataType(A.Char) -> L.build_ret (L.const_array (L.const_array i8_t r) c)
                                   | A.DataType(A.String) -> L.build_ret (L.const_array (L.const_array (pointer_t i8_t) r) c)
@@ -427,7 +436,9 @@ let translate (globals, functions) =
                              | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
                              | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
                              | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
-                             | A.Void -> L.build_ret_void))
+                             | A.Void -> L.build_ret_void)
+      | A.DoublePointerType(t) -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i32_t)))
+    )
   in
 
   List.iter build_function_body functions;
