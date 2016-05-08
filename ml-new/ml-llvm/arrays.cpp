@@ -1,11 +1,13 @@
 // Use clang -S -emit-llvm arrays.c to compile to llvm
 
-int getAverage(int arr[], int size);
+int[] addTuples(int a[], int b[]);
 
-int getAverage(int arr[], int size)
+int[] getAverage(int a[], int b[])
 {
   return arr[0];
 }
+
+
 
 int main ()
 {

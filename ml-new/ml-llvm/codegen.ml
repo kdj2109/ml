@@ -175,7 +175,7 @@ let translate (globals, functions) =
                               )
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
-      | A.Reference (s) -> build_tuple_argument s builder 
+      | A.Reference (s) -> build_tuple_argument s builder
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
@@ -422,11 +422,11 @@ let translate (globals, functions) =
                                                           | A.DataType(A.Bool) -> L.build_ret (L.const_array (L.const_array (L.const_array i1_t l) r) c)
                                                           | A.DataType(A.Void) -> L.build_ret_void)) *)
       | A.PointerType(t) -> (match t with
-                               A.Int -> L.build_ret (L.const_pointer_null i32_t)
-                             | A.Float -> L.build_ret (L.const_pointer_null float_t)
-                             | A.Char -> L.build_ret (L.const_pointer_null i8_t)
-                             | A.String -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
-                             | A.Bool -> L.build_ret (L.const_pointer_null i1_t)
+                               A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                             | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                             | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
+                             | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
+                             | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
                              | A.Void -> L.build_ret_void))
   in
 

@@ -2,16 +2,16 @@ int[3] addTuples(int[3] x, int[3] y) {
 	int i;
 	int[3] t;
 
-	for (i = 0; i < 3; i = i + 1) {
+	for (i = 0; i < t.length; i = i + 1) {
 		t[i] = x[i] + y[i];
 	}
 
 	return t;
 }
 
-// ALEX -- this is what wee need to work on
-int addTuples2(int[] x, int[] y) {
-	return 0;
+// ALEX -- this is what we need to work on
+int[] addTuples2(int[] x, int[] y) {
+	return x;
 }
 
 int main() {
