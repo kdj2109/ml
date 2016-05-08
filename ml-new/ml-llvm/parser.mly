@@ -3,7 +3,7 @@
 %{ open Ast %}
 
 %token SEMI COLON LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK BAR PERIOD COMMA
-%token PLUS MINUS TIMES DIVIDE ASSIGN AT
+%token PLUS MINUS TIMES DIVIDE ASSIGN AT DOLLAR
 %token EQ NEQ LT LEQ GT GEQ AND OR NOT
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
@@ -134,6 +134,7 @@ expr:
   | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
   | ID PERIOD LENGTH                     { Length($1) }
   | AT ID                                { Reference($2) }
+  | DOLLAR ID                            { Dereference($2) }
   | AT AT ID                             { DoubleReference($3)}
 
 primitives:

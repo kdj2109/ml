@@ -1,20 +1,22 @@
 // Use clang -S -emit-llvm arrays.c to compile to llvm
+#include <iostream>
+using namespace std;
 
-int[] addTuples(int a[], int b[]);
+int addTuples(int a[]);
 
-int[] getAverage(int a[], int b[])
+int addTuples(int a[])
 {
-  return arr[0];
+  return a[0];
 }
-
-
 
 int main ()
 {
    // an int array with 5 elements.
    int balance[5] = {1000, 2, 3, 17, 50};
    // pass pointer to the array as an argument.
-   int x = getAverage( balance, 5 ) ;
+   int x = addTuples( balance );
+
+   cout << x << '\n';
 
    return 0;
 }

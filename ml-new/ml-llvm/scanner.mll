@@ -43,6 +43,7 @@ rule token = parse
 | '*'        { TIMES }
 | '/'        { DIVIDE }
 | '@'        { AT }
+| '$'        { DOLLAR }
 | "true"     { TRUE }
 | "false"    { FALSE }
 | '='        { ASSIGN }

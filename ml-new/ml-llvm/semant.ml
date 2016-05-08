@@ -208,6 +208,15 @@ let check (globals, functions) =
     | MatrixType(t, _, _) ->  DoublePointerType(Int)
     | _ -> raise ( Failure ("illegal pointer type") ) in
 
+  let pointer_type = function
+    | PointerType(Int) -> DataType(Int)
+    | PointerType(Float) -> DataType(Float)
+    | PointerType(Char) -> DataType(Char)
+    | PointerType(String) -> DataType(String)
+    | PointerType(Bool) -> DataType(Bool)
+    | PointerType(Void) -> DataType(Void)
+    | _ -> raise ( Failure ("cannot dereference a non-pointer type") ) in
+
   (* Return the type of an expression or throw an exception *)
   let rec expr = function
     IntLit _ -> DataType(Int)
@@ -222,6 +231,7 @@ let check (globals, functions) =
   | MatrixAccess(s, _, _) -> type_of_identifier s
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Reference(s) -> type_of_pointer (type_of_identifier s)
+  | Dereference(s) -> pointer_type (type_of_identifier s)
   | DoubleReference(s) -> DoublePointerType(Int)
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
