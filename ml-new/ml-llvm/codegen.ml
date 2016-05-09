@@ -67,7 +67,13 @@ let translate (globals, functions) =
                            | A.String -> pointer_t (pointer_t i8_t)
                            | A.Bool -> pointer_t i1_t
                            | A.Void -> pointer_t void_t)
-    | A.DoublePointerType(t) -> pointer_t (pointer_t i32_t)
+    | A.DoublePointerType(t) -> (match t with
+                                   A.Int -> pointer_t i32_t
+                                 | A.Float -> pointer_t float_t
+                                 | A.Char -> pointer_t i8_t
+                                 | A.String -> pointer_t (pointer_t i8_t)
+                                 | A.Bool -> pointer_t i1_t
+                                 | A.Void -> pointer_t void_t)
     in
 
   (* Declare each global variable; remember its value in a map *)
@@ -192,7 +198,7 @@ let translate (globals, functions) =
                               | A.IntLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
                               | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
                               )
-      | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
+      | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder false
       | A.PointerIncrement (s) ->  build_pointer_increment s builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
       | A.Reference (s) -> build_tuple_argument s builder
@@ -340,7 +346,7 @@ let translate (globals, functions) =
       | A.Assign (e1, e2) -> let e1' = (match e1 with
                                             Id s -> lookup s
                                           | A.TupleAccess(s, e) -> let i = (match e with A.IntLit i -> L.const_int i32_t i | A.Id s -> L.build_load (lookup s) s builder) in build_tuple_access s (L.const_int i32_t 0) i builder true
-                                          | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO) (L.const_int i32_t iT) builder true
+                                          | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder true
                                           | A.PointerIncrement(s) -> build_pointer_increment s builder true
                                           | A.Dereference(s) -> build_pointer_dereference s builder true
                                           | _ -> raise (IllegalAssignment))
@@ -456,7 +462,13 @@ let translate (globals, functions) =
                              | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
                              | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
                              | A.Void -> L.build_ret_void)
-      | A.DoublePointerType(t) -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i32_t)))
+      | A.DoublePointerType(t) -> (match t with
+                                     A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                                   | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                                   | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
+                                   | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
+                                   | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
+                                   | A.Void -> L.build_ret_void)
     )
   in
 

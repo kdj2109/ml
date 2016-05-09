@@ -169,6 +169,9 @@ let check (globals, functions) =
     | TupleType(Bool, _) -> DataType(Void)
     | _ -> raise (Failure ("illegal access type")) in
 
+  let matrix_acces_type = function
+      MatrixType(t, _, _) -> t in
+
   let type_of_matrix m r c =
     match (List.hd (List.hd m)) with
         IntLit _ -> MatrixType(DataType(Int), r, c)
@@ -215,6 +218,7 @@ let check (globals, functions) =
     | PointerType(String) -> DataType(String)
     | PointerType(Bool) -> DataType(Bool)
     | PointerType(Void) -> DataType(Void)
+    | DoublePointerType(t) -> DataType(t)
     | _ -> raise ( Failure ("cannot dereference a non-pointer type") ) in
 
   (* Return the type of an expression or throw an exception *)
@@ -228,7 +232,7 @@ let check (globals, functions) =
   | TupleLiteral t -> type_of_tuple t
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, _) -> access_type (type_of_identifier s)
-  | MatrixAccess(s, _, _) -> type_of_identifier s
+  | MatrixAccess(s, _, _) -> matrix_acces_type (type_of_identifier s)
   | PointerIncrement(s) -> type_of_identifier s
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Reference(s) -> type_of_pointer (type_of_identifier s)
@@ -268,15 +272,15 @@ let check (globals, functions) =
                                                                                  )
                                                                 | _ -> raise ( Failure ("expression is not of type int") )
                                                              )
-                                      | MatrixAccess(s, i1, i2) -> (match (type_of_identifier s) with
+                                      | MatrixAccess(s, _, _) -> (match (type_of_identifier s) with
                                                                       MatrixType(t, l1, l2) -> (match t with
-                                                                                                    DataType(Int) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int)
-                                                                                                  | DataType(Float) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                                  | DataType(Char) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
-                                                                                                  | DataType(String) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String)
-                                                                                                  | DataType(Bool) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Bool)
-                                                                                                  | DataType(Void) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void)
-                                                                                                  | TupleType(p, l) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else TupleType(p, l)
+                                                                                                    DataType(Int) -> DataType(Int)
+                                                                                                  | DataType(Float) -> DataType(Float)
+                                                                                                  | DataType(Char) -> DataType(Char)
+                                                                                                  | DataType(String) -> DataType(String)
+                                                                                                  | DataType(Bool) -> DataType(Bool)
+                                                                                                  | DataType(Void) -> DataType(Void)
+                                                                                                  | TupleType(p, l) -> TupleType(p, l)
                                                                                                   | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                                 )
                                                                       | _ -> raise ( Failure ("cannot access a primitive") )
@@ -296,15 +300,15 @@ let check (globals, functions) =
                                                                                  )
                                                                 | _ -> raise ( Failure ("expression is not have of int") )
                                                              )
-                                      | MatrixAccess(s, i1, i2) -> (match (type_of_identifier s) with
+                                      | MatrixAccess(s, _, _) -> (match (type_of_identifier s) with
                                                                       MatrixType(t, l1, l2) -> (match t with
-                                                                                                  DataType(Int) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Int)
-                                                                                                | DataType(Float) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Float)
-                                                                                                | DataType(Char) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Char)
-                                                                                                | DataType(String) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(String)
-                                                                                                | DataType(Bool) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Bool)
-                                                                                                | DataType(Void) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else DataType(Void)
-                                                                                                | TupleType(p, l) -> if i1 > l1 - 1 || i2 > l2 - 1 then raise ( Failure ("accessing out of bounds element") ) else TupleType(p, l)
+                                                                                                  DataType(Int) -> DataType(Int)
+                                                                                                | DataType(Float) -> DataType(Float)
+                                                                                                | DataType(Char) -> DataType(Char)
+                                                                                                | DataType(String) -> DataType(String)
+                                                                                                | DataType(Bool) -> DataType(Bool)
+                                                                                                | DataType(Void) -> DataType(Void)
+                                                                                                | TupleType(p, l) -> TupleType(p, l)
                                                                                                 | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                               )
                                                                       | _ -> raise ( Failure ("cannot access a primitive") )

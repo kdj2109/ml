@@ -131,7 +131,7 @@ expr:
   | ID LPAREN actuals_opt RPAREN         { Call($1, $3) }
   | LPAREN expr RPAREN                   { $2 }
   | ID LBRACK expr RBRACK                { TupleAccess($1, $3)}
-  | ID LBRACK INTLIT COLON INTLIT RBRACK { MatrixAccess($1, $3, $5)}
+  | ID LBRACK expr COLON expr RBRACK     { MatrixAccess($1, $3, $5)}
   | ID PERIOD LENGTH                     { Length($1) }
   | AT ID                                { Reference($2) }
   | DOLLAR ID                            { Dereference($2) }

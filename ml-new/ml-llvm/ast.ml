@@ -23,7 +23,7 @@ type expr =
   | StrLit of string
   | BoolLit of bool
   | TupleAccess of string * expr
-  | MatrixAccess of string * int * int
+  | MatrixAccess of string * expr * expr
   | PointerIncrement of string
   | TupleLiteral of expr list
   | MatrixLiteral of expr list list
@@ -137,7 +137,7 @@ let rec string_of_expr = function
   | TupleLiteral(t) -> string_of_tuple t
   | MatrixLiteral(m) -> "string_of_matrix m r c"
   | TupleAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]"
-  | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
+  | MatrixAccess(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ ":" ^ string_of_expr e2 ^ "]"
   | PointerIncrement(s) -> s ^ "++"
   | Length(s) -> s ^ "." ^ "length"
   | Reference(s) -> "@" ^ s

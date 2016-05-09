@@ -1,28 +1,33 @@
+void addIntMatrices(int[][] x, int[][] y, int rows, int columns) {
+	int len;
+	int i;
 
-// ALEX -- this is what we need to work on
-int[][] addTuples2(int[][] z, int[][] y) {
-	return z;
+	len = rows * columns;
+
+	for(i = 0; i < len; i = i + 1) {
+		$x = $x + $y;
+		x = x.+;
+		y = y.+;
+	}
 }
 
 int main() {
 	int[3:4] a;
-	//int[3] a;
-	int[2:2] b;
-	int[3] c;
+	int[3:4] b;
 	int i;
+	int j;
 
-	//a = [1, 2, 3];
-	//b = [1, 2, 3];
-	a=[|1,2,3,4|3,4,5,6|7,8,9,8|];
-	b=[|5,7|9,15|];
+	a = [| 1, 2, 3, 4 | 3, 4, 5, 6 | 7, 8, 9, 8 |];
+	b = [| 5, 7, 3, 4 | 9, 15, 7, 8 | 1, 2, 3, 4 |];
 
 
-	//addTuples2(@@a, @@b);
-	@@a;
+	addIntMatrices(@@a, @@b, 3, 4);
 
-	//for (i = 0; i < c.length; i = i + 1) {
-	//	print(c[i]);
-	//}
+	for(i = 0; i < 3; i = i + 1) {
+		for (j = 0; j < 4; j = j + 1) {
+			print(a[i:j]);
+		}
+	}
 
 	return 0;
 }
