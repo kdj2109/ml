@@ -1,0 +1,28 @@
+int main() { 
+	
+	int[3:3] y;
+	int a;
+	int b; 
+	int c; 
+	int d; 
+	int e; 
+	int f;
+	int g; 
+	int h; 
+	int i; 
+	int sum;  
+        y = [|1, 2, 3|4,5,6|7,8,10|];
+	a = y[0:0];
+        b = y[0:1];
+	c = y[0:2];
+	d = y[1:0];
+	e = y[1:1];
+	f = y[1:2];
+	g = y[2:0];
+	h = y[2:1];
+	i = y[2:2];
+
+	sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i); 
+
+	print(sum);
+}
