@@ -16,8 +16,6 @@ type datatype =
 
 type var_dec = datatype * string
 
-type include_stmt = Include of string
-
 type expr =
     IntLit of int
   | CharLit of char
@@ -26,6 +24,7 @@ type expr =
   | BoolLit of bool
   | TupleAccess of string * expr
   | MatrixAccess of string * int * int
+  | PointerIncrement of string
   | TupleLiteral of expr list
   | MatrixLiteral of expr list list
   | Length of string
@@ -139,9 +138,10 @@ let rec string_of_expr = function
   | MatrixLiteral(m) -> "string_of_matrix m r c"
   | TupleAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]"
   | MatrixAccess(s, i1, i2) -> s ^ "[" ^ string_of_int i1 ^ ":" ^ string_of_int i2 ^ "]"
+  | PointerIncrement(s) -> s ^ "++"
   | Length(s) -> s ^ "." ^ "length"
   | Reference(s) -> "@" ^ s
-  | Dereference(s) -> "$" ^ s 
+  | Dereference(s) -> "$" ^ s
   | DoubleReference(s) -> "@@" ^ s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2

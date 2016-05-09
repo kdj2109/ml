@@ -229,6 +229,7 @@ let check (globals, functions) =
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, _) -> access_type (type_of_identifier s)
   | MatrixAccess(s, _, _) -> type_of_identifier s
+  | PointerIncrement(s) -> type_of_identifier s
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Reference(s) -> type_of_pointer (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)

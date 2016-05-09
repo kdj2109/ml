@@ -64,7 +64,7 @@ datatype:
   | doublepointer_type {$1}
 
 tuple_type:
-  primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
+    primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
 
 matrix_type:
     primitive LBRACK INTLIT COLON INTLIT RBRACK  { MatrixType(DataType($1), $3, $5) }
@@ -136,6 +136,7 @@ expr:
   | AT ID                                { Reference($2) }
   | DOLLAR ID                            { Dereference($2) }
   | AT AT ID                             { DoubleReference($3)}
+  | ID PERIOD PLUS                       { PointerIncrement($1) }
 
 primitives:
     INTLIT    { IntLit($1) }

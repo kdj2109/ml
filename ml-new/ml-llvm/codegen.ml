@@ -171,6 +171,13 @@ let translate (globals, functions) =
         L.build_load (L.build_load (lookup s) s builder) s builder
     in
 
+    let build_pointer_increment s builder isAssign =
+      if isAssign
+        then L.build_load (L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 1 |] s builder) s builder
+      else
+        L.build_in_bounds_gep (L.build_load (L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0 |] s builder) s builder) [| L.const_int i32_t 1 |] s builder
+    in
+
     (* Construct code for an expression; return its value *)
     let rec expr builder = function
 	      A.IntLit i -> L.const_int i32_t i
@@ -186,6 +193,7 @@ let translate (globals, functions) =
                               | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
                               )
       | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO)  (L.const_int i32_t iT) builder false
+      | A.PointerIncrement (s) ->  build_pointer_increment s builder false
       | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
       | A.Reference (s) -> build_tuple_argument s builder
       | A.Dereference (s) -> build_pointer_dereference s builder false
@@ -333,7 +341,8 @@ let translate (globals, functions) =
                                             Id s -> lookup s
                                           | A.TupleAccess(s, e) -> let i = (match e with A.IntLit i -> L.const_int i32_t i | A.Id s -> L.build_load (lookup s) s builder) in build_tuple_access s (L.const_int i32_t 0) i builder true
                                           | A.MatrixAccess (s,iO,iT) -> build_matrix_access s (L.const_int i32_t 0) (L.const_int i32_t iO) (L.const_int i32_t iT) builder true
-                                          | A.Dereference(s) -> build_pointer_dereference s builder true 
+                                          | A.PointerIncrement(s) -> build_pointer_increment s builder true
+                                          | A.Dereference(s) -> build_pointer_dereference s builder true
                                           | _ -> raise (IllegalAssignment))
                              and e2' = expr builder e2 in
 	                   ignore (L.build_store e2' e1' builder); e2'

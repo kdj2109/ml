@@ -1,4 +1,4 @@
-// Use clang -S -emit-llvm arrays.c to compile to llvm
+// Use clang -S -emit-llvm arrays.cpp to compile to llvm
 #include <iostream>
 using namespace std;
 
@@ -6,7 +6,7 @@ int addTuples(int a[]);
 
 int addTuples(int a[])
 {
-  return a[0];
+  return a[1];
 }
 
 int main ()

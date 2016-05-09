@@ -38,7 +38,7 @@ define i32 @_Z9addTuplesPi(i32* %a) #0 {
   %1 = alloca i32*, align 8
   store i32* %a, i32** %1, align 8
   %2 = load i32*, i32** %1, align 8
-  %3 = getelementptr inbounds i32, i32* %2, i64 0
+  %3 = getelementptr inbounds i32, i32* %2, i64 1
   %4 = load i32, i32* %3, align 4
   ret i32 %4
 }
