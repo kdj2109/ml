@@ -1,0 +1,43 @@
+int detThree(int[][] x){ 	
+	int a;
+	int b; 
+	int c; 
+	int d; 
+	int e; 
+	int f;
+	int g; 
+	int h; 
+	int i; 
+	int sum;  
+	a = $x;
+	x = x.+;
+        b = $x;
+    	x = x.+;
+    	c = $x;
+	x = x.+;
+	d = $x;
+	x = x.+;
+	e = $x;
+	x = x.+;
+	f = $x;
+	x = x.+;
+	g = $x;
+	x = x.+;
+	h = $x;
+	x = x.+;
+	i = $x;
+
+	sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i); 
+
+        return sum;
+
+}
+
+int main(){
+	int det; 
+	int[3:3] y;
+	y = [|1, 2, 3|4,5,6|7,8,10|];
+	det = detThree(@@y);
+	print(det);
+}
+
