@@ -194,6 +194,7 @@ let translate (globals, functions) =
                                 A.FloatLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (List.length (List.hd m))) arrayOfArrays
                               | A.IntLit _ -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
                               | A.TupleLiteral t -> let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (expr builder)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array (array_t (get_tuple_type t) (List.length t))) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t (array_t (get_tuple_type t) (List.length t)) (List.length (List.hd m))) arrayOfArrays
+                              | _ -> raise ( UnsupportedMatrixType )
                               )
       | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder false
       | A.PointerIncrement (s) ->  build_pointer_increment s builder false
@@ -342,8 +343,8 @@ let translate (globals, functions) =
 
         build_ops_with_type e'_type
       | A.Assign (e1, e2) -> let e1' = (match e1 with
-                                            Id s -> lookup s
-                                          | A.TupleAccess(s, e) -> let i = (match e with A.IntLit i -> L.const_int i32_t i | A.Id s -> L.build_load (lookup s) s builder) in build_tuple_access s (L.const_int i32_t 0) i builder true
+                                            A.Id s -> lookup s
+                                          | A.TupleAccess(s, e) -> let i = expr builder e in build_tuple_access s (L.const_int i32_t 0) i builder true
                                           | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder true
                                           | A.PointerIncrement(s) -> build_pointer_increment s builder true
                                           | A.Dereference(s) -> build_pointer_dereference s builder true
@@ -435,10 +436,11 @@ let translate (globals, functions) =
                               | A.String -> L.build_ret (L.const_array (pointer_t i8_t) [| L.const_string context "" |])
                               | A.Bool -> L.build_ret (L.const_array i1_t [| L.const_int i1_t 0 |])
                               | A.Void -> L.build_ret_void)
-      | A.MatrixType(typ, size1, size2) -> L.build_ret ( match typ with
-                                A.DataType(A.Float) -> let m= [[0.0;0.0];[0.0;0.0]] in let realOrder= List.map List.rev m in let i32Lists = List.map (List.map (L.const_float float_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (2)) arrayOfArrays
-                              | A.DataType(A.Int) -> let m= [[0;0];[0;0]] in let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
-                            )
+      | A.MatrixType(typ, _, _) -> L.build_ret (match typ with
+                                                    A.DataType(A.Float) -> let m= [[0.0;0.0];[0.0;0.0]] in let realOrder= List.map List.rev m in let i32Lists = List.map (List.map (L.const_float float_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (2)) arrayOfArrays
+                                                  | A.DataType(A.Int) -> let m= [[0;0];[0;0]] in let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
+                                                  | _ -> raise ( UnsupportedMatrixType )
+                                               )
       (*| A.MatrixType(t, r, c) -> (match t with
                                     A.DataType(A.Int) -> L.build_ret (array_t (array_t i32_t r) c)
                                   | A.DataType(A.Float) -> L.build_ret (L.const_array (L.const_array float_t r) c)

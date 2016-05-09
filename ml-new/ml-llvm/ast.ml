@@ -137,7 +137,7 @@ let rec string_of_expr = function
   | BoolLit(false) -> "false"
   | Id(s) -> s
   | TupleLiteral(t) -> string_of_tuple t
-  | MatrixLiteral(m) -> "string_of_matrix m r c"
+  | MatrixLiteral(_) -> "matrix literal"
   | TupleAccess(s, e) -> s ^ "[" ^ string_of_expr e ^ "]"
   | MatrixAccess(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ ":" ^ string_of_expr e2 ^ "]"
   | PointerIncrement(s) -> s ^ "++"

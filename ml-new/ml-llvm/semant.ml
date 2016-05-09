@@ -32,7 +32,6 @@ let check (globals, functions) =
     | (DataType(Float), DataType(Float)) -> lvaluet
     | (DataType(Char), DataType(Char)) -> lvaluet
     | (DataType(String), DataType(String)) -> lvaluet
-    | (DataType(String), DataType(String)) -> lvaluet
     | (DataType(Bool), DataType(Bool)) -> lvaluet
     | (DataType(Void), DataType(Void)) -> lvaluet
     | (TupleType(Int, l1), TupleType(Int, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
@@ -168,7 +167,8 @@ let check (globals, functions) =
     | _ -> raise (Failure ("illegal access type")) in
 
   let matrix_acces_type = function
-      MatrixType(t, _, _) -> t in
+      MatrixType(t, _, _) -> t
+    | _ -> raise (Failure ("illegal matrix access") ) in
 
   let type_of_matrix m r c =
     match (List.hd (List.hd m)) with
@@ -208,8 +208,11 @@ let check (globals, functions) =
     | TupleType(t, _) -> type_of_pointer (DataType(t))
     | MatrixType(t, _, _) -> (match t with
                                 DataType(t) -> MatrixPointerType(t)
-                              | TupleType(t, _) -> MatrixTuplePointerType(t))
-    | _ -> raise ( Failure ("illegal pointer type") ) in
+                              | TupleType(t, _) -> MatrixTuplePointerType(t)
+                              | _ -> raise (Failure ("illegal matrix pointer type"))
+                             )
+    | _ -> raise ( Failure ("illegal pointer type") )
+  in
 
   let pointer_type = function
     | TuplePointerType(Int) -> DataType(Int)
@@ -271,11 +274,12 @@ let check (globals, functions) =
                                                                                                         | Bool -> DataType(Bool)
                                                                                                         | Void -> DataType(Void)
                                                                                                        )
+                                                                                   | _ -> raise ( Failure ("cannot access a non-tuple type") )
                                                                                  )
                                                                 | _ -> raise ( Failure ("expression is not of type int") )
                                                              )
                                       | MatrixAccess(s, _, _) -> (match (type_of_identifier s) with
-                                                                      MatrixType(t, l1, l2) -> (match t with
+                                                                      MatrixType(t, _, _) -> (match t with
                                                                                                     DataType(Int) -> DataType(Int)
                                                                                                   | DataType(Float) -> DataType(Float)
                                                                                                   | DataType(Char) -> DataType(Char)
@@ -299,11 +303,12 @@ let check (globals, functions) =
                                                                                                         | Bool -> DataType(Bool)
                                                                                                         | Void -> DataType(Void)
                                                                                                        )
+                                                                                   | _ -> raise ( Failure ("cannot access a non-tuple type") )
                                                                                  )
-                                                                | _ -> raise ( Failure ("expression is not have of int") )
+                                                                | _ -> raise ( Failure ("expression is not of datatype int") )
                                                              )
                                       | MatrixAccess(s, _, _) -> (match (type_of_identifier s) with
-                                                                      MatrixType(t, l1, l2) -> (match t with
+                                                                      MatrixType(t, _, _) -> (match t with
                                                                                                   DataType(Int) -> DataType(Int)
                                                                                                 | DataType(Float) -> DataType(Float)
                                                                                                 | DataType(Char) -> DataType(Char)
