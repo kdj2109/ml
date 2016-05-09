@@ -1,0 +1,18 @@
+void printFloatTuples(float[] x,  int len) {
+         int i;
+         float f;
+         for (i = 0; i < len; i = i + 1) {
+                 f = $x;
+		 printf(f);
+		 x = x.+;
+         }
+}
+
+int main(){
+	float[3] tup;
+	tup = [2.3,3.4,4.5];
+	
+	printFloatTuples(@tup, tup.length);
+
+	return 0;
+}
