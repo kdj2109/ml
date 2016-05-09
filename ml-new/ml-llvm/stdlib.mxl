@@ -1,0 +1,44 @@
+/* NAME: printFloatTuples
+   ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
+   EXECUTES: Prints the values of the tuple, each on a new line 
+   RETURNS: VOID
+*/
+void printFloatTuples(float[] x,  int len) {
+         int i;
+         float f;
+         for (i = 0; i < len; i = i + 1) {
+                 f = $x;
+		 printf(f);
+		 x = x.+;
+         }
+}
+/* NAME: printIntTuples
+   ARGUMENTS: Pointer to int tuple (@varialbe_name) and tuple length
+   EXECUTES: Prints the values of the tuple, each on a new line
+   RETURNS: VOID
+*/
+void printIntTuples(int[] x,  int len) {
+         int i;
+         int f;
+         for (i = 0; i < len; i = i + 1) {
+                 f = $x;
+		 print(f);
+		 x = x.+;
+         }
+}
+/* NAME: addIntTuples
+   ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   	EXECUTES: Adds the contents of y to the contents of x; updating x in memory 
+   	RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+/*
+void addIntTuples(int[] x, int[] y, int len) {
+	
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x + $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}

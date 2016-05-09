@@ -1,0 +1,17 @@
+#include <stdlib.mxl>;
+
+int main(){
+
+	int[3] a;
+	int[3] b;
+	int i;
+
+	a = [1, 2, 3];
+	b = [1, 2, 3];
+
+        addIntTuples(@a, @b, a.length); // Add b to a -> change a
+
+	printIntTuples(@a, a.length);
+	
+	return 0;
+}
