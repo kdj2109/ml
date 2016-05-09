@@ -1,0 +1,36 @@
+void printFloatTuples(float[] x,  int len) {
+         int i;
+         float f;
+         for (i = 0; i < len; i = i + 1) {
+                 f = $x;
+		 printf(f);
+		 x = x.+;
+         }
+}
+
+void printIntTuples(int[] x,  int len) {
+         int i;
+         int f;
+         for (i = 0; i < len; i = i + 1) {
+                 f = $x;
+		 print(f);
+		 x = x.+;
+         }
+}
+
+void addIntTuples(int[] x, int[] y, int len) {
+	/*
+
+	Arguments x and y are integer pointers
+	pointing to the first elements in the tuples.
+	Length is the length of the tuples being passed in.
+	Adds the second tuple to the first tuple, stores in the first
+	*/
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x + $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
