@@ -198,7 +198,17 @@ let translate (globals, functions) =
                               )
       | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder false
       | A.PointerIncrement (s) ->  build_pointer_increment s builder false
-      | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
+      | A.Length (s) -> (match (type_of_identifier s 0) with
+                           A.TupleType(_, l) -> L.const_int i32_t l
+                         | A.MatrixType(A.TupleType(_, l), _, _) -> L.const_int i32_t l
+                         | _ -> raise ( InvalidUseOfLength )
+                        )
+      | A.Rows(s) -> (match (type_of_identifier s 0) with
+                        A.MatrixType(_, r, _) -> L.const_int i32_t r
+                      | _ -> raise ( InvalidUseOfRows ))
+      | A.Columns(s) -> (match (type_of_identifier s 0) with
+                           A.MatrixType(_, _, c) -> L.const_int i32_t c
+                         | _ -> raise ( InvalidUseOfColumns ))
       | A.TupleReference (s) -> build_tuple_argument s builder
       | A.Dereference (s) -> build_pointer_dereference s builder false
       | A.MatrixReference (s) -> build_matrix_argument s builder

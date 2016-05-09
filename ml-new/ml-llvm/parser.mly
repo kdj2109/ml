@@ -8,7 +8,7 @@
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
 %token INT FLOAT BOOL STRING CHAR VOID
-%token LENGTH
+%token LENGTH ROWS COLUMNS
 %token <int> INTLIT
 %token <float> FLOATLIT
 %token <char> CHARLIT
@@ -137,6 +137,8 @@ expr:
   | ID LBRACK expr RBRACK                { TupleAccess($1, $3)}
   | ID LBRACK expr COLON expr RBRACK     { MatrixAccess($1, $3, $5)}
   | ID PERIOD LENGTH                     { Length($1) }
+  | ID PERIOD ROWS                       { Rows($1) }
+  | ID PERIOD COLUMNS                    { Columns($1) }
   | AT ID                                { TupleReference($2) }
   | DOLLAR ID                            { Dereference($2) }
   | AT AT ID                             { MatrixReference($3)}

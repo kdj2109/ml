@@ -29,6 +29,8 @@ type expr =
   | TupleLiteral of expr list
   | MatrixLiteral of expr list list
   | Length of string
+  | Rows of string
+  | Columns of string
   | TupleReference of string
   | Dereference of string
   | MatrixReference of string
@@ -142,6 +144,8 @@ let rec string_of_expr = function
   | MatrixAccess(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ ":" ^ string_of_expr e2 ^ "]"
   | PointerIncrement(s) -> s ^ "++"
   | Length(s) -> s ^ "." ^ "length"
+  | Rows(s) -> s ^ "." ^ "rows"
+  | Columns(s) -> s ^ "." ^ "columns"
   | TupleReference(s) -> "@" ^ s
   | Dereference(s) -> "$" ^ s
   | MatrixReference(s) -> "@@" ^ s

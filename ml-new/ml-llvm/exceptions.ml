@@ -1,11 +1,11 @@
-(* Binop Exceptions *) 
+(* Binop Exceptions *)
 
-exception UnsupportedBinaryOperationOnTypes of string * string 
+exception UnsupportedBinaryOperationOnTypes of string * string
 exception UnsuppotedBinOp
 
-(* Unop Exceptions *) 
+(* Unop Exceptions *)
 
-exception UnsupportedUnaryOperationOnType of string 
+exception UnsupportedUnaryOperationOnType of string
 exception UnsupportedUnaryOperationOnFloat
 
 (* Tuple Exceptions *)
@@ -13,11 +13,14 @@ exception UnsupportedUnaryOperationOnFloat
 exception UnsupportedTupleOfTuples
 exception UnsupportedTupleType
 exception InvalidTuplePointerType
+exception InvalidUseOfLength
 
 (* Matrix Exceptions *)
 
 exception UnsupportedMatrixofMatrices
 exception UnsupportedMatrixType
+exception InvalidUseOfRows
+exception InvalidUseOfColumns
 
 (* Assignment Exceptions *)
 

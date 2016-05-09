@@ -219,7 +219,7 @@ let check (globals, functions) =
     | MatrixPointerType(t) -> MatrixPointerType(t)
     | MatrixTuplePointerType(t) -> MatrixTuplePointerType(t)
     | _ -> raise ( Failure ("cannot increment a non-pointer type") )
-  in 
+  in
 
   let pointer_type = function
     | TuplePointerType(Int) -> DataType(Int)
@@ -254,7 +254,16 @@ let check (globals, functions) =
                                         | _ -> raise (Failure ("attempting to access with a non-integer type"))) in
                                matrix_acces_type (type_of_identifier s)
   | PointerIncrement(s) -> check_pointer_type (type_of_identifier s)
-  | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
+  | Length(s) -> (match (type_of_identifier s) with
+                    TupleType(_, _) -> DataType(Int)
+                  | MatrixType(TupleType(_, _), _, _) -> DataType(Int)
+                  | _ -> raise(Failure ("cannot get the length of non-matrix-of-tuples or non-tuple datatype")))
+  | Rows(s) -> (match (type_of_identifier s) with
+                  MatrixType(_, _, _) -> DataType(Int)
+                | _ -> raise (Failure ("cannot get the rows of non-matrix datatype")))
+  | Columns(s) -> (match (type_of_identifier s) with
+                     MatrixType(_, _, _) -> DataType(Int)
+                   | _ -> raise (Failure ("cannot get the rows of non-matrix datatype")))
   | TupleReference(s) -> type_of_pointer (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)
   | MatrixReference(s) -> type_of_pointer (type_of_identifier s)
