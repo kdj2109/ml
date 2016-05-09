@@ -1,4 +1,23 @@
-#include <file/for.mxl>;
 int main(){
-  return 0;
+	int y;
+	int[3] z; 
+	x = open("file/temp.ppm");
+	z = x[0:0];
+	y = z[0];
+	print(y);
+	z = x[1:0];
+	y = z[0];
+	print(y);
+	z = x[2:0];
+	y = z[0];
+	print(y);
+	z = x[4:0];
+	y = z[0];
+	print(y);
+	z = x[1:1];
+	prints("18");
+	z = x[2:1];
+	print(y);
+	prints("done");
+	return 0;
 }
