@@ -31,7 +31,7 @@ void printIntTuples(int[] x,  int len) {
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
    	EXECUTES: Adds the contents of y to the contents of x; updating x in memory 
    	RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
-/*
+*/
 void addIntTuples(int[] x, int[] y, int len) {
 	
 	int i;
