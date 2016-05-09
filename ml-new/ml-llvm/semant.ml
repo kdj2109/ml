@@ -214,6 +214,13 @@ let check (globals, functions) =
     | _ -> raise ( Failure ("illegal pointer type") )
   in
 
+  let check_pointer_type = function
+      TuplePointerType(t) -> TuplePointerType(t)
+    | MatrixPointerType(t) -> MatrixPointerType(t)
+    | MatrixTuplePointerType(t) -> MatrixTuplePointerType(t)
+    | _ -> raise ( Failure ("cannot increment a non-pointer type") )
+  in 
+
   let pointer_type = function
     | TuplePointerType(Int) -> DataType(Int)
     | TuplePointerType(Float) -> DataType(Float)
@@ -235,9 +242,18 @@ let check (globals, functions) =
   | Id s -> type_of_identifier s
   | TupleLiteral t -> type_of_tuple t
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
-  | TupleAccess(s, _) -> access_type (type_of_identifier s)
-  | MatrixAccess(s, _, _) -> matrix_acces_type (type_of_identifier s)
-  | PointerIncrement(s) -> type_of_identifier s
+  | TupleAccess(s, e) -> let _ = (match (expr e) with
+                                    DataType(Int) -> DataType(Int)
+                                  | _ -> raise (Failure ("attempting to access with a non-integer type"))) in
+                         access_type (type_of_identifier s)
+  | MatrixAccess(s, e1, e2) -> let _ = (match (expr e1) with
+                                          DataType(Int) -> DataType(Int)
+                                        | _ -> raise (Failure ("attempting to access with a non-integer type")))
+                               and _ = (match (expr e2) with
+                                          DataType(Int) -> DataType(Int)
+                                        | _ -> raise (Failure ("attempting to access with a non-integer type"))) in
+                               matrix_acces_type (type_of_identifier s)
+  | PointerIncrement(s) -> check_pointer_type (type_of_identifier s)
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | TupleReference(s) -> type_of_pointer (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)
