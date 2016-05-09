@@ -11,9 +11,9 @@ type datatype =
    TupleType of primitive * int
  | MatrixType of datatype * int * int
  | DataType of primitive
- | PointerType of primitive
- | DoublePointerType of primitive
- | TriplePointerType of primitive
+ | TuplePointerType of primitive
+ | MatrixPointerType of primitive
+ | MatrixTuplePointerType of primitive
 
 type var_dec = datatype * string
 
@@ -29,10 +29,10 @@ type expr =
   | TupleLiteral of expr list
   | MatrixLiteral of expr list list
   | Length of string
-  | Reference of string
+  | TupleReference of string
   | Dereference of string
-  | DoubleReference of string
-  | TripleReference of string
+  | MatrixReference of string
+  | MatrixTupleReference of string
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -142,10 +142,10 @@ let rec string_of_expr = function
   | MatrixAccess(s, e1, e2) -> s ^ "[" ^ string_of_expr e1 ^ ":" ^ string_of_expr e2 ^ "]"
   | PointerIncrement(s) -> s ^ "++"
   | Length(s) -> s ^ "." ^ "length"
-  | Reference(s) -> "@" ^ s
+  | TupleReference(s) -> "@" ^ s
   | Dereference(s) -> "$" ^ s
-  | DoubleReference(s) -> "@@" ^ s
-  | TripleReference(s) -> "@@@" ^ s
+  | MatrixReference(s) -> "@@" ^ s
+  | MatrixTupleReference(s) -> "@@@" ^ s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
@@ -198,24 +198,24 @@ let string_of_typ = function
                                                     )
                               | _ -> raise ( Failure ("Illegal matrix of matrices") )
                             )
-  | PointerType(Int) -> "int[]"
-  | PointerType(Float) -> "float[]"
-  | PointerType(String) -> "str[]"
-  | PointerType(Char) -> "char[]"
-  | PointerType(Bool) -> "bool[]"
-  | PointerType(Void) -> "void[]"
-  | DoublePointerType(Int) -> "int[][]"
-  | DoublePointerType(Float) -> "float[][]"
-  | DoublePointerType(Char) -> "char[][]"
-  | DoublePointerType(String) -> "str[][]"
-  | DoublePointerType(Bool) -> "bool[][]"
-  | DoublePointerType(Void) -> "void[][]"
-  | TriplePointerType(Int) -> "int[][][]"
-  | TriplePointerType(Float) -> "float[][][]"
-  | TriplePointerType(Char) -> "char[][][]"
-  | TriplePointerType(String) -> "str[][][]"
-  | TriplePointerType(Bool) -> "bool[][][]"
-  | TriplePointerType(Void) -> "void[][][]"
+  | TuplePointerType(Int) -> "int[]"
+  | TuplePointerType(Float) -> "float[]"
+  | TuplePointerType(String) -> "str[]"
+  | TuplePointerType(Char) -> "char[]"
+  | TuplePointerType(Bool) -> "bool[]"
+  | TuplePointerType(Void) -> "void[]"
+  | MatrixPointerType(Int) -> "int[][]"
+  | MatrixPointerType(Float) -> "float[][]"
+  | MatrixPointerType(Char) -> "char[][]"
+  | MatrixPointerType(String) -> "str[][]"
+  | MatrixPointerType(Bool) -> "bool[][]"
+  | MatrixPointerType(Void) -> "void[][]"
+  | MatrixTuplePointerType(Int) -> "int[][][]"
+  | MatrixTuplePointerType(Float) -> "float[][][]"
+  | MatrixTuplePointerType(Char) -> "char[][][]"
+  | MatrixTuplePointerType(String) -> "str[][][]"
+  | MatrixTuplePointerType(Bool) -> "bool[][][]"
+  | MatrixTuplePointerType(Void) -> "void[][][]"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
