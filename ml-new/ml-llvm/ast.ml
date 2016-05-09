@@ -13,6 +13,7 @@ type datatype =
  | DataType of primitive
  | PointerType of primitive
  | DoublePointerType of primitive
+ | TriplePointerType of primitive
 
 type var_dec = datatype * string
 
@@ -31,6 +32,7 @@ type expr =
   | Reference of string
   | Dereference of string
   | DoubleReference of string
+  | TripleReference of string
   | Id of string
   | Binop of expr * op * expr
   | Unop of uop * expr
@@ -143,6 +145,7 @@ let rec string_of_expr = function
   | Reference(s) -> "@" ^ s
   | Dereference(s) -> "$" ^ s
   | DoubleReference(s) -> "@@" ^ s
+  | TripleReference(s) -> "@@@" ^ s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
   | Unop(o, e) -> string_of_uop o ^ string_of_expr e
@@ -201,7 +204,18 @@ let string_of_typ = function
   | PointerType(Char) -> "char[]"
   | PointerType(Bool) -> "bool[]"
   | PointerType(Void) -> "void[]"
-  | DoublePointerType(_) -> "Double pointer fix ast print 201"
+  | DoublePointerType(Int) -> "int[][]"
+  | DoublePointerType(Float) -> "float[][]"
+  | DoublePointerType(Char) -> "char[][]"
+  | DoublePointerType(String) -> "str[][]"
+  | DoublePointerType(Bool) -> "bool[][]"
+  | DoublePointerType(Void) -> "void[][]"
+  | TriplePointerType(Int) -> "int[][][]"
+  | TriplePointerType(Float) -> "float[][][]"
+  | TriplePointerType(Char) -> "char[][][]"
+  | TriplePointerType(String) -> "str[][][]"
+  | TriplePointerType(Bool) -> "bool[][][]"
+  | TriplePointerType(Void) -> "void[][][]"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 

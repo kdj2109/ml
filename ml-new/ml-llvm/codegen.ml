@@ -74,6 +74,13 @@ let translate (globals, functions) =
                                  | A.String -> pointer_t (pointer_t i8_t)
                                  | A.Bool -> pointer_t i1_t
                                  | A.Void -> pointer_t void_t)
+    | A.TriplePointerType(t) -> (match t with
+                                   A.Int -> pointer_t i32_t
+                                 | A.Float -> pointer_t float_t
+                                 | A.Char -> pointer_t i8_t
+                                 | A.String -> pointer_t (pointer_t i8_t)
+                                 | A.Bool -> pointer_t i1_t
+                                 | A.Void -> pointer_t void_t)
     in
 
   (* Declare each global variable; remember its value in a map *)
@@ -167,7 +174,11 @@ let translate (globals, functions) =
     in
 
     let build_matrix_argument s builder =
-      L.build_in_bounds_gep (lookup s) [|L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0|] s builder
+      L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0 |] s builder
+    in
+
+    let build_matrix_tuple_argument s builder =
+      L.build_in_bounds_gep (lookup s) [| L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0; L.const_int i32_t 0 |] s builder
     in
 
     let build_pointer_dereference s builder isAssign =
@@ -204,6 +215,7 @@ let translate (globals, functions) =
       | A.Reference (s) -> build_tuple_argument s builder
       | A.Dereference (s) -> build_pointer_dereference s builder false
       | A.DoubleReference (s) -> build_matrix_argument s builder
+      | A.TripleReference (s) -> build_matrix_tuple_argument s builder
       | A.Noexpr -> L.const_int i32_t 0
       | A.Id s -> L.build_load (lookup s) s builder
       | A.Binop (e1, op, e2) ->
@@ -463,6 +475,13 @@ let translate (globals, functions) =
                              | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
                              | A.Void -> L.build_ret_void)
       | A.DoublePointerType(t) -> (match t with
+                                     A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                                   | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                                   | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
+                                   | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
+                                   | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
+                                   | A.Void -> L.build_ret_void)
+      | A.TriplePointerType(t) -> (match t with
                                      A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
                                    | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
                                    | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))

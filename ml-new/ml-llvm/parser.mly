@@ -57,24 +57,28 @@ formal_list:
   | formal_list COMMA datatype ID { ($3, $4) :: $1 }
 
 datatype:
-    primitive    { DataType($1) }
-  | tuple_type   { $1 }
-  | matrix_type  { $1 }
-  | pointer_type { $1 }
-  | doublepointer_type {$1}
+    primitive           { DataType($1) }
+  | tuple_type          { $1 }
+  | matrix_type         { $1 }
+  | pointer_type        { $1 }
+  | double_pointer_type { $1 }
+  | triple_pointer_type { $1 }
 
 tuple_type:
-    primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
+  primitive LBRACK INTLIT RBRACK { TupleType($1, $3) }
 
 matrix_type:
     primitive LBRACK INTLIT COLON INTLIT RBRACK  { MatrixType(DataType($1), $3, $5) }
   | tuple_type LBRACK INTLIT COLON INTLIT RBRACK { MatrixType($1, $3, $5) }
 
 pointer_type:
-    primitive LBRACK RBRACK { PointerType($1) }
+  primitive LBRACK RBRACK { PointerType($1) }
 
-doublepointer_type:
-    primitive LBRACK RBRACK LBRACK RBRACK { DoublePointerType($1)}
+double_pointer_type:
+  primitive LBRACK RBRACK LBRACK RBRACK { DoublePointerType($1)}
+
+triple_pointer_type:
+  primitive LBRACK RBRACK LBRACK RBRACK LBRACK RBRACK { TriplePointerType($1) }
 
 primitive:
     INT    { Int }
@@ -89,7 +93,7 @@ vdecl_list:
   | vdecl_list vdecl { $2 :: $1 }
 
 vdecl:
-    datatype ID SEMI { ($1, $2) }
+  datatype ID SEMI { ($1, $2) }
 
 stmt_list:
     /* nothing */  { [] }
@@ -136,6 +140,7 @@ expr:
   | AT ID                                { Reference($2) }
   | DOLLAR ID                            { Dereference($2) }
   | AT AT ID                             { DoubleReference($3)}
+  | AT AT AT ID                          { TripleReference($4) }
   | ID PERIOD PLUS                       { PointerIncrement($1) }
 
 primitives:

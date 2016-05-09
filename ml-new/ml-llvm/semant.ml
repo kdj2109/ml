@@ -41,7 +41,6 @@ let check (globals, functions) =
     | (TupleType(String, l1), TupleType(String, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Bool, l1), TupleType(Bool, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (DataType(Int), TupleType(Int, _)) -> lvaluet
     | (PointerType(Int), TupleType(Int, _)) -> lvaluet
     | (PointerType(Float), TupleType(Float, _)) -> lvaluet
     | (PointerType(Char), TupleType(Char, _)) -> lvaluet
@@ -54,17 +53,18 @@ let check (globals, functions) =
     | (TupleType(String, _), PointerType(String)) -> lvaluet
     | (TupleType(Bool, _), PointerType(Bool)) -> lvaluet
     | (TupleType(Void, _), PointerType(Void)) -> lvaluet
+    | (MatrixType(DataType(Int), _, _), DoublePointerType(Int)) -> lvaluet
+    | (MatrixType(DataType(Float), _, _), DoublePointerType(Float)) -> lvaluet
+    | (DoublePointerType(Int), MatrixType(DataType(Int), _, _)) -> lvaluet
+    | (DoublePointerType(Float), MatrixType(DataType(Float), _, _)) -> lvaluet
+    | (MatrixType(TupleType(Int, _), _, _), TriplePointerType(Int)) -> lvaluet
+    | (MatrixType(TupleType(Float, _), _, _), TriplePointerType(Float)) -> lvaluet
+    | (TriplePointerType(Int), MatrixType(TupleType(Int, _), _, _)) -> lvaluet
+    | (TriplePointerType(Float), MatrixType(TupleType(Float, _), _, _)) -> lvaluet
     | (MatrixType(DataType(Int), r1, c1), MatrixType(DataType(Int), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(DataType(Float), r1, c1), MatrixType(DataType(Float), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(DataType(Char), r1, c1), MatrixType(DataType(Char), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(DataType(String), r1, c1), MatrixType(DataType(String), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(DataType(Void), r1, c1), MatrixType(DataType(Void), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Int, d1), r1, c1), MatrixType(TupleType(Int, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Float, d1), r1, c1), MatrixType(TupleType(Float, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(TupleType(Char, d1), r1, c1), MatrixType(TupleType(Char, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(TupleType(String, d1), r1, c1), MatrixType(TupleType(String, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(TupleType(Bool, d1), r1, c1), MatrixType(TupleType(Bool, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
-    | (MatrixType(TupleType(Void, d1), r1, c1), MatrixType(TupleType(Void, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
     | (PointerType(Int), PointerType(Int)) -> lvaluet
     | (PointerType(Float), PointerType(Float)) -> lvaluet
     | (PointerType(Char), PointerType(Char)) -> lvaluet
@@ -73,10 +73,10 @@ let check (globals, functions) =
     | (PointerType(Void), PointerType(Void)) -> lvaluet
     | (DoublePointerType(Int), DoublePointerType(Int)) -> lvaluet
     | (DoublePointerType(Float), DoublePointerType(Float)) -> lvaluet
-    | (DoublePointerType(Char), DoublePointerType(Char)) -> lvaluet
-    | (DoublePointerType(String), DoublePointerType(String)) -> lvaluet
-    | (DoublePointerType(Bool), DoublePointerType(Bool)) -> lvaluet
-    | (DoublePointerType(Void), DoublePointerType(Void)) -> lvaluet
+    | (TriplePointerType(Int), TriplePointerType(Int)) -> lvaluet
+    | (TriplePointerType(Float), TriplePointerType(Float)) -> lvaluet
+    | (PointerType(Int), TriplePointerType(Int)) -> lvaluet
+    | (PointerType(Float), TriplePointerType(Float)) -> lvaluet
     | _ -> raise err
   in
 
@@ -208,7 +208,9 @@ let check (globals, functions) =
     | DataType(Bool) -> PointerType(Bool)
     | DataType(Void) -> PointerType(Void)
     | TupleType(t, _) -> type_of_pointer (DataType(t))
-    | MatrixType(t, _, _) ->  DoublePointerType(Int)
+    | MatrixType(t, _, _) -> (match t with
+                                DataType(t) -> DoublePointerType(t)
+                              | TupleType(t, _) -> TriplePointerType(t))
     | _ -> raise ( Failure ("illegal pointer type") ) in
 
   let pointer_type = function
@@ -219,6 +221,7 @@ let check (globals, functions) =
     | PointerType(Bool) -> DataType(Bool)
     | PointerType(Void) -> DataType(Void)
     | DoublePointerType(t) -> DataType(t)
+    | TriplePointerType(t) -> DataType(t)
     | _ -> raise ( Failure ("cannot dereference a non-pointer type") ) in
 
   (* Return the type of an expression or throw an exception *)
@@ -237,7 +240,8 @@ let check (globals, functions) =
   | Length(s) -> (match (type_of_identifier s) with TupleType(_, _) -> DataType(Int) | _ -> raise(Failure ("illegal expression in arguments of length()")))
   | Reference(s) -> type_of_pointer (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)
-  | DoubleReference(s) -> DoublePointerType(Int)
+  | DoubleReference(s) -> type_of_pointer (type_of_identifier s)
+  | TripleReference(s) -> type_of_pointer (type_of_identifier s)
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)
