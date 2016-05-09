@@ -1,3 +1,8 @@
+/* NAME: printFloatTuples
+   ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
+   EXECUTES: Prints the values of the tuple, each on a new line 
+   RETURNS: VOID
+*/
 void printFloatTuples(float[] x,  int len) {
          int i;
          float f;
@@ -7,7 +12,11 @@ void printFloatTuples(float[] x,  int len) {
 		 x = x.+;
          }
 }
-
+/* NAME: printIntTuples
+   ARGUMENTS: Pointer to int tuple (@varialbe_name) and tuple length
+   EXECUTES: Prints the values of the tuple, each on a new line
+   RETURNS: VOID
+*/
 void printIntTuples(int[] x,  int len) {
          int i;
          int f;
@@ -17,15 +26,14 @@ void printIntTuples(int[] x,  int len) {
 		 x = x.+;
          }
 }
-
+/* NAME: addIntTuples
+   ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   	EXECUTES: Adds the contents of y to the contents of x; updating x in memory 
+   	RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+/*
 void addIntTuples(int[] x, int[] y, int len) {
-	/*
-
-	Arguments x and y are integer pointers
-	pointing to the first elements in the tuples.
-	Length is the length of the tuples being passed in.
-	Adds the second tuple to the first tuple, stores in the first
-	*/
+	
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
