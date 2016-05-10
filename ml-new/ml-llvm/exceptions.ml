@@ -25,3 +25,11 @@ exception InvalidUseOfColumns
 (* Assignment Exceptions *)
 
 exception IllegalAssignment
+
+(* Pointer Exceptions *)
+
+exception IllegalPointerType
+
+(* Return Execeptions *)
+
+exception IllegalReturnType

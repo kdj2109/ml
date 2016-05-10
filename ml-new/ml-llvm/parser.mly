@@ -8,7 +8,7 @@
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
 %token INT FLOAT BOOL CHAR VOID
-%token LENGTH ROWS COLUMNS
+%token LENGTH ROWS COLUMNS FREE
 %token <int> INTLIT
 %token <float> FLOATLIT
 %token <char> CHARLIT
@@ -143,6 +143,7 @@ expr:
   | AT AT ID                             { MatrixReference($3)}
   | AT AT AT ID                          { MatrixTupleReference($4) }
   | ID PERIOD PLUS                       { PointerIncrement($1) }
+  | FREE LPAREN ID RPAREN                { Free($3) }
 
 primitives:
     INTLIT    { IntLit($1) }
