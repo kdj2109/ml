@@ -1,0 +1,624 @@
+/usr/local/opt/llvm/bin/lli
+
+###### Testing test-add1
+./ml.native tests/test-add1.mxl > test-add1.ll
+llc -filetype=obj test-add1.ll > test-add1.o
+g++ test-add1.o > a.out
+ld: warning: object file (test-add1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-add1.out
+diff -b test-add1.out tests/test-add1.out > test-add1.diff
+###### SUCCESS
+
+###### Testing test-arith1
+./ml.native tests/test-arith1.mxl > test-arith1.ll
+llc -filetype=obj test-arith1.ll > test-arith1.o
+g++ test-arith1.o > a.out
+ld: warning: object file (test-arith1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-arith1.out
+diff -b test-arith1.out tests/test-arith1.out > test-arith1.diff
+###### SUCCESS
+
+###### Testing test-arith2
+./ml.native tests/test-arith2.mxl > test-arith2.ll
+llc -filetype=obj test-arith2.ll > test-arith2.o
+g++ test-arith2.o > a.out
+ld: warning: object file (test-arith2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-arith2.out
+diff -b test-arith2.out tests/test-arith2.out > test-arith2.diff
+###### SUCCESS
+
+###### Testing test-arith3
+./ml.native tests/test-arith3.mxl > test-arith3.ll
+llc -filetype=obj test-arith3.ll > test-arith3.o
+g++ test-arith3.o > a.out
+ld: warning: object file (test-arith3.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-arith3.out
+diff -b test-arith3.out tests/test-arith3.out > test-arith3.diff
+###### SUCCESS
+
+###### Testing test-det
+./ml.native tests/test-det.mxl > test-det.ll
+llc -filetype=obj test-det.ll > test-det.o
+g++ test-det.o > a.out
+ld: warning: object file (test-det.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-det.out
+diff -b test-det.out tests/test-det.out > test-det.diff
+###### SUCCESS
+
+###### Testing test-detfxn
+./ml.native tests/test-detfxn.mxl > test-detfxn.ll
+llc -filetype=obj test-detfxn.ll > test-detfxn.o
+g++ test-detfxn.o > a.out
+ld: warning: object file (test-detfxn.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-detfxn.out
+diff -b test-detfxn.out tests/test-detfxn.out > test-detfxn.diff
+###### SUCCESS
+
+###### Testing test-fib
+./ml.native tests/test-fib.mxl > test-fib.ll
+llc -filetype=obj test-fib.ll > test-fib.o
+g++ test-fib.o > a.out
+ld: warning: object file (test-fib.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-fib.out
+diff -b test-fib.out tests/test-fib.out > test-fib.diff
+###### SUCCESS
+
+###### Testing test-floatarith
+./ml.native tests/test-floatarith.mxl > test-floatarith.ll
+llc -filetype=obj test-floatarith.ll > test-floatarith.o
+g++ test-floatarith.o > a.out
+ld: warning: object file (test-floatarith.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-floatarith.out
+diff -b test-floatarith.out tests/test-floatarith.out > test-floatarith.diff
+###### SUCCESS
+
+###### Testing test-for1
+./ml.native tests/test-for1.mxl > test-for1.ll
+llc -filetype=obj test-for1.ll > test-for1.o
+g++ test-for1.o > a.out
+ld: warning: object file (test-for1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-for1.out
+diff -b test-for1.out tests/test-for1.out > test-for1.diff
+###### SUCCESS
+
+###### Testing test-for2
+./ml.native tests/test-for2.mxl > test-for2.ll
+llc -filetype=obj test-for2.ll > test-for2.o
+g++ test-for2.o > a.out
+ld: warning: object file (test-for2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-for2.out
+diff -b test-for2.out tests/test-for2.out > test-for2.diff
+###### SUCCESS
+
+###### Testing test-func1
+./ml.native tests/test-func1.mxl > test-func1.ll
+llc -filetype=obj test-func1.ll > test-func1.o
+g++ test-func1.o > a.out
+ld: warning: object file (test-func1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func1.out
+diff -b test-func1.out tests/test-func1.out > test-func1.diff
+###### SUCCESS
+
+###### Testing test-func2
+./ml.native tests/test-func2.mxl > test-func2.ll
+llc -filetype=obj test-func2.ll > test-func2.o
+g++ test-func2.o > a.out
+ld: warning: object file (test-func2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func2.out
+diff -b test-func2.out tests/test-func2.out > test-func2.diff
+###### SUCCESS
+
+###### Testing test-func3
+./ml.native tests/test-func3.mxl > test-func3.ll
+llc -filetype=obj test-func3.ll > test-func3.o
+g++ test-func3.o > a.out
+ld: warning: object file (test-func3.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func3.out
+diff -b test-func3.out tests/test-func3.out > test-func3.diff
+###### SUCCESS
+
+###### Testing test-func4
+./ml.native tests/test-func4.mxl > test-func4.ll
+llc -filetype=obj test-func4.ll > test-func4.o
+g++ test-func4.o > a.out
+ld: warning: object file (test-func4.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func4.out
+diff -b test-func4.out tests/test-func4.out > test-func4.diff
+###### SUCCESS
+
+###### Testing test-func5
+./ml.native tests/test-func5.mxl > test-func5.ll
+llc -filetype=obj test-func5.ll > test-func5.o
+g++ test-func5.o > a.out
+ld: warning: object file (test-func5.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func5.out
+diff -b test-func5.out tests/test-func5.out > test-func5.diff
+###### SUCCESS
+
+###### Testing test-func6
+./ml.native tests/test-func6.mxl > test-func6.ll
+llc -filetype=obj test-func6.ll > test-func6.o
+g++ test-func6.o > a.out
+ld: warning: object file (test-func6.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func6.out
+diff -b test-func6.out tests/test-func6.out > test-func6.diff
+###### SUCCESS
+
+###### Testing test-func7
+./ml.native tests/test-func7.mxl > test-func7.ll
+llc -filetype=obj test-func7.ll > test-func7.o
+g++ test-func7.o > a.out
+ld: warning: object file (test-func7.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func7.out
+diff -b test-func7.out tests/test-func7.out > test-func7.diff
+###### SUCCESS
+
+###### Testing test-func8
+./ml.native tests/test-func8.mxl > test-func8.ll
+llc -filetype=obj test-func8.ll > test-func8.o
+g++ test-func8.o > a.out
+ld: warning: object file (test-func8.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-func8.out
+diff -b test-func8.out tests/test-func8.out > test-func8.diff
+###### SUCCESS
+
+###### Testing test-gcd
+./ml.native tests/test-gcd.mxl > test-gcd.ll
+llc -filetype=obj test-gcd.ll > test-gcd.o
+g++ test-gcd.o > a.out
+ld: warning: object file (test-gcd.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-gcd.out
+diff -b test-gcd.out tests/test-gcd.out > test-gcd.diff
+###### SUCCESS
+
+###### Testing test-gcd2
+./ml.native tests/test-gcd2.mxl > test-gcd2.ll
+llc -filetype=obj test-gcd2.ll > test-gcd2.o
+g++ test-gcd2.o > a.out
+ld: warning: object file (test-gcd2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-gcd2.out
+diff -b test-gcd2.out tests/test-gcd2.out > test-gcd2.diff
+###### SUCCESS
+
+###### Testing test-global1
+./ml.native tests/test-global1.mxl > test-global1.ll
+llc -filetype=obj test-global1.ll > test-global1.o
+g++ test-global1.o > a.out
+ld: warning: object file (test-global1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-global1.out
+diff -b test-global1.out tests/test-global1.out > test-global1.diff
+###### SUCCESS
+
+###### Testing test-global2
+./ml.native tests/test-global2.mxl > test-global2.ll
+llc -filetype=obj test-global2.ll > test-global2.o
+g++ test-global2.o > a.out
+ld: warning: object file (test-global2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-global2.out
+diff -b test-global2.out tests/test-global2.out > test-global2.diff
+###### SUCCESS
+
+###### Testing test-global3
+./ml.native tests/test-global3.mxl > test-global3.ll
+llc -filetype=obj test-global3.ll > test-global3.o
+g++ test-global3.o > a.out
+ld: warning: object file (test-global3.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-global3.out
+diff -b test-global3.out tests/test-global3.out > test-global3.diff
+###### SUCCESS
+
+###### Testing test-hello
+./ml.native tests/test-hello.mxl > test-hello.ll
+llc -filetype=obj test-hello.ll > test-hello.o
+g++ test-hello.o > a.out
+ld: warning: object file (test-hello.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-hello.out
+diff -b test-hello.out tests/test-hello.out > test-hello.diff
+###### SUCCESS
+
+###### Testing test-helloworld
+./ml.native tests/test-helloworld.mxl > test-helloworld.ll
+llc -filetype=obj test-helloworld.ll > test-helloworld.o
+g++ test-helloworld.o > a.out
+ld: warning: object file (test-helloworld.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-helloworld.out
+diff -b test-helloworld.out tests/test-helloworld.out > test-helloworld.diff
+###### SUCCESS
+
+###### Testing test-helloworld2
+./ml.native tests/test-helloworld2.mxl > test-helloworld2.ll
+llc -filetype=obj test-helloworld2.ll > test-helloworld2.o
+g++ test-helloworld2.o > a.out
+ld: warning: object file (test-helloworld2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-helloworld2.out
+diff -b test-helloworld2.out tests/test-helloworld2.out > test-helloworld2.diff
+###### SUCCESS
+
+###### Testing test-if1
+./ml.native tests/test-if1.mxl > test-if1.ll
+llc -filetype=obj test-if1.ll > test-if1.o
+g++ test-if1.o > a.out
+ld: warning: object file (test-if1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-if1.out
+diff -b test-if1.out tests/test-if1.out > test-if1.diff
+###### SUCCESS
+
+###### Testing test-if2
+./ml.native tests/test-if2.mxl > test-if2.ll
+llc -filetype=obj test-if2.ll > test-if2.o
+g++ test-if2.o > a.out
+ld: warning: object file (test-if2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-if2.out
+diff -b test-if2.out tests/test-if2.out > test-if2.diff
+###### SUCCESS
+
+###### Testing test-if3
+./ml.native tests/test-if3.mxl > test-if3.ll
+llc -filetype=obj test-if3.ll > test-if3.o
+g++ test-if3.o > a.out
+ld: warning: object file (test-if3.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-if3.out
+diff -b test-if3.out tests/test-if3.out > test-if3.diff
+###### SUCCESS
+
+###### Testing test-if4
+./ml.native tests/test-if4.mxl > test-if4.ll
+llc -filetype=obj test-if4.ll > test-if4.o
+g++ test-if4.o > a.out
+ld: warning: object file (test-if4.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-if4.out
+diff -b test-if4.out tests/test-if4.out > test-if4.diff
+###### SUCCESS
+
+###### Testing test-if5
+./ml.native tests/test-if5.mxl > test-if5.ll
+llc -filetype=obj test-if5.ll > test-if5.o
+g++ test-if5.o > a.out
+ld: warning: object file (test-if5.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-if5.out
+diff -b test-if5.out tests/test-if5.out > test-if5.diff
+###### SUCCESS
+
+###### Testing test-local1
+./ml.native tests/test-local1.mxl > test-local1.ll
+llc -filetype=obj test-local1.ll > test-local1.o
+g++ test-local1.o > a.out
+ld: warning: object file (test-local1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-local1.out
+diff -b test-local1.out tests/test-local1.out > test-local1.diff
+###### SUCCESS
+
+###### Testing test-local2
+./ml.native tests/test-local2.mxl > test-local2.ll
+llc -filetype=obj test-local2.ll > test-local2.o
+g++ test-local2.o > a.out
+ld: warning: object file (test-local2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-local2.out
+diff -b test-local2.out tests/test-local2.out > test-local2.diff
+###### SUCCESS
+
+###### Testing test-matdecl
+./ml.native tests/test-matdecl.mxl > test-matdecl.ll
+llc -filetype=obj test-matdecl.ll > test-matdecl.o
+g++ test-matdecl.o > a.out
+ld: warning: object file (test-matdecl.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-matdecl.out
+diff -b test-matdecl.out tests/test-matdecl.out > test-matdecl.diff
+###### SUCCESS
+
+###### Testing test-matrixadd
+./ml.native tests/test-matrixadd.mxl > test-matrixadd.ll
+llc -filetype=obj test-matrixadd.ll > test-matrixadd.o
+g++ test-matrixadd.o > a.out
+ld: warning: object file (test-matrixadd.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-matrixadd.out
+diff -b test-matrixadd.out tests/test-matrixadd.out > test-matrixadd.diff
+###### SUCCESS
+
+###### Testing test-matrixaddfloat
+./ml.native tests/test-matrixaddfloat.mxl > test-matrixaddfloat.ll
+llc -filetype=obj test-matrixaddfloat.ll > test-matrixaddfloat.o
+g++ test-matrixaddfloat.o > a.out
+ld: warning: object file (test-matrixaddfloat.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-matrixaddfloat.out
+diff -b test-matrixaddfloat.out tests/test-matrixaddfloat.out > test-matrixaddfloat.diff
+###### SUCCESS
+
+###### Testing test-matrixaddtuples
+./ml.native tests/test-matrixaddtuples.mxl > test-matrixaddtuples.ll
+llc -filetype=obj test-matrixaddtuples.ll > test-matrixaddtuples.o
+g++ test-matrixaddtuples.o > a.out
+ld: warning: object file (test-matrixaddtuples.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-matrixaddtuples.out
+diff -b test-matrixaddtuples.out tests/test-matrixaddtuples.out > test-matrixaddtuples.diff
+###### SUCCESS
+
+###### Testing test-ops1
+./ml.native tests/test-ops1.mxl > test-ops1.ll
+llc -filetype=obj test-ops1.ll > test-ops1.o
+g++ test-ops1.o > a.out
+ld: warning: object file (test-ops1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-ops1.out
+diff -b test-ops1.out tests/test-ops1.out > test-ops1.diff
+###### SUCCESS
+
+###### Testing test-ops2
+./ml.native tests/test-ops2.mxl > test-ops2.ll
+llc -filetype=obj test-ops2.ll > test-ops2.o
+g++ test-ops2.o > a.out
+ld: warning: object file (test-ops2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-ops2.out
+diff -b test-ops2.out tests/test-ops2.out > test-ops2.diff
+###### SUCCESS
+
+###### Testing test-printFloatTup
+./ml.native tests/test-printFloatTup.mxl > test-printFloatTup.ll
+llc -filetype=obj test-printFloatTup.ll > test-printFloatTup.o
+g++ test-printFloatTup.o > a.out
+ld: warning: object file (test-printFloatTup.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-printFloatTup.out
+diff -b test-printFloatTup.out tests/test-printFloatTup.out > test-printFloatTup.diff
+###### SUCCESS
+
+###### Testing test-printIntTup
+./ml.native tests/test-printIntTup.mxl > test-printIntTup.ll
+llc -filetype=obj test-printIntTup.ll > test-printIntTup.o
+g++ test-printIntTup.o > a.out
+ld: warning: object file (test-printIntTup.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-printIntTup.out
+diff -b test-printIntTup.out tests/test-printIntTup.out > test-printIntTup.diff
+###### SUCCESS
+
+###### Testing test-printf
+./ml.native tests/test-printf.mxl > test-printf.ll
+llc -filetype=obj test-printf.ll > test-printf.o
+g++ test-printf.o > a.out
+ld: warning: object file (test-printf.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-printf.out
+diff -b test-printf.out tests/test-printf.out > test-printf.diff
+###### SUCCESS
+
+###### Testing test-tupleaccess
+./ml.native tests/test-tupleaccess.mxl > test-tupleaccess.ll
+llc -filetype=obj test-tupleaccess.ll > test-tupleaccess.o
+g++ test-tupleaccess.o > a.out
+ld: warning: object file (test-tupleaccess.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tupleaccess.out
+diff -b test-tupleaccess.out tests/test-tupleaccess.out > test-tupleaccess.diff
+###### SUCCESS
+
+###### Testing test-tupleadd
+./ml.native tests/test-tupleadd.mxl > test-tupleadd.ll
+llc -filetype=obj test-tupleadd.ll > test-tupleadd.o
+g++ test-tupleadd.o > a.out
+ld: warning: object file (test-tupleadd.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tupleadd.out
+diff -b test-tupleadd.out tests/test-tupleadd.out > test-tupleadd.diff
+###### SUCCESS
+
+###### Testing test-tupledec
+./ml.native tests/test-tupledec.mxl > test-tupledec.ll
+llc -filetype=obj test-tupledec.ll > test-tupledec.o
+g++ test-tupledec.o > a.out
+ld: warning: object file (test-tupledec.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tupledec.out
+diff -b test-tupledec.out tests/test-tupledec.out > test-tupledec.diff
+###### SUCCESS
+
+###### Testing test-tuplemat
+./ml.native tests/test-tuplemat.mxl > test-tuplemat.ll
+llc -filetype=obj test-tuplemat.ll > test-tuplemat.o
+g++ test-tuplemat.o > a.out
+ld: warning: object file (test-tuplemat.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tuplemat.out
+diff -b test-tuplemat.out tests/test-tuplemat.out > test-tuplemat.diff
+###### SUCCESS
+
+###### Testing test-tuplemat2
+./ml.native tests/test-tuplemat2.mxl > test-tuplemat2.ll
+llc -filetype=obj test-tuplemat2.ll > test-tuplemat2.o
+g++ test-tuplemat2.o > a.out
+ld: warning: object file (test-tuplemat2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tuplemat2.out
+diff -b test-tuplemat2.out tests/test-tuplemat2.out > test-tuplemat2.diff
+###### SUCCESS
+
+###### Testing test-tuplib
+./ml.native tests/test-tuplib.mxl > test-tuplib.ll
+llc -filetype=obj test-tuplib.ll > test-tuplib.o
+g++ test-tuplib.o > a.out
+ld: warning: object file (test-tuplib.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-tuplib.out
+diff -b test-tuplib.out tests/test-tuplib.out > test-tuplib.diff
+###### SUCCESS
+
+###### Testing test-var1
+./ml.native tests/test-var1.mxl > test-var1.ll
+llc -filetype=obj test-var1.ll > test-var1.o
+g++ test-var1.o > a.out
+ld: warning: object file (test-var1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-var1.out
+diff -b test-var1.out tests/test-var1.out > test-var1.diff
+###### SUCCESS
+
+###### Testing test-var2
+./ml.native tests/test-var2.mxl > test-var2.ll
+llc -filetype=obj test-var2.ll > test-var2.o
+g++ test-var2.o > a.out
+ld: warning: object file (test-var2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-var2.out
+diff -b test-var2.out tests/test-var2.out > test-var2.diff
+###### SUCCESS
+
+###### Testing test-while1
+./ml.native tests/test-while1.mxl > test-while1.ll
+llc -filetype=obj test-while1.ll > test-while1.o
+g++ test-while1.o > a.out
+ld: warning: object file (test-while1.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-while1.out
+diff -b test-while1.out tests/test-while1.out > test-while1.diff
+###### SUCCESS
+
+###### Testing test-while2
+./ml.native tests/test-while2.mxl > test-while2.ll
+llc -filetype=obj test-while2.ll > test-while2.o
+g++ test-while2.o > a.out
+ld: warning: object file (test-while2.o) was built for newer OSX version (15.4) than being linked (10.11)
+./a.out > test-while2.out
+diff -b test-while2.out tests/test-while2.out > test-while2.diff
+###### SUCCESS
+
+###### Testing fail-assign1
+./ml.native tests/fail-assign1.mxl 2> fail-assign1.err >> testall.log
+diff -b fail-assign1.err tests/fail-assign1.err > fail-assign1.diff
+###### SUCCESS
+
+###### Testing fail-assign2
+./ml.native tests/fail-assign2.mxl 2> fail-assign2.err >> testall.log
+diff -b fail-assign2.err tests/fail-assign2.err > fail-assign2.diff
+###### SUCCESS
+
+###### Testing fail-assign3
+./ml.native tests/fail-assign3.mxl 2> fail-assign3.err >> testall.log
+diff -b fail-assign3.err tests/fail-assign3.err > fail-assign3.diff
+###### SUCCESS
+
+###### Testing fail-dead1
+./ml.native tests/fail-dead1.mxl 2> fail-dead1.err >> testall.log
+diff -b fail-dead1.err tests/fail-dead1.err > fail-dead1.diff
+###### SUCCESS
+
+###### Testing fail-dead2
+./ml.native tests/fail-dead2.mxl 2> fail-dead2.err >> testall.log
+diff -b fail-dead2.err tests/fail-dead2.err > fail-dead2.diff
+###### SUCCESS
+
+###### Testing fail-expr1
+./ml.native tests/fail-expr1.mxl 2> fail-expr1.err >> testall.log
+diff -b fail-expr1.err tests/fail-expr1.err > fail-expr1.diff
+###### SUCCESS
+
+###### Testing fail-expr2
+./ml.native tests/fail-expr2.mxl 2> fail-expr2.err >> testall.log
+diff -b fail-expr2.err tests/fail-expr2.err > fail-expr2.diff
+###### SUCCESS
+
+###### Testing fail-for1
+./ml.native tests/fail-for1.mxl 2> fail-for1.err >> testall.log
+diff -b fail-for1.err tests/fail-for1.err > fail-for1.diff
+###### SUCCESS
+
+###### Testing fail-for2
+./ml.native tests/fail-for2.mxl 2> fail-for2.err >> testall.log
+diff -b fail-for2.err tests/fail-for2.err > fail-for2.diff
+###### SUCCESS
+
+###### Testing fail-for3
+./ml.native tests/fail-for3.mxl 2> fail-for3.err >> testall.log
+diff -b fail-for3.err tests/fail-for3.err > fail-for3.diff
+###### SUCCESS
+
+###### Testing fail-for4
+./ml.native tests/fail-for4.mxl 2> fail-for4.err >> testall.log
+diff -b fail-for4.err tests/fail-for4.err > fail-for4.diff
+###### SUCCESS
+
+###### Testing fail-for5
+./ml.native tests/fail-for5.mxl 2> fail-for5.err >> testall.log
+diff -b fail-for5.err tests/fail-for5.err > fail-for5.diff
+###### SUCCESS
+
+###### Testing fail-func1
+./ml.native tests/fail-func1.mxl 2> fail-func1.err >> testall.log
+diff -b fail-func1.err tests/fail-func1.err > fail-func1.diff
+###### SUCCESS
+
+###### Testing fail-func2
+./ml.native tests/fail-func2.mxl 2> fail-func2.err >> testall.log
+diff -b fail-func2.err tests/fail-func2.err > fail-func2.diff
+###### SUCCESS
+
+###### Testing fail-func3
+./ml.native tests/fail-func3.mxl 2> fail-func3.err >> testall.log
+diff -b fail-func3.err tests/fail-func3.err > fail-func3.diff
+###### SUCCESS
+
+###### Testing fail-func4
+./ml.native tests/fail-func4.mxl 2> fail-func4.err >> testall.log
+diff -b fail-func4.err tests/fail-func4.err > fail-func4.diff
+###### SUCCESS
+
+###### Testing fail-func5
+./ml.native tests/fail-func5.mxl 2> fail-func5.err >> testall.log
+diff -b fail-func5.err tests/fail-func5.err > fail-func5.diff
+###### SUCCESS
+
+###### Testing fail-func6
+./ml.native tests/fail-func6.mxl 2> fail-func6.err >> testall.log
+diff -b fail-func6.err tests/fail-func6.err > fail-func6.diff
+###### SUCCESS
+
+###### Testing fail-func7
+./ml.native tests/fail-func7.mxl 2> fail-func7.err >> testall.log
+diff -b fail-func7.err tests/fail-func7.err > fail-func7.diff
+###### SUCCESS
+
+###### Testing fail-func8
+./ml.native tests/fail-func8.mxl 2> fail-func8.err >> testall.log
+diff -b fail-func8.err tests/fail-func8.err > fail-func8.diff
+###### SUCCESS
+
+###### Testing fail-func9
+./ml.native tests/fail-func9.mxl 2> fail-func9.err >> testall.log
+diff -b fail-func9.err tests/fail-func9.err > fail-func9.diff
+###### SUCCESS
+
+###### Testing fail-global1
+./ml.native tests/fail-global1.mxl 2> fail-global1.err >> testall.log
+diff -b fail-global1.err tests/fail-global1.err > fail-global1.diff
+###### SUCCESS
+
+###### Testing fail-global2
+./ml.native tests/fail-global2.mxl 2> fail-global2.err >> testall.log
+diff -b fail-global2.err tests/fail-global2.err > fail-global2.diff
+###### SUCCESS
+
+###### Testing fail-if1
+./ml.native tests/fail-if1.mxl 2> fail-if1.err >> testall.log
+diff -b fail-if1.err tests/fail-if1.err > fail-if1.diff
+###### SUCCESS
+
+###### Testing fail-if2
+./ml.native tests/fail-if2.mxl 2> fail-if2.err >> testall.log
+diff -b fail-if2.err tests/fail-if2.err > fail-if2.diff
+###### SUCCESS
+
+###### Testing fail-if3
+./ml.native tests/fail-if3.mxl 2> fail-if3.err >> testall.log
+diff -b fail-if3.err tests/fail-if3.err > fail-if3.diff
+###### SUCCESS
+
+###### Testing fail-nomain
+./ml.native tests/fail-nomain.mxl 2> fail-nomain.err >> testall.log
+diff -b fail-nomain.err tests/fail-nomain.err > fail-nomain.diff
+###### SUCCESS
+
+###### Testing fail-return1
+./ml.native tests/fail-return1.mxl 2> fail-return1.err >> testall.log
+diff -b fail-return1.err tests/fail-return1.err > fail-return1.diff
+###### SUCCESS
+
+###### Testing fail-return2
+./ml.native tests/fail-return2.mxl 2> fail-return2.err >> testall.log
+diff -b fail-return2.err tests/fail-return2.err > fail-return2.diff
+###### SUCCESS
+
+###### Testing fail-while1
+./ml.native tests/fail-while1.mxl 2> fail-while1.err >> testall.log
+diff -b fail-while1.err tests/fail-while1.err > fail-while1.diff
+###### SUCCESS
+
+###### Testing fail-while2
+./ml.native tests/fail-while2.mxl 2> fail-while2.err >> testall.log
+diff -b fail-while2.err tests/fail-while2.err > fail-while2.diff
+###### SUCCESS
