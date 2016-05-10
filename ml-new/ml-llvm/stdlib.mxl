@@ -1,6 +1,6 @@
 /* NAME: printFloatTuples
    ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
-   EXECUTES: Prints the values of the tuple, each on a new line 
+   EXECUTES: Prints the values of the tuple, each on a new line
    RETURNS: VOID
 */
 void printFloatTuples(float[] x,  int len) {
@@ -29,11 +29,11 @@ void printIntTuples(int[] x,  int len) {
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
-   EXECUTES: Adds the contents of y to the contents of x; updating x in memory 
+   EXECUTES: Adds the contents of y to the contents of x; updating x in memory
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void addIntTuples(int[] x, int[] y, int len) {
-	
+
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -48,14 +48,14 @@ void addIntTuples(int[] x, int[] y, int len) {
    EXECUTES: Add each element in matrix x with its corresponding element
              in matrix y. Updates x in memory with the sum.
    RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
-   NOTE: Both tuples must have the same number of rows and columns. This is why the this are 
+   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
          only passed in once, because they are expected to be the same.
 */
-void addIntMatrices(int[][] x, int[][] y, int rows, int columns) {
+void addIntMatrices(int[][] x, int[][] y, int r, int c) {
 	int len;
 	int i;
 
-	len = rows * columns;
+	len = r * c;
 
 	for(i = 0; i < len; i = i + 1) {
 		$x = $x + $y;
@@ -69,14 +69,14 @@ void addIntMatrices(int[][] x, int[][] y, int rows, int columns) {
    EXECUTES: Add each element in matrix x with its corresponding element
              in matrix y. Updates x in memory with the sum.
    RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
-   NOTE: Both tuples must have the same number of rows and columns. This is why the this are 
+   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
          only passed in once, because they are expected to be the same.
 */
-void addFloatMatrices(float[][] x, float[][] y, int rows, int columns) {
+void addFloatMatrices(float[][] x, float[][] y, int r, int c) {
   int len;
   int i;
 
-  len = rows * columns;
+  len = r * c;
 
   for(i = 0; i < len; i = i + 1) {
     $x = $x + $y;
@@ -90,16 +90,16 @@ void addFloatMatrices(float[][] x, float[][] y, int rows, int columns) {
    EXECUTES: Add each element in matrix x with its corresponding element
              in matrix y. Updates x in memory with the sum.
    RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
-   NOTE: Both int matrix tuples must have the same number of rows and columns and same tuple 
-          length. This is why the this are only passed in once, because they are 
+   NOTE: Both int matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
           expected to be the same.
 */
-void addIntTupleMatrices(int[][][] x, int[][][] y, int rows, int columns, int tuple_length) {
+void addIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
   int len;
   int i;
   int k;
 
-  len = rows * columns * tuple_length;
+  len = r * c * l;
 
   for(i = 0; i < len; i = i + 1) {
     $x = $x + $y;
@@ -113,17 +113,17 @@ void addIntTupleMatrices(int[][][] x, int[][][] y, int rows, int columns, int tu
    RETURNS: INT; resturns the determinant (an integer)
    NOTE: Only accepts 3x3 matrix because Sarrus's Rule only for 3x3.
 */
-int detThree(int[][] x){  
+int detThree(int[][] x){
   int a;
-  int b; 
-  int c; 
-  int d; 
-  int e; 
+  int b;
+  int c;
+  int d;
+  int e;
   int f;
-  int g; 
-  int h; 
-  int i; 
-  int sum;  
+  int g;
+  int h;
+  int i;
+  int sum;
   a = $x;
   x = x.+;
         b = $x;
@@ -142,9 +142,8 @@ int detThree(int[][] x){
   x = x.+;
   i = $x;
 
-  sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i); 
+  sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i);
 
         return sum;
 
 }
-

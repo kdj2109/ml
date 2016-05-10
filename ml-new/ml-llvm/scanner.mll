@@ -65,9 +65,10 @@ rule token = parse
 | "float"    { FLOAT }
 | "bool"     { BOOL }
 | "char"     { CHAR }
-| "str"      { STRING }
 | "void"     { VOID }
 | "length"   { LENGTH }
+| "rows"     { ROWS }
+| "columns"  { COLUMNS }
 | integer as lxm { INTLIT(int_of_string lxm) }
 | float   as lxm { FLOATLIT(float_of_string lxm) }
 | string         { STRINGLIT(un_esc s) }

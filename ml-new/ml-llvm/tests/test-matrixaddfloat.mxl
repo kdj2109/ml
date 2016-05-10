@@ -1,8 +1,8 @@
-void addFloatMatrices(float[][] x, float[][] y, int rows, int columns) {
+void addFloatMatrices(float[][] x, float[][] y, int r, int c) {
 	int len;
 	int i;
 
-	len = rows * columns;
+	len = r * c;
 
 	for(i = 0; i < len; i = i + 1) {
 		$x = $x + $y;
@@ -20,7 +20,7 @@ int main() {
 	a=[|2.5,5.7,17.88,19.2|17.11,100.99,555.66,666.77|19.8,28.65,17.9,38.22|11.11,22.22,33.33,44.44|99.56,12.32,14.12,16.17|];
 	b=[|2.5,5.7,17.88,19.2|17.11,100.99,555.66,666.77|19.8,28.65,17.9,38.22|11.11,22.22,33.33,44.44|99.56,12.32,14.12,16.17|];
 
-	addFloatMatrices(@@a, @@b, 5, 4);
+	addFloatMatrices(@@a, @@b, a.rows, a.columns);
 
 	for(i = 0; i < 5; i = i + 1) {
 		for (j = 0; j < 4; j = j + 1) {

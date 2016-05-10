@@ -7,8 +7,8 @@
 %token EQ NEQ LT LEQ GT GEQ AND OR NOT
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
-%token INT FLOAT BOOL STRING CHAR VOID
-%token LENGTH
+%token INT FLOAT BOOL CHAR VOID
+%token LENGTH ROWS COLUMNS
 %token <int> INTLIT
 %token <float> FLOATLIT
 %token <char> CHARLIT
@@ -84,7 +84,6 @@ primitive:
     INT    { Int }
   | FLOAT  { Float }
   | CHAR   { Char }
-  | STRING { String }
   | BOOL   { Bool }
   | VOID   { Void }
 
@@ -137,6 +136,8 @@ expr:
   | ID LBRACK expr RBRACK                { TupleAccess($1, $3)}
   | ID LBRACK expr COLON expr RBRACK     { MatrixAccess($1, $3, $5)}
   | ID PERIOD LENGTH                     { Length($1) }
+  | ID PERIOD ROWS                       { Rows($1) }
+  | ID PERIOD COLUMNS                    { Columns($1) }
   | AT ID                                { TupleReference($2) }
   | DOLLAR ID                            { Dereference($2) }
   | AT AT ID                             { MatrixReference($3)}
@@ -156,10 +157,6 @@ literals:
   | LBRACK array_literal RBRACK                                  { TupleLiteral(List.rev $2) }
   | LBRACK BAR multiple_matrix BAR RBRACK      { MatrixLiteral(List.rev $3) }
   | LBRACK BAR tuple_multiple_matrix BAR RBRACK { MatrixLiteral(List.rev $3) }
-
-/*matrix_list:
-    literals { [$1] }
-    | matrix_list COMMA literals {$3 :: $1}*/
 
 multiple_matrix:
     | array_literal {[$1]}

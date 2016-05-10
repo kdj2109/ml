@@ -45,18 +45,10 @@ let translate (globals, functions) =
     | A.MatrixType(typ, size1, size2) -> (match typ with
                                             A.DataType(A.Int) -> array_t (array_t i32_t size2) size1
                                           | A.DataType(A.Float) -> array_t (array_t float_t size2) size1
-                                          (*| A.DataType(A.Char) -> array_t i8_t (size1 * size2)
-                                          | A.DataType(A.String) -> array_t (pointer_t i8_t) (size1 * size2)
-                                          | A.DataType(A.Bool) -> array_t i1_t (size1 * size2)
-                                          | A.DataType(A.Void) -> array_t void_t (size1 * size2)*)
                                           | A.TupleType(typ1, size3) -> (match typ1 with
                                                                          | A.Int -> array_t (array_t (array_t i32_t size3) size2) size1
                                                                          | A.Float -> array_t (array_t (array_t float_t size3) size2) size1
                                                                          | _ -> raise (UnsupportedMatrixType)
-                                                                         (*| A.Char -> array_t i8_t (size1 * size2 * size3)
-                                                                         | A.String -> array_t (pointer_t i8_t) (size1 * size2 * size3)
-                                                                         | A.Bool -> array_t i1_t (size1 * size2 * size3)
-                                                                         | A.Void -> array_t void_t (size1 * size2 * size3)*)
                                                                         )
                                           | _ -> raise ( UnsupportedMatrixType )
                                          )
@@ -198,7 +190,17 @@ let translate (globals, functions) =
                               )
       | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder false
       | A.PointerIncrement (s) ->  build_pointer_increment s builder false
-      | A.Length (s) -> L.const_int i32_t (L.array_length (ltype_of_typ (type_of_identifier s 0)))
+      | A.Length (s) -> (match (type_of_identifier s 0) with
+                           A.TupleType(_, l) -> L.const_int i32_t l
+                         | A.MatrixType(A.TupleType(_, l), _, _) -> L.const_int i32_t l
+                         | _ -> raise ( InvalidUseOfLength )
+                        )
+      | A.Rows(s) -> (match (type_of_identifier s 0) with
+                        A.MatrixType(_, r, _) -> L.const_int i32_t r
+                      | _ -> raise ( InvalidUseOfRows ))
+      | A.Columns(s) -> (match (type_of_identifier s 0) with
+                           A.MatrixType(_, _, c) -> L.const_int i32_t c
+                         | _ -> raise ( InvalidUseOfColumns ))
       | A.TupleReference (s) -> build_tuple_argument s builder
       | A.Dereference (s) -> build_pointer_dereference s builder false
       | A.MatrixReference (s) -> build_matrix_argument s builder
@@ -240,27 +242,6 @@ let translate (globals, functions) =
         | A.Greater -> L.build_icmp L.Icmp.Sgt e1' e2' "tmp" builder
         | A.Geq     -> L.build_icmp L.Icmp.Sge e1' e2' "tmp" builder
       in
-
-      (*(let create_binops e1 e2 =
-        match (e1, e2) with
-          A.IntLit e1, A.IntLit e2 -> let e1' = L.const_int i32_t e1
-                                      and e2' = L.const_int i32_t e2 in
-                                      int_bops op e1' e2'
-        | A.FloatLit e1, A.FloatLit e2 -> let e1' = L.const_float float_t e1
-                                          and e2' = L.const_float float_t e2 in
-                                          float_bops op e1' e2'
-        | A.Id e1, A.Id e2 -> let e1' = L.build_load (lookup e1) e1 builder
-                              and e2' = L.build_load (lookup e2) e2 builder in
-                              (*let match_vars e1 e2 =
-                                (match ((lookup e1), (lookup e2)) with
-                                   i32_t, i32_t -> int_bops op e1' e1'
-                                 | float_t, float_t -> float_bops op e1' e2') in
-                              match_vars e1 e2*)
-                              int_bops op e1' e2'
-        | _ -> raise(UnsuppotedBinOp)
-      in
-
-      create_binops e1 e2 *)
 
       let string_of_e1'_llvalue = L.string_of_llvalue e1'
       and string_of_e2'_llvalue = L.string_of_llvalue e2' in
@@ -441,20 +422,6 @@ let translate (globals, functions) =
                                                   | A.DataType(A.Int) -> let m= [[0;0];[0;0]] in let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
                                                   | _ -> raise ( UnsupportedMatrixType )
                                                )
-      (*| A.MatrixType(t, r, c) -> (match t with
-                                    A.DataType(A.Int) -> L.build_ret (array_t (array_t i32_t r) c)
-                                  | A.DataType(A.Float) -> L.build_ret (L.const_array (L.const_array float_t r) c)
-                                  | A.DataType(A.Char) -> L.build_ret (L.const_array (L.const_array i8_t r) c)
-                                  | A.DataType(A.String) -> L.build_ret (L.const_array (L.const_array (pointer_t i8_t) r) c)
-                                  | A.DataType(A.Bool) -> L.build_ret (L.const_array (L.const_array i1_t r) c)
-                                  | A.DataType(A.Void) -> L.build_ret_void
-                                  | A.TupleType(t, l) -> (match t with
-                                                            A.DataType(A.Int) -> L.build_ret (L.const_array (L.const_array (L.const_array i32_t l) r) c)
-                                                          | A.DataType(A.Float) -> L.build_ret (L.const_array (L.const_array (L.const_array float_t l) r) c)
-                                                          | A.DataType(A.Char) -> L.build_ret (L.const_array (L.const_array (L.const_array i8_t l) r) c)
-                                                          | A.DataType(A.String) -> L.build_ret (L.const_array (L.const_array (L.const_array (pointer_t i8_t) l) r) c)
-                                                          | A.DataType(A.Bool) -> L.build_ret (L.const_array (L.const_array (L.const_array i1_t l) r) c)
-                                                          | A.DataType(A.Void) -> L.build_ret_void)) *)
       | A.TuplePointerType(t) | A.MatrixPointerType(t) | A.MatrixTuplePointerType(t) -> (match t with
                                                                                            A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
                                                                                          | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))

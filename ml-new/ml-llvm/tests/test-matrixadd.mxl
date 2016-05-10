@@ -1,8 +1,8 @@
-void addIntMatrices(int[][] x, int[][] y, int rows, int columns) {
+void addIntMatrices(int[][] x, int[][] y, int r, int c) {
 	int len;
 	int i;
 
-	len = rows * columns;
+	len = r * c;
 
 	for(i = 0; i < len; i = i + 1) {
 		$x = $x + $y;
@@ -21,7 +21,7 @@ int main() {
 	b = [| 5, 7, 3, 4 | 9, 15, 7, 8 | 1, 2, 3, 4 |];
 
 
-	addIntMatrices(@@a, @@b, 3, 4);
+	addIntMatrices(@@a, @@b, a.rows, a.columns);
 
 	for(i = 0; i < 3; i = i + 1) {
 		for (j = 0; j < 4; j = j + 1) {

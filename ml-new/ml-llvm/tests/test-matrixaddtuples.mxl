@@ -1,9 +1,9 @@
-void addIntTupleMatrices(int[][][] x, int[][][] y, int rows, int columns, int tuple_length) {
+void addIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
 	int len;
 	int i;
 	int k;
 
-	len = rows * columns * tuple_length;
+	len = r * c * l;
 
 	for(i = 0; i < len; i = i + 1) {
 		$x = $x + $y;
@@ -25,7 +25,7 @@ int main() {
 	b = [| (1, 2, 3), (4, 5, 6)
        | (1, 2, 3), (4, 5, 6) |];
 
-	addIntTupleMatrices(@@@a, @@@b, 2, 2, 3);
+	addIntTupleMatrices(@@@a, @@@b, a.rows, a.columns, a.length);
 
 	for(i = 0; i < 2; i = i + 1) {
 		for (j = 0; j < 2; j = j + 1) {

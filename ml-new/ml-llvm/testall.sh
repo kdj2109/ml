@@ -9,6 +9,13 @@
 LLI="lli"
 #LLI="/usr/local/opt/llvm/bin/lli"
 
+#Path to the LLVM compiler
+LLC="llc"
+#LLC="/usr/local/opt/llvm/bin/llc"
+
+#Path to the G++ compiler
+GPP="g++"
+
 # Path to the ml compiler.  Usually "./ml.native"
 # Try "_build/ml.native" if ocamlbuild was unable to create a symbolic link.
 ML="./ml.native"
@@ -24,7 +31,7 @@ globalerror=0
 
 keep=0
 
-filecount=0 
+filecount=0
 failurecount=0
 
 Usage() {
@@ -88,9 +95,11 @@ Check() {
 
     generatedfiles=""
 
-    generatedfiles="$generatedfiles ${basename}.ll ${basename}.out" &&
+    generatedfiles="$generatedfiles ${basename}.ll ${basename}.s ${basename}.o a.out ${basename}.out" &&
     Run "$ML"  $1 ">" "${basename}.ll" &&
-    Run "$LLI" "${basename}.ll" ">" "${basename}.out" &&
+    Run "$LLC" "-filetype=obj" "${basename}.ll" ">" "${basename}.o" &&
+    Run "$GPP" "${basename}.o" ">" "a.out" &&
+    Run "./a.out" ">" "${basename}.out" &&
     Compare ${basename}.out ${reffile}.out ${basename}.diff
 
     # Report the status and clean up the generated files
@@ -194,4 +203,3 @@ successcount=$(($filecount-$failurecount))
 echo "$successcount $filecount" | awk '{printf "PASS RATE: (%.4f) \n", $1/$2}'
 
 exit $globalerror
-
