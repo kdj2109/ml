@@ -1,3 +1,20 @@
+void bwIntTupleMatrix(int[][][] x, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+  
+  /*
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x + $y;
+    x = x.+;
+    y = y.+;
+  }
+  */
+}
+
+
 /* NAME: printFloatTuples
    ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
    EXECUTES: Prints the values of the tuple, each on a new line
@@ -126,9 +143,9 @@ int detThree(int[][] x){
   int sum;
   a = $x;
   x = x.+;
-        b = $x;
-      x = x.+;
-      c = $x;
+  b = $x;
+  x = x.+;
+  c = $x;
   x = x.+;
   d = $x;
   x = x.+;
@@ -144,6 +161,6 @@ int detThree(int[][] x){
 
   sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i);
 
-        return sum;
+    return sum;
 
 }
