@@ -7,7 +7,7 @@
 %token EQ NEQ LT LEQ GT GEQ AND OR NOT
 %token RETURN IF ELSE ELSEIF FOR WHILE
 %token TRUE FALSE
-%token INT FLOAT BOOL STRING CHAR VOID
+%token INT FLOAT BOOL CHAR VOID
 %token LENGTH ROWS COLUMNS
 %token <int> INTLIT
 %token <float> FLOATLIT
@@ -84,7 +84,6 @@ primitive:
     INT    { Int }
   | FLOAT  { Float }
   | CHAR   { Char }
-  | STRING { String }
   | BOOL   { Bool }
   | VOID   { Void }
 
@@ -158,10 +157,6 @@ literals:
   | LBRACK array_literal RBRACK                                  { TupleLiteral(List.rev $2) }
   | LBRACK BAR multiple_matrix BAR RBRACK      { MatrixLiteral(List.rev $3) }
   | LBRACK BAR tuple_multiple_matrix BAR RBRACK { MatrixLiteral(List.rev $3) }
-
-/*matrix_list:
-    literals { [$1] }
-    | matrix_list COMMA literals {$3 :: $1}*/
 
 multiple_matrix:
     | array_literal {[$1]}
