@@ -37,9 +37,7 @@ let check (globals, functions) =
     | (TupleType(Int, l1), TupleType(Int, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Float, l1), TupleType(Float, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Char, l1), TupleType(Char, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (TupleType(String, l1), TupleType(String, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Bool, l1), TupleType(Bool, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (MatrixType(DataType(Int), r1, c1), MatrixType(DataType(Int), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(DataType(Float), r1, c1), MatrixType(DataType(Float), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Int, d1), r1, c1), MatrixType(TupleType(Int, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
@@ -229,7 +227,7 @@ locals = []; body = [] } (StringMap.singleton "open"
   | StrLit _ -> DataType(String)
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
-  | TupleLiteral t -> check_tuple_literal (type_of_tuple t) t 0 
+  | TupleLiteral t -> check_tuple_literal (type_of_tuple t) t 0
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, e) -> let _ = (match (expr e) with
                                     DataType(Int) -> DataType(Int)
