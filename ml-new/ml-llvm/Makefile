@@ -16,7 +16,7 @@ ml.native :
 clean :
 	ocamlbuild -clean
 	rm -rf testall.log *.diff ml scanner.ml parser.ml parser.mli
-	rm -rf *.cmx *.cmi *.cmo *.cmx *.o *.err *.out pretty
+	rm -rf *.cmx *.cmi *.cmo *.cmx *.o *.s *.err *.ll *.out pretty
 
 # "make pretty" generates pretty print ast generator
 
