@@ -166,15 +166,7 @@ locals = []; body = [] } (StringMap.singleton "open"
       IntLit _ -> TupleType(Int, List.length t)
     | FloatLit _ -> TupleType(Float, List.length t)
     | CharLit _ -> TupleType(Char, List.length t)
-    | StrLit _ -> TupleType(String, List.length t)
     | BoolLit _ -> TupleType(Bool, List.length t)
-    | Id s -> TupleType((match (type_of_identifier s) with
-                            DataType(Int) -> Int
-                          | DataType(Float) -> Float
-                          | DataType(Char) -> Char
-                          | DataType(String) -> String
-                          | DataType(Bool) -> Bool
-                          | _ -> raise (Failure ("illegal tuple type"))), List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
   let access_type = function
@@ -189,16 +181,6 @@ locals = []; body = [] } (StringMap.singleton "open"
     match (List.hd (List.hd m)) with
         IntLit _ -> MatrixType(DataType(Int), r, c)
       | FloatLit _ -> MatrixType(DataType(Float), r, c)
-      | Id s -> (match (type_of_identifier s) with
-                    DataType(Int) -> MatrixType(DataType(Int), r, c)
-                  | DataType(Float) -> MatrixType(DataType(Float), r, c)
-                  | TupleType(p, l) -> (match p with
-                                            Int -> MatrixType(TupleType(Int, l), r, c)
-                                          | Float -> MatrixType(TupleType(Float, l), r, c)
-                                          | _ -> raise (Failure ("illegal matrix type"))
-                                       )
-                  | _ -> raise (Failure ("illegal matrix type"))
-                )
       | TupleLiteral t -> MatrixType((type_of_tuple) t, r, c)
       | _ -> raise (Failure ("illegal matrix type"))
   in
