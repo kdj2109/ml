@@ -68,13 +68,25 @@ let check (globals, functions) =
   if List.mem "print" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
+  if List.mem "printsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
   if List.mem "prints" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printssl" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
   if List.mem "printb" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
+  if List.mem "printbsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
   if List.mem "printf" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printfsl" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
   if List.mem "open" (List.map (fun fd -> fd.fname) functions)
@@ -86,15 +98,23 @@ let check (globals, functions) =
   (* Function declaration for a named function *)
   let built_in_decls =  StringMap.add "print"
   { datatype = DataType(Void); fname = "print"; formals = [(DataType(Int), "x")];
-  locals = []; body = [] } (StringMap.add "printb"
+  locals = []; body = [] } (StringMap.add "printsl"
+    { datatype = DataType(Void); fname = "printsl"; formals = [(DataType(Int), "x")];
+    locals = []; body = [] } (StringMap.add "printb"
     { datatype = DataType(Void); fname = "printb"; formals = [(DataType(Bool), "x")];
+    locals = []; body = [] } (StringMap.add "printbsl"
+    { datatype = DataType(Void); fname = "printbsl"; formals = [(DataType(Bool), "x")];
     locals = []; body = [] } (StringMap.add "prints"
       { datatype = DataType(Void); fname = "prints"; formals = [(DataType(String), "s")];
-      locals = []; body = [] } (StringMap.add "printf"
+      locals = []; body = [] } (StringMap.add "printssl"
+        { datatype = DataType(Void); fname = "printssl"; formals = [(DataType(String), "s")];
+        locals = []; body = [] } (StringMap.add "printf"
         { datatype = DataType(Void); fname = "printf"; formals = [(DataType(Float), "x")];
-      locals = []; body = [] } (StringMap.singleton "open"
+      locals = []; body = [] } (StringMap.add "printfsl"
+      { datatype = DataType(Void); fname = "printfsl"; formals = [(DataType(Float), "x")];
+    locals = []; body = [] } (StringMap.singleton "open"
         { datatype = DataType(Void); fname = "open"; formals= [(DataType(String), "s")];
-      locals = []; body = []}))))
+      locals = []; body = []}))))))))
   in
 
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
