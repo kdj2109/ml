@@ -1,0 +1,24 @@
+int main() {
+  char[3] a;
+  bool[3] b;
+  int i;
+
+  a = ['h', 'e', 'y'];
+  b = [true, false, false];
+
+  for (i = 0; i < a.length; i = i + 1) {
+    if (i != a.length - 1) {
+      printcsl(a[i]);
+    } else {
+      printc(a[i]);
+    }
+  }
+
+  for (i = 0; i < b.length; i = i + 1) {
+    if (i != b.length - 1) {
+      printbsl(b[i]);
+    } else {
+      printb(b[i]);
+    }
+  }
+}

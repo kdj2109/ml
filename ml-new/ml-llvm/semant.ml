@@ -47,9 +47,7 @@ let check (globals, functions) =
     | (TuplePointerType(Int), TuplePointerType(Int)) -> lvaluet
     | (TuplePointerType(Float), TuplePointerType(Float)) -> lvaluet
     | (TuplePointerType(Char), TuplePointerType(Char)) -> lvaluet
-    | (TuplePointerType(String), TuplePointerType(String)) -> lvaluet
     | (TuplePointerType(Bool), TuplePointerType(Bool)) -> lvaluet
-    | (TuplePointerType(Void), TuplePointerType(Void)) -> lvaluet
     | (MatrixPointerType(Int), MatrixPointerType(Int)) -> lvaluet
     | (MatrixPointerType(Float), MatrixPointerType(Float)) -> lvaluet
     | (MatrixTuplePointerType(Int), MatrixTuplePointerType(Int)) -> lvaluet
@@ -89,6 +87,12 @@ let check (globals, functions) =
   if List.mem "printfsl" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
+  if List.mem "printc" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printcsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
   if List.mem "open" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function open may not be defined")) else ();
 
@@ -112,9 +116,13 @@ let check (globals, functions) =
         { datatype = DataType(Void); fname = "printf"; formals = [(DataType(Float), "x")];
       locals = []; body = [] } (StringMap.add "printfsl"
       { datatype = DataType(Void); fname = "printfsl"; formals = [(DataType(Float), "x")];
-    locals = []; body = [] } (StringMap.singleton "open"
+    locals = []; body = [] } (StringMap.add "printc"
+    { datatype = DataType(Void); fname = "printc"; formals = [(DataType(Char), "x")];
+  locals = []; body = [] } (StringMap.add "printcsl"
+  { datatype = DataType(Void); fname = "printcsl"; formals = [(DataType(Char), "x")];
+locals = []; body = [] } (StringMap.singleton "open"
         { datatype = DataType(Void); fname = "open"; formals= [(DataType(String), "s")];
-      locals = []; body = []}))))))))
+      locals = []; body = []}))))))))))
   in
 
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
@@ -156,15 +164,7 @@ let check (globals, functions) =
       IntLit _ -> TupleType(Int, List.length t)
     | FloatLit _ -> TupleType(Float, List.length t)
     | CharLit _ -> TupleType(Char, List.length t)
-    | StrLit _ -> TupleType(String, List.length t)
     | BoolLit _ -> TupleType(Bool, List.length t)
-    | Id s -> TupleType((match (type_of_identifier s) with
-                            DataType(Int) -> Int
-                          | DataType(Float) -> Float
-                          | DataType(Char) -> Char
-                          | DataType(String) -> String
-                          | DataType(Bool) -> Bool
-                          | _ -> raise (Failure ("illegal tuple type"))), List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
   let access_type = function
@@ -179,16 +179,6 @@ let check (globals, functions) =
     match (List.hd (List.hd m)) with
         IntLit _ -> MatrixType(DataType(Int), r, c)
       | FloatLit _ -> MatrixType(DataType(Float), r, c)
-      | Id s -> (match (type_of_identifier s) with
-                    DataType(Int) -> MatrixType(DataType(Int), r, c)
-                  | DataType(Float) -> MatrixType(DataType(Float), r, c)
-                  | TupleType(p, l) -> (match p with
-                                            Int -> MatrixType(TupleType(Int, l), r, c)
-                                          | Float -> MatrixType(TupleType(Float, l), r, c)
-                                          | _ -> raise (Failure ("illegal matrix type"))
-                                       )
-                  | _ -> raise (Failure ("illegal matrix type"))
-                )
       | TupleLiteral t -> MatrixType((type_of_tuple) t, r, c)
       | _ -> raise (Failure ("illegal matrix type"))
   in
