@@ -47,9 +47,7 @@ let check (globals, functions) =
     | (TuplePointerType(Int), TuplePointerType(Int)) -> lvaluet
     | (TuplePointerType(Float), TuplePointerType(Float)) -> lvaluet
     | (TuplePointerType(Char), TuplePointerType(Char)) -> lvaluet
-    | (TuplePointerType(String), TuplePointerType(String)) -> lvaluet
     | (TuplePointerType(Bool), TuplePointerType(Bool)) -> lvaluet
-    | (TuplePointerType(Void), TuplePointerType(Void)) -> lvaluet
     | (MatrixPointerType(Int), MatrixPointerType(Int)) -> lvaluet
     | (MatrixPointerType(Float), MatrixPointerType(Float)) -> lvaluet
     | (MatrixTuplePointerType(Int), MatrixTuplePointerType(Int)) -> lvaluet
