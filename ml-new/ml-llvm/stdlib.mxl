@@ -42,13 +42,139 @@ void addIntTuples(int[] x, int[] y, int len) {
 		y = y.+;		  // Incrementing the pointer by 1
 	}
 }
+
+
+/* NAME: subtractIntTuples
+   ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Subtracts the contents of y from the contents of x; updating x in memory
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void subtractIntTuples(int[] x, int[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x - $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+/* NAME: multiplyIntTuples
+   ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Multiply the contents of y with the contents of x; updating x in memory
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void multiplyIntTuples(int[] x, int[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x * $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+/* NAME: divideIntTuples
+   ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Divide x by y; updating x in memory and tossing the remainder
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void divideIntTuples(int[] x, int[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x / $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+
+
+/* NAME: addFloatTuples
+   ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Add the contents of y to the contents of x; updating x in memory 
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void addFloatTuples(float[] x, float[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x + $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+/* NAME: subtractFloatTuples
+   ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Subtract the contents of y from the contents of x; updating x in memory 
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void subtractFloatTuples(float[] x, float[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x - $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+
+/* NAME: multiplyFloatTuples
+   ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Multiply the contents of y by the contents of x; updating x in memory 
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void multiplyFloatTuples(float[] x, float[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x * $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+
+/* NAME: divideFloatTuples
+   ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
+   	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
+   EXECUTES: Divide the contents of x by the contents of y; updating x in memory; toss remainder 
+   RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
+*/
+void divideFloatTuples(float[] x, float[] y, int len) {
+
+	int i;
+
+	for (i = 0; i < len; i = i + 1) {
+		$x = $x / $y; // $ dereferences the pointer
+		x = x.+;      // Incrementing the pointer by 1
+		y = y.+;		  // Incrementing the pointer by 1
+	}
+}
+
+
 /* NAME: addIntMatrices
    ARGUMENTS: Pointer to int matrix (@@x), pointer to int matrix (@@y)
  	           number of rows (int), number of columns (int)
    EXECUTES: Add each element in matrix x with its corresponding element
              in matrix y. Updates x in memory with the sum.
    RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
-   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
+   NOTE: Both matrices must have the same number of rows and columns. This is why the this are
          only passed in once, because they are expected to be the same.
 */
 void addIntMatrices(int[][] x, int[][] y, int r, int c) {
@@ -63,6 +189,77 @@ void addIntMatrices(int[][] x, int[][] y, int r, int c) {
 		y = y.+;
 	}
 }
+
+
+
+/* NAME: subtractIntMatrices
+   ARGUMENTS: Pointer to int matrix (@@x), pointer to int matrix (@@y)
+ 	           number of rows (int), number of columns (int)
+   EXECUTES: Subtract each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the difference.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both matrices must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void subtractIntMatrices(int[][] x, int[][] y, int r, int c) {
+	int len;
+	int i;
+
+	len = r * c;
+
+	for(i = 0; i < len; i = i + 1) {
+		$x = $x - $y;
+		x = x.+;
+		y = y.+;
+	}
+}
+
+
+/* NAME: multiplyIntMatrices
+   ARGUMENTS: Pointer to int matrix (@@x), pointer to int matrix (@@y)
+ 	           number of rows (int), number of columns (int)
+   EXECUTES: Multiply  each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the product.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both matrices must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void multiplyIntMatrices(int[][] x, int[][] y, int r, int c) {
+	int len;
+	int i;
+
+	len = r * c;
+
+	for(i = 0; i < len; i = i + 1) {
+		$x = $x * $y;
+		x = x.+;
+		y = y.+;
+	}
+}
+
+
+/* NAME: divideIntMatrices
+   ARGUMENTS: Pointer to int matrix (@@x), pointer to int matrix (@@y)
+ 	           number of rows (int), number of columns (int)
+   EXECUTES: Divide  each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the quotient. Tosses the remainder.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both matrices must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void divideIntMatrices(int[][] x, int[][] y, int r, int c) {
+	int len;
+	int i;
+
+	len = r * c;
+
+	for(i = 0; i < len; i = i + 1) {
+		$x = $x / $y;
+		x = x.+;
+		y = y.+;
+	}
+}
+
 /* NAME: addFloatMatrices
    ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
              number of rows (int), number of columns (int)
@@ -84,9 +281,83 @@ void addFloatMatrices(float[][] x, float[][] y, int r, int c) {
     y = y.+;
   }
 }
+
+
+/* NAME: multiplyFloatMatrices
+   ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
+             number of rows (int), number of columns (int)
+   EXECUTES: Multiply each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the sum.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void multiplyFloatMatrices(float[][] x, float[][] y, int r, int c) {
+  int len;
+  int i;
+
+  len = r * c;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x * $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: divideFloatMatrices
+   ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
+             number of rows (int), number of columns (int)
+   EXECUTES: Divide each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the sum. Tosses the remainder.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void divideFloatMatrices(float[][] x, float[][] y, int r, int c) {
+  int len;
+  int i;
+
+  len = r * c;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x / $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: subtractFloatMatrices
+   ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
+             number of rows (int), number of columns (int)
+   EXECUTES: Subtracts each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the sum.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both tuples must have the same number of rows and columns. This is why the this are
+         only passed in once, because they are expected to be the same.
+*/
+void divideFloatMatrices(float[][] x, float[][] y, int r, int c) {
+  int len;
+  int i;
+
+  len = r - c;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x / $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+
+
+
 /* NAME: addIntTupleMatrices
    ARGUMENTS: Pointer to int tuple matrix (@@@x), pointer to int tuple matrix (@@@y)
-             number of rows (int), number of columns (int)
+             number of rows (int), number of columns (int), length of tuple (int)
    EXECUTES: Add each element in matrix x with its corresponding element
              in matrix y. Updates x in memory with the sum.
    RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
@@ -107,6 +378,196 @@ void addIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
     y = y.+;
   }
 }
+
+
+/* NAME: subtractIntTupleMatrices
+   ARGUMENTS: Pointer to int tuple matrix (@@@x), pointer to int tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Subtract each element in matrix y from its corresponding element
+             in matrix x. Updates x in memory with the difference.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both int matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void subtractIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x - $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: multiplyIntTupleMatrices
+   ARGUMENTS: Pointer to int tuple matrix (@@@x), pointer to int tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Multiply each element in matrix y with its corresponding element
+             in matrix x. Updates x in memory with the product.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both int matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void multiplyIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x * $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: divideIntTupleMatrices
+   ARGUMENTS: Pointer to int tuple matrix (@@@x), pointer to int tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Divide each element in matrix x by its corresponding element
+             in matrix y. Updates x in memory with the quotient. Tosses the remainder.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both int matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void divideIntTupleMatrices(int[][][] x, int[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x / $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: addFloatTupleMatrices
+   ARGUMENTS: Pointer to float tuple matrix (@@@x), pointer to float tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Add each element in matrix y to its corresponding element
+             in matrix x. Updates x in memory with the sum. 
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both float matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void addFloatTupleMatrices(float[][][] x, float[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x + $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: subtractFloatTupleMatrices
+   ARGUMENTS: Pointer to float tuple matrix (@@@x), pointer to float tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Subtract each element in matrix y from its corresponding element
+             in matrix x. Updates x in memory with the difference. 
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both float matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void subtractFloatTupleMatrices(float[][][] x, float[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x - $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/* NAME: multiplyFloatTupleMatrices
+   ARGUMENTS: Pointer to float tuple matrix (@@@x), pointer to float tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Multiply each element in matrix x with its corresponding element
+             in matrix y. Updates x in memory with the product. 
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both float matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void multiplyFloatTupleMatrices(float[][][] x, float[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x * $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+
+/* NAME: divideFloatTupleMatrices
+   ARGUMENTS: Pointer to float tuple matrix (@@@x), pointer to float tuple matrix (@@@y)
+             number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Divide each element in matrix x by its corresponding element
+             in matrix y. Updates x in memory with the quotient. Toss the remainder. 
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+   NOTE: Both float matrix tuples must have the same number of rows and columns and same tuple
+          length. This is why the this are only passed in once, because they are
+          expected to be the same.
+*/
+void divideFloatTupleMatrices(float[][][] x, float[][][] y, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+
+  len = r * c * l;
+
+  for(i = 0; i < len; i = i + 1) {
+    $x = $x / $y;
+    x = x.+;
+    y = y.+;
+  }
+}
+
+
+/*Scalar Operations*/
+
+
+
+
+
+
+
+
+
+
+
 /* NAME: detThree
    ARGUMENTS: Pointer to int matrix (@@x)
    EXECUTES: Calculates the determinant of a 3x3 matrix using Sarrus's rule
@@ -147,3 +608,7 @@ int detThree(int[][] x){
         return sum;
 
 }
+
+
+
+
