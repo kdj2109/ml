@@ -1,5 +1,5 @@
 #include <stdlib.mxl>;
-
+int y; 
 int main(){
 
 	int[3] a;
@@ -8,10 +8,11 @@ int main(){
 
 	a = [1, 2, 3];
 	b = [1, 2, 3];
-
+	y = 7; 
         addIntTuples(@a, @b, a.length); // Add b to a -> change a
 
 	printIntTuples(@a, a.length);
 	
+	print(y);	
 	return 0;
 }
