@@ -39,27 +39,7 @@ let check (globals, functions) =
     | (TupleType(Char, l1), TupleType(Char, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(String, l1), TupleType(String, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Bool, l1), TupleType(Bool, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (TuplePointerType(Int), TupleType(Int, _)) -> lvaluet
-    | (TuplePointerType(Float), TupleType(Float, _)) -> lvaluet
-    | (TuplePointerType(Char), TupleType(Char, _)) -> lvaluet
-    | (TuplePointerType(String), TupleType(String, _)) -> lvaluet
-    | (TuplePointerType(Bool), TupleType(Bool, _)) -> lvaluet
-    | (TuplePointerType(Void), TupleType(Void, _)) -> lvaluet
-    | (TupleType(Int, _), TuplePointerType(Int)) -> lvaluet
-    | (TupleType(Float, _), TuplePointerType(Float)) -> lvaluet
-    | (TupleType(Char, _), TuplePointerType(Float)) -> lvaluet
-    | (TupleType(String, _), TuplePointerType(String)) -> lvaluet
-    | (TupleType(Bool, _), TuplePointerType(Bool)) -> lvaluet
-    | (TupleType(Void, _), TuplePointerType(Void)) -> lvaluet
-    | (MatrixType(DataType(Int), _, _), MatrixPointerType(Int)) -> lvaluet
-    | (MatrixType(DataType(Float), _, _), MatrixPointerType(Float)) -> lvaluet
-    | (MatrixPointerType(Int), MatrixType(DataType(Int), _, _)) -> lvaluet
-    | (MatrixPointerType(Float), MatrixType(DataType(Float), _, _)) -> lvaluet
-    | (MatrixType(TupleType(Int, _), _, _), MatrixTuplePointerType(Int)) -> lvaluet
-    | (MatrixType(TupleType(Float, _), _, _), MatrixTuplePointerType(Float)) -> lvaluet
-    | (MatrixTuplePointerType(Int), MatrixType(TupleType(Int, _), _, _)) -> lvaluet
-    | (MatrixTuplePointerType(Float), MatrixType(TupleType(Float, _), _, _)) -> lvaluet
+    | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err 
     | (MatrixType(DataType(Int), r1, c1), MatrixType(DataType(Int), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(DataType(Float), r1, c1), MatrixType(DataType(Float), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Int, d1), r1, c1), MatrixType(TupleType(Int, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
