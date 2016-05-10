@@ -54,17 +54,17 @@ let process filename =
         "int" ^ !matrix_decl ^ " " ^ id ^ (String.make 1 '\n') ^ ";" ^id ^ "= [|" ^ (String.concat "|"
         (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|];"
       with End_of_file -> ignore(close_in ppm_chan); "int" ^ !matrix_decl ^ " " ^ id
-      ^ ";" ^ (String.make 1 '\n') ^ id ^ "=[|" ^ (String.concat "|"
+      ^ ";" ^ (String.make 1 '\n') ^ id ^ " = [|" ^ (String.concat "|"
       (List.map (fun i -> i) (List.rev !ppm_lines))) ^ "|];"
     in
     let file_regex = Str.regexp "\".+\\.ppm" in
     let decl_regex = Str.regexp "[0-9A-Za-z_]+[ ]*=[ ]*open\\(.+*\\);" in
-    let id_regex = Str.regexp "[0-9A-Za-z_]+[ ]*=" in
+    let id_regex = Str.regexp "[0-9A-Za-z_]+[ ]*=[ ]*open" in
     let has_decl l = try ignore(Str.search_forward decl_regex l 0); true
         with Not_found -> false
     in
     let get_id l = try ignore(Str.search_forward id_regex l 0);
-        Str.global_replace (Str.regexp "=") "" (Str.matched_string l)
+    Str.global_replace (Str.regexp "=[ ]*open") "" (Str.matched_string l)
         with Not_found -> l
     in
     let get_file l = try ignore(Str.search_forward file_regex l 0);
