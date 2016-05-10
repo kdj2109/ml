@@ -63,6 +63,34 @@ void printIntTuples(int[] x,  int len) {
 
   prints("]");
 }
+
+/* NAME: printIntMatrices
+   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int) 
+   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
+             row surrounded by brackets {}.
+    RETURNS: void
+*/
+
+
+void printIntMatrices(int [][] x, int r, int c){
+    int i;
+    int f;
+    int k;    
+
+    for(k = 0; k < c; k = k+1){
+        printssl("{ ");
+
+        for (i = 0; i < r; i = i + 1){
+            f = $x;
+            printsl(f);
+            if(i != r-1) {
+                printssl(", ");
+            }
+        prints(" }");
+        }
+    }
+}
+
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
@@ -374,7 +402,7 @@ void divideFloatMatrices(float[][] x, float[][] y, int r, int c) {
    NOTE: Both tuples must have the same number of rows and columns. This is why the this are
          only passed in once, because they are expected to be the same.
 */
-void divideFloatMatrices(float[][] x, float[][] y, int r, int c) {
+void subtractFloatMatrices(float[][] x, float[][] y, int r, int c) {
   int len;
   int i;
 
