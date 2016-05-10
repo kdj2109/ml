@@ -1,0 +1,11 @@
+int main() {
+  int[3] a;
+  float[3] b;
+  char[3] c;
+  bool[3] d;
+
+  a = [1, 2, 3];
+  b = [1.0, 2.0, 3.0];
+  c = ['h', 'e', 'y'];
+  d = [true, 1, false];
+}

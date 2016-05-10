@@ -167,6 +167,16 @@ locals = []; body = [] } (StringMap.singleton "open"
     | BoolLit _ -> TupleType(Bool, List.length t)
     | _ -> raise (Failure ("illegal tuple type")) in
 
+  let rec check_tuple_literal tt l i =
+    let length = List.length l in
+    match (tt, List.nth l i) with
+      (TupleType(Int, _), IntLit _) -> if i == length - 1 then TupleType(Int, length) else check_tuple_literal (TupleType(Int, length)) l (succ i)
+    | (TupleType(Float, _), FloatLit _) -> if i == length - 1 then TupleType(Float, length) else check_tuple_literal (TupleType(Float, length)) l (succ i)
+    | (TupleType(Char, _), CharLit _) -> if i == length - 1 then TupleType(Char, length) else check_tuple_literal (TupleType(Char, length)) l (succ i)
+    | (TupleType(Bool, _), BoolLit _) -> if i == length - 1 then TupleType(Bool, length) else check_tuple_literal (TupleType(Bool, length)) l (succ i)
+    | _ -> raise (Failure ("illegal tuple literal"))
+  in
+
   let access_type = function
       TupleType(p, _) -> DataType(p)
     | _ -> raise (Failure ("illegal access type")) in
@@ -219,7 +229,7 @@ locals = []; body = [] } (StringMap.singleton "open"
   | StrLit _ -> DataType(String)
   | BoolLit _ -> DataType(Bool)
   | Id s -> type_of_identifier s
-  | TupleLiteral t -> type_of_tuple t
+  | TupleLiteral t -> check_tuple_literal (type_of_tuple t) t 0 
   | MatrixLiteral m -> type_of_matrix m (List.length m) (List.length (List.hd m))
   | TupleAccess(s, e) -> let _ = (match (expr e) with
                                     DataType(Int) -> DataType(Int)
