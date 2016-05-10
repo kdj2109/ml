@@ -1,0 +1,13 @@
+int f() {
+  int[3] a;
+  a = [1, 2, 3];
+
+  return 0;
+}
+
+int main() {
+  int[4] a;
+  a = [1, 2, 3, 4];
+
+  print(a.length);
+}
