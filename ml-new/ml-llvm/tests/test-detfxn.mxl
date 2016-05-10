@@ -1,4 +1,5 @@
 int detThree(int[][] x){ 	
+	int[][] y; 
 	int a;
 	int b; 
 	int c; 
@@ -9,6 +10,9 @@ int detThree(int[][] x){
 	int h; 
 	int i; 
 	int sum;  
+	y = x;
+	a = $y;
+	print(a);
 	a = $x;
 	x = x.+;
         b = $x;
