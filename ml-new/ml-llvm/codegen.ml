@@ -93,6 +93,9 @@ let translate (globals, functions) =
     let int_sl_format_str = L.build_global_stringptr "%d" "fmt" builder
     and float_sl_format_str = L.build_global_stringptr "%f" "fmt" builder in
 
+    let char_format_str = L.build_global_stringptr "%c\n" "fmt" builder
+    and char_sl_format_str = L.build_global_stringptr "%c" "fmt" builder in
+
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
        value, if appropriate, and remember their values in the "locals" map *)
@@ -352,6 +355,12 @@ let translate (globals, functions) =
       "printf" builder
       | A.Call ("printfsl", [e]) ->
     L.build_call printf_func [| float_sl_format_str ; (expr builder e) |]
+      "printf" builder
+      | A.Call ("printc", [e]) ->
+    L.build_call printf_func [| char_format_str ; (expr builder e) |]
+      "printf" builder
+      | A.Call ("printcsl", [e]) ->
+    L.build_call printf_func [| char_sl_format_str ; (expr builder e) |]
       "printf" builder
       | A.Call (f, act) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
