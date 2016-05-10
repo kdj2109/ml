@@ -1,0 +1,16 @@
+#include <stdlib.mxl>;
+
+int main(){
+  int r;
+  int c;
+  int[3] pix;
+  m1 = open("file/temp2.ppm");
+  bwIntTupleMatrix(@@@m1, m1.rows, m1.columns, m1.length);
+  for (r = 0; r < m1.rows ; r = r + 1) {
+    for (c = 0; c < m1.columns; c = c + 1) {
+      pix=m1[r:c];
+      printIntTuples(@pix, 3);
+    }
+  }
+  return 0;
+}
