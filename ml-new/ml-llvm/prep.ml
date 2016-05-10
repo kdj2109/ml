@@ -37,7 +37,6 @@ let process filename =
                                               else if i mod 3 = 0 then ("(" ^ x) else x) only_digits))
       in
       let ppm_chan = open_in ppmname in
-      print_endline ppmname;
       let w = ref "" in
       let h = ref "" in
       let matrix_decl = ref "" in
