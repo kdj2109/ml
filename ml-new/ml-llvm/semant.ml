@@ -68,6 +68,15 @@ let check (globals, functions) =
   if List.mem "print" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
+  if List.mem "prints" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printb" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printf" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
   if List.mem "open" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function open may not be defined")) else ();
 
@@ -150,23 +159,13 @@ let check (globals, functions) =
     match (List.hd (List.hd m)) with
         IntLit _ -> MatrixType(DataType(Int), r, c)
       | FloatLit _ -> MatrixType(DataType(Float), r, c)
-      | CharLit _ -> MatrixType(DataType(Char), r, c)
-      | StrLit _ -> MatrixType(DataType(String), r, c)
-      | BoolLit _ -> MatrixType(DataType(Bool), r, c)
       | Id s -> (match (type_of_identifier s) with
                     DataType(Int) -> MatrixType(DataType(Int), r, c)
                   | DataType(Float) -> MatrixType(DataType(Float), r, c)
-                  | DataType(Char) -> MatrixType(DataType(Char), r, c)
-                  | DataType(String) -> MatrixType(DataType(String), r, c)
-                  | DataType(Bool) -> MatrixType(DataType(Bool), r, c)
-                  | DataType(Void) -> MatrixType(DataType(Void), r, c)
                   | TupleType(p, l) -> (match p with
                                             Int -> MatrixType(TupleType(Int, l), r, c)
                                           | Float -> MatrixType(TupleType(Float, l), r, c)
-                                          | Char -> MatrixType(TupleType(Char, l), r, c)
-                                          | String -> MatrixType(TupleType(String, l), r, c)
-                                          | Bool -> MatrixType(TupleType(Bool, l), r, c)
-                                          | Void -> MatrixType(TupleType(Void, l), r, c)
+                                          | _ -> raise (Failure ("illegal matrix type"))
                                        )
                   | _ -> raise (Failure ("illegal matrix type"))
                 )
@@ -277,10 +276,6 @@ let check (globals, functions) =
                                                                       MatrixType(t, _, _) -> (match t with
                                                                                                     DataType(Int) -> DataType(Int)
                                                                                                   | DataType(Float) -> DataType(Float)
-                                                                                                  | DataType(Char) -> DataType(Char)
-                                                                                                  | DataType(String) -> DataType(String)
-                                                                                                  | DataType(Bool) -> DataType(Bool)
-                                                                                                  | DataType(Void) -> DataType(Void)
                                                                                                   | TupleType(p, l) -> TupleType(p, l)
                                                                                                   | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                                 )
@@ -306,10 +301,6 @@ let check (globals, functions) =
                                                                       MatrixType(t, _, _) -> (match t with
                                                                                                   DataType(Int) -> DataType(Int)
                                                                                                 | DataType(Float) -> DataType(Float)
-                                                                                                | DataType(Char) -> DataType(Char)
-                                                                                                | DataType(String) -> DataType(String)
-                                                                                                | DataType(Bool) -> DataType(Bool)
-                                                                                                | DataType(Void) -> DataType(Void)
                                                                                                 | TupleType(p, l) -> TupleType(p, l)
                                                                                                 | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                               )
