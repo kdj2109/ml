@@ -8,10 +8,9 @@ int main(){
 
 	a = [1, 2, 3];
 	b = [1, 2, 3];
-
-        addIntTuples(@a, @b, a.length); // Add b to a -> change a
+	
+  addIntTuples(@a, @b, a.length); // Add b to a -> change a
 
 	printIntTuples(@a, a.length);
-	
 	return 0;
 }

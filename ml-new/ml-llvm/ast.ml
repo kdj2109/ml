@@ -182,21 +182,21 @@ let string_of_typ = function
                           Int -> "int" ^ "[" ^ string_of_int l ^ "]"
                         | Float -> "float" ^ "[" ^ string_of_int l ^ "]"
                         | Char -> "char" ^ "[" ^ string_of_int l ^ "]"
-                        | String -> "string" ^ "[" ^ string_of_int l ^ "]"
+                        | String -> "str" ^ "[" ^ string_of_int l ^ "]"
                         | Bool -> "bool" ^ "[" ^ string_of_int l ^ "]"
                         | Void -> "void" ^ "[" ^ string_of_int l ^ "]")
   | MatrixType(t, l1, l2) -> (match t with
                                 DataType(Int) -> "int" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                               | DataType(Float) -> "float" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                               | DataType(Char) -> "char" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                              | DataType(String) -> "string" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                              | DataType(String) -> "str" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                               | DataType(Bool) -> "bool" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                               | DataType(Void) -> "void" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                               | TupleType(p, l) ->  (match p with
                                                         Int -> "int" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                                                       | Float -> "float" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                                                       | Char -> "char" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
-                                                      | String -> "string" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
+                                                      | String -> "str" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                                                       | Bool -> "bool" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                                                       | Void -> "void" ^ "[" ^ string_of_int l ^ "]" ^ "[" ^ string_of_int l1 ^ ":" ^ string_of_int l2 ^ "]"
                                                     )

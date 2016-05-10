@@ -40,26 +40,6 @@ let check (globals, functions) =
     | (TupleType(String, l1), TupleType(String, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Bool, l1), TupleType(Bool, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
     | (TupleType(Void, l1), TupleType(Void, l2)) -> if l1 == l2 then lvaluet else if l1 == 0 then lvaluet else raise err
-    | (TuplePointerType(Int), TupleType(Int, _)) -> lvaluet
-    | (TuplePointerType(Float), TupleType(Float, _)) -> lvaluet
-    | (TuplePointerType(Char), TupleType(Char, _)) -> lvaluet
-    | (TuplePointerType(String), TupleType(String, _)) -> lvaluet
-    | (TuplePointerType(Bool), TupleType(Bool, _)) -> lvaluet
-    | (TuplePointerType(Void), TupleType(Void, _)) -> lvaluet
-    | (TupleType(Int, _), TuplePointerType(Int)) -> lvaluet
-    | (TupleType(Float, _), TuplePointerType(Float)) -> lvaluet
-    | (TupleType(Char, _), TuplePointerType(Float)) -> lvaluet
-    | (TupleType(String, _), TuplePointerType(String)) -> lvaluet
-    | (TupleType(Bool, _), TuplePointerType(Bool)) -> lvaluet
-    | (TupleType(Void, _), TuplePointerType(Void)) -> lvaluet
-    | (MatrixType(DataType(Int), _, _), MatrixPointerType(Int)) -> lvaluet
-    | (MatrixType(DataType(Float), _, _), MatrixPointerType(Float)) -> lvaluet
-    | (MatrixPointerType(Int), MatrixType(DataType(Int), _, _)) -> lvaluet
-    | (MatrixPointerType(Float), MatrixType(DataType(Float), _, _)) -> lvaluet
-    | (MatrixType(TupleType(Int, _), _, _), MatrixTuplePointerType(Int)) -> lvaluet
-    | (MatrixType(TupleType(Float, _), _, _), MatrixTuplePointerType(Float)) -> lvaluet
-    | (MatrixTuplePointerType(Int), MatrixType(TupleType(Int, _), _, _)) -> lvaluet
-    | (MatrixTuplePointerType(Float), MatrixType(TupleType(Float, _), _, _)) -> lvaluet
     | (MatrixType(DataType(Int), r1, c1), MatrixType(DataType(Int), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(DataType(Float), r1, c1), MatrixType(DataType(Float), r2, c2)) -> if r1 == r2 && c1 == c2 then lvaluet else raise err
     | (MatrixType(TupleType(Int, d1), r1, c1), MatrixType(TupleType(Int, d2), r2, c2)) -> if d1 == d2 && r1 == r2 && c1 == c2 then lvaluet else raise err
@@ -88,6 +68,27 @@ let check (globals, functions) =
   if List.mem "print" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function print may not be defined")) else ();
 
+  if List.mem "printsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "prints" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printssl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printb" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printbsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printf" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
+  if List.mem "printfsl" (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function print may not be defined")) else ();
+
   if List.mem "open" (List.map (fun fd -> fd.fname) functions)
   then raise (Failure ("function open may not be defined")) else ();
 
@@ -97,15 +98,23 @@ let check (globals, functions) =
   (* Function declaration for a named function *)
   let built_in_decls =  StringMap.add "print"
   { datatype = DataType(Void); fname = "print"; formals = [(DataType(Int), "x")];
-  locals = []; body = [] } (StringMap.add "printb"
+  locals = []; body = [] } (StringMap.add "printsl"
+    { datatype = DataType(Void); fname = "printsl"; formals = [(DataType(Int), "x")];
+    locals = []; body = [] } (StringMap.add "printb"
     { datatype = DataType(Void); fname = "printb"; formals = [(DataType(Bool), "x")];
+    locals = []; body = [] } (StringMap.add "printbsl"
+    { datatype = DataType(Void); fname = "printbsl"; formals = [(DataType(Bool), "x")];
     locals = []; body = [] } (StringMap.add "prints"
       { datatype = DataType(Void); fname = "prints"; formals = [(DataType(String), "s")];
-      locals = []; body = [] } (StringMap.add "printf"
+      locals = []; body = [] } (StringMap.add "printssl"
+        { datatype = DataType(Void); fname = "printssl"; formals = [(DataType(String), "s")];
+        locals = []; body = [] } (StringMap.add "printf"
         { datatype = DataType(Void); fname = "printf"; formals = [(DataType(Float), "x")];
-      locals = []; body = [] } (StringMap.singleton "open"
+      locals = []; body = [] } (StringMap.add "printfsl"
+      { datatype = DataType(Void); fname = "printfsl"; formals = [(DataType(Float), "x")];
+    locals = []; body = [] } (StringMap.singleton "open"
         { datatype = DataType(Void); fname = "open"; formals= [(DataType(String), "s")];
-      locals = []; body = []}))))
+      locals = []; body = []}))))))))
   in
 
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
@@ -159,11 +168,7 @@ let check (globals, functions) =
     | _ -> raise (Failure ("illegal tuple type")) in
 
   let access_type = function
-      TupleType(Int, _) -> DataType(Int)
-    | TupleType(Float, _) -> DataType(Float)
-    | TupleType(Char, _) -> DataType(Char)
-    | TupleType(String, _) -> DataType(String)
-    | TupleType(Bool, _) -> DataType(Void)
+      TupleType(p, _) -> DataType(p)
     | _ -> raise (Failure ("illegal access type")) in
 
   let matrix_acces_type = function
@@ -174,44 +179,18 @@ let check (globals, functions) =
     match (List.hd (List.hd m)) with
         IntLit _ -> MatrixType(DataType(Int), r, c)
       | FloatLit _ -> MatrixType(DataType(Float), r, c)
-      | CharLit _ -> MatrixType(DataType(Char), r, c)
-      | StrLit _ -> MatrixType(DataType(String), r, c)
-      | BoolLit _ -> MatrixType(DataType(Bool), r, c)
       | Id s -> (match (type_of_identifier s) with
                     DataType(Int) -> MatrixType(DataType(Int), r, c)
                   | DataType(Float) -> MatrixType(DataType(Float), r, c)
-                  | DataType(Char) -> MatrixType(DataType(Char), r, c)
-                  | DataType(String) -> MatrixType(DataType(String), r, c)
-                  | DataType(Bool) -> MatrixType(DataType(Bool), r, c)
-                  | DataType(Void) -> MatrixType(DataType(Void), r, c)
                   | TupleType(p, l) -> (match p with
                                             Int -> MatrixType(TupleType(Int, l), r, c)
                                           | Float -> MatrixType(TupleType(Float, l), r, c)
-                                          | Char -> MatrixType(TupleType(Char, l), r, c)
-                                          | String -> MatrixType(TupleType(String, l), r, c)
-                                          | Bool -> MatrixType(TupleType(Bool, l), r, c)
-                                          | Void -> MatrixType(TupleType(Void, l), r, c)
+                                          | _ -> raise (Failure ("illegal matrix type"))
                                        )
                   | _ -> raise (Failure ("illegal matrix type"))
                 )
       | TupleLiteral t -> MatrixType((type_of_tuple) t, r, c)
       | _ -> raise (Failure ("illegal matrix type"))
-  in
-
-  let rec type_of_pointer = function
-      DataType(Int) -> TuplePointerType(Int)
-    | DataType(Float) -> TuplePointerType(Float)
-    | DataType(Char) -> TuplePointerType(Char)
-    | DataType(String) -> TuplePointerType(String)
-    | DataType(Bool) -> TuplePointerType(Bool)
-    | DataType(Void) -> TuplePointerType(Void)
-    | TupleType(t, _) -> type_of_pointer (DataType(t))
-    | MatrixType(t, _, _) -> (match t with
-                                DataType(t) -> MatrixPointerType(t)
-                              | TupleType(t, _) -> MatrixTuplePointerType(t)
-                              | _ -> raise (Failure ("illegal matrix pointer type"))
-                             )
-    | _ -> raise ( Failure ("illegal pointer type") )
   in
 
   let check_pointer_type = function
@@ -221,15 +200,25 @@ let check (globals, functions) =
     | _ -> raise ( Failure ("cannot increment a non-pointer type") )
   in
 
+  let check_tuple_pointer_type = function
+      TupleType(p, _) -> TuplePointerType(p)
+    | _ -> raise ( Failure ("cannot reference a non-tuple pointer type"))
+  in
+
+  let check_matrix_pointer_type = function
+      MatrixType(DataType(p), _, _) -> MatrixPointerType(p)
+    | _ -> raise ( Failure ("cannot reference a non-matrix pointer type"))
+  in
+
+  let check_matrix_tuple_pointer_type = function
+      MatrixType(TupleType(p, _), _, _) -> MatrixTuplePointerType(p)
+    | _ -> raise ( Failure ("cannot reference a non-matrix-tuple pointer type"))
+  in
+
   let pointer_type = function
-    | TuplePointerType(Int) -> DataType(Int)
-    | TuplePointerType(Float) -> DataType(Float)
-    | TuplePointerType(Char) -> DataType(Char)
-    | TuplePointerType(String) -> DataType(String)
-    | TuplePointerType(Bool) -> DataType(Bool)
-    | TuplePointerType(Void) -> DataType(Void)
-    | MatrixPointerType(t) -> DataType(t)
-    | MatrixTuplePointerType(t) -> DataType(t)
+    | TuplePointerType(p) -> DataType(p)
+    | MatrixPointerType(p) -> DataType(p)
+    | MatrixTuplePointerType(p) -> DataType(p)
     | _ -> raise ( Failure ("cannot dereference a non-pointer type") ) in
 
   (* Return the type of an expression or throw an exception *)
@@ -264,10 +253,10 @@ let check (globals, functions) =
   | Columns(s) -> (match (type_of_identifier s) with
                      MatrixType(_, _, _) -> DataType(Int)
                    | _ -> raise (Failure ("cannot get the rows of non-matrix datatype")))
-  | TupleReference(s) -> type_of_pointer (type_of_identifier s)
+  | TupleReference(s) -> check_tuple_pointer_type (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)
-  | MatrixReference(s) -> type_of_pointer (type_of_identifier s)
-  | MatrixTupleReference(s) -> type_of_pointer (type_of_identifier s)
+  | MatrixReference(s) -> check_matrix_pointer_type (type_of_identifier s)
+  | MatrixTupleReference(s) -> check_matrix_tuple_pointer_type (type_of_identifier s)
   | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
   (match op with
       Add | Sub | Mult | Div when t1 = DataType(Int) && t2 = DataType(Int) -> DataType(Int)
@@ -307,10 +296,6 @@ let check (globals, functions) =
                                                                       MatrixType(t, _, _) -> (match t with
                                                                                                     DataType(Int) -> DataType(Int)
                                                                                                   | DataType(Float) -> DataType(Float)
-                                                                                                  | DataType(Char) -> DataType(Char)
-                                                                                                  | DataType(String) -> DataType(String)
-                                                                                                  | DataType(Bool) -> DataType(Bool)
-                                                                                                  | DataType(Void) -> DataType(Void)
                                                                                                   | TupleType(p, l) -> TupleType(p, l)
                                                                                                   | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                                 )
@@ -336,10 +321,6 @@ let check (globals, functions) =
                                                                       MatrixType(t, _, _) -> (match t with
                                                                                                   DataType(Int) -> DataType(Int)
                                                                                                 | DataType(Float) -> DataType(Float)
-                                                                                                | DataType(Char) -> DataType(Char)
-                                                                                                | DataType(String) -> DataType(String)
-                                                                                                | DataType(Bool) -> DataType(Bool)
-                                                                                                | DataType(Void) -> DataType(Void)
                                                                                                 | TupleType(p, l) -> TupleType(p, l)
                                                                                                 | _ -> raise ( Failure ("illegal matrix of matrices") )
                                                                                               )
