@@ -1,4 +1,5 @@
 int main(){
-  m1 = open("file/pic.ppm");
+  m1 = open("file/edwards.ppm");
+  free(m1);
   return 0;
 }
