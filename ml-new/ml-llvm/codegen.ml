@@ -90,6 +90,9 @@ let translate (globals, functions) =
     let int_format_str   = L.build_global_stringptr "%d\n" "fmt" builder
     and float_format_str = L.build_global_stringptr "%f\n" "fmt" builder in
 
+    let int_sl_format_str = L.build_global_stringptr "%d" "fmt" builder
+    and float_sl_format_str = L.build_global_stringptr "%f" "fmt" builder in
+
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
        value, if appropriate, and remember their values in the "locals" map *)
@@ -335,12 +338,20 @@ let translate (globals, functions) =
       | A.Call ("print", [e]) | A.Call ("printb", [e]) ->
 	  L.build_call printf_func [| int_format_str ; (expr builder e) |]
 	    "printf" builder
+      | A.Call ("printsl", [e]) | A.Call ("printbsl", [e]) ->
+    L.build_call printf_func [| int_sl_format_str ; (expr builder e) |]
+	    "printf" builder
       | A.Call ("prints", [e]) -> let get_string = function A.StrLit s -> s | _ -> "" in
       let s_ptr = L.build_global_stringptr ((get_string e) ^ "\n") ".str" builder in
-    L.build_call printf_func [| s_ptr |]
-      "printf" builder
+    L.build_call printf_func [| s_ptr |] "printf" builder
+      | A.Call ("printssl", [e]) -> let get_string = function A.StrLit s -> s | _ -> "" in
+      let s_ptr = L.build_global_stringptr (get_string e) ".str" builder in
+    L.build_call printf_func [| s_ptr |] "printf" builder
       | A.Call ("printf", [e]) ->
     L.build_call printf_func [| float_format_str ; (expr builder e) |]
+      "printf" builder
+      | A.Call ("printfsl", [e]) ->
+    L.build_call printf_func [| float_sl_format_str ; (expr builder e) |]
       "printf" builder
       | A.Call (f, act) ->
          let (fdef, fdecl) = StringMap.find f function_decls in

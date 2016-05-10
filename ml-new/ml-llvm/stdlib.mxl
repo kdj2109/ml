@@ -21,13 +21,23 @@ void bwIntTupleMatrix(int[][][] x, int r, int c, int l) {
    RETURNS: VOID
 */
 void printFloatTuples(float[] x,  int len) {
-         int i;
-         float f;
-         for (i = 0; i < len; i = i + 1) {
-                 f = $x;
-		 printf(f);
-		 x = x.+;
-         }
+  int i;
+  float f;
+
+  printssl("[");
+
+  for (i = 0; i < len; i = i + 1) {
+    f = $x;
+		printfsl(f);
+
+    if (i != len - 1) {
+      printssl(", ");
+    }
+
+	  x = x.+;
+  }
+
+  prints("]");
 }
 /* NAME: printIntTuples
    ARGUMENTS: Pointer to int tuple (@varialbe_name) and tuple length
@@ -35,13 +45,23 @@ void printFloatTuples(float[] x,  int len) {
    RETURNS: VOID
 */
 void printIntTuples(int[] x,  int len) {
-         int i;
-         int f;
-         for (i = 0; i < len; i = i + 1) {
-                 f = $x;
-		 print(f);
-		 x = x.+;
-         }
+  int i;
+  int f;
+
+  printssl("[");
+
+  for (i = 0; i < len; i = i + 1) {
+    f = $x;
+		printsl(f);
+
+    if (i != len - 1) {
+      printssl(", ");
+    }
+
+		x = x.+;
+  }
+
+  prints("]");
 }
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
@@ -50,7 +70,6 @@ void printIntTuples(int[] x,  int len) {
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void addIntTuples(int[] x, int[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -160,7 +179,6 @@ int detThree(int[][] x){
   i = $x;
 
   sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i);
-
-    return sum;
-
+  
+  return sum;
 }
