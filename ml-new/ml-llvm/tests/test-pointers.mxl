@@ -1,0 +1,20 @@
+int pointers(int[][] x) {
+  int[][] a;
+
+  a = x;
+
+  x = x.+;
+
+  $a = $x;
+
+  return $a;
+}
+
+int main() {
+  int[2:2] x;
+
+  x = [| 1, 2
+       | 1, 2 |];
+
+  print(pointers(@@x));
+}
