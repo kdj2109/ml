@@ -1,9 +1,14 @@
 #include <stdlib.mxl>;
 
 int main() {
+  int[3][100:100] img2;  
+
   img1 = open("file/edwards_demo.ppm");
+   
   bwIntTupleMatrix(@@@img1, img1.rows, img1.columns, img1.length);
-  out(@@@img1, img1.rows, img1.columns, img1.length);
+  rotateIntTupMatrixRight(@@@img1, @@@img2, img1.rows, img1.columns, image1.length);
+  out(@@@img2, img.rows, img2.columns, img2.length);
   free(img1);
+  free(img2);
   return 0;
 }

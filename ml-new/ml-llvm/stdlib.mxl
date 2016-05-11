@@ -834,3 +834,31 @@ void vertMean(int[][][] x, int r, int c, int l){
 
 
 
+
+void rotateIntTupMatrixRight(int[][][] old, int[][][] new, int r, int c, int l){
+    
+    int[][][] iter;
+    int rowIt;
+    int colIt;
+    int newCnt;
+    int tupCnt;
+
+    for(rowIt=0; rowIt<r; rowIt=rowIt+1){
+        for(colIt=0; colIt<c; colIt=colIt+1){
+            iter=new;
+            for(newCnt=0; newCnt<((((c)-rowIt)+((colIt)*(r)))*l); newCnt=newCnt+1){
+                iter = iter.+;
+            }
+            for(tupCnt=0; tupCnt<l; tupCnt=tupCnt+1){
+                $iter=$old;
+                iter=iter.+;
+                old=old.+;
+            }
+        }
+    }
+}
+
+
+    
+
+
