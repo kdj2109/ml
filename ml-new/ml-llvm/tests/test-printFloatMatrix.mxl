@@ -1,4 +1,4 @@
-void printIntMatrix(int[][] x, int r, int c) {
+void printFloatMatrix(float[][] x, int r, int c) {
   int len;
   int i;
   int j;
@@ -10,11 +10,11 @@ void printIntMatrix(int[][] x, int r, int c) {
   for (i = 0; i < r; i = i + 1) {
     for (j = 0; j < c; j = j + 1) {
       if (j != c - 1) {
-        printsl($x);
+        printfsl($x);
         printssl(", ");
         x = x.+;
       } else {
-        printsl($x);
+        printfsl($x);
         if (i != r - 1) {
           prints("");
         }
@@ -30,13 +30,11 @@ void printIntMatrix(int[][] x, int r, int c) {
 }
 
 int main() {
-  int[3:3] a;
-  int[3:3] b;
+  float[3:3] a;
 
-  a = [| 1, 2, 3 | 1, 2, 3 | 2, 2, 2 |];
-  b = [| 1, 2, 3 | 1, 2, 3 | 2, 2, 2 |];
+  a = [| 1.0, 2.0, 3.0 | 1.0, 2.0, 3.0 | 2.0, 2.0, 2.0 |];
 
-  printIntMatrix(@@a, a.rows, a.columns);
+  printFloatMatrix(@@a, a.rows, a.columns);
 
   return 0;
 }

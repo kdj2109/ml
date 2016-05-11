@@ -1,0 +1,118 @@
+/* NAME: printIntMatrix
+   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int)
+   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
+             ([|...|]).
+   RETURNS: void
+*/
+
+void printIntMatrix(int[][] x, int r, int c) {
+  int len;
+  int i;
+  int j;
+
+  len = r * c;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      if (j != c - 1) {
+        printsl($x);
+        printssl(", ");
+        x = x.+;
+      } else {
+        printsl($x);
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+/* NAME: printFloatMatrix
+   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int)
+   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
+             ([|...|]).
+   RETURNS: void
+*/
+
+void printFloatMatrix(float[][] x, int r, int c) {
+  int len;
+  int i;
+  int j;
+
+  len = r * c;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      if (j != c - 1) {
+        printfsl($x);
+        printssl(", ");
+        x = x.+;
+      } else {
+        printfsl($x);
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+void scalarMultiplyIntMatrix(int[][] x, int r, int c, int scalar) {
+  int i;
+  int j;
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      $x = $x * scalar;
+      x = x.+;
+    }
+  }
+}
+
+void scalarMultiplyFloatMatrix(float[][] x, int r, int c, float scalar) {
+  int i;
+  int j;
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      $x = $x * scalar;
+      x = x.+;
+    }
+  }
+}
+
+int main() {
+  int[3:3] a;
+  float[3:3] b;
+
+  a = [| 1, 2, 3
+       | 1, 2, 3
+       | 1, 2, 3 |];
+
+  b = [| 1.0, 2.0, 3.0
+       | 1.0, 2.0, 3.0
+       | 1.0, 2.0, 3.0 |];
+
+  scalarMultiplyIntMatrix(@@a, a.rows, a.columns, 3);
+  scalarMultiplyFloatMatrix(@@b, b.rows, b.columns, 3.0);
+
+  printIntMatrix(@@a, a.rows, a.columns);
+  printFloatMatrix(@@b, b.rows, b.columns);
+}

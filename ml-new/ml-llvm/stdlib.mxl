@@ -50,7 +50,7 @@ void printIntTuple(int[] x,  int len) {
 /* NAME: printIntMatrix
    ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int)
    EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
-             row ([|...|]).
+             ([|...|]).
    RETURNS: void
 */
 
@@ -79,10 +79,50 @@ void printIntMatrix(int[][] x, int r, int c) {
     if (i != r - 1) {
       printssl(" | ");
     }
+    x = x.+;
   }
 
   prints(" |]");
 }
+
+/* NAME: printFloatMatrix
+   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int)
+   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
+             ([|...|]).
+   RETURNS: void
+*/
+
+void printFloatMatrix(float[][] x, int r, int c) {
+  int len;
+  int i;
+  int j;
+
+  len = r * c;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      if (j != c - 1) {
+        printfsl($x);
+        printssl(", ");
+        x = x.+;
+      } else {
+        printfsl($x);
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
@@ -400,6 +440,40 @@ void subtractFloatMatrices(float[][] x, float[][] y, int r, int c) {
 }
 
 /* Scalar Operations */
+
+/* NAME: scalarMultiplyIntMatrix
+   ARGUMENTS: Pointer to int matrix (@@@x), number of rows(int), number of columns(int), scalar (int).
+   EXECUTES: Scalar multiplies an int matrix
+   RETURNS: VOID; the matrix passed in is updated in memory; nothing is returned.
+*/
+void scalarMultiplyIntMatrix(int[][] x, int r, int c, int scalar) {
+  int i;
+  int j;
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      $x = $x * scalar;
+      x = x.+;
+    }
+  }
+}
+
+/* NAME: scalarMultiplyFloatMatrix
+   ARGUMENTS: Pointer to float matrix (@@@x), number of rows(int), number of columns(int), scalar (float).
+   EXECUTES: Scalar multiplies a float matrix
+   RETURNS: VOID; the matrix passed in is updated in memory; nothing is returned.
+*/
+void scalarMultiplyFloatMatrix(float[][] x, int r, int c, float scalar) {
+  int i;
+  int j;
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      $x = $x * scalar;
+      x = x.+;
+    }
+  }
+}
 
 /* NAME: bwIntTupleMatrix
    ARGUMENTS: Pointer to float matrix (@@@x), number of rows(int), number of columns(int), length of tuple (int) number of rows (int), number of columns (int).

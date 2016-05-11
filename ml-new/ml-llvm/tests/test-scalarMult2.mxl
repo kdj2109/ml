@@ -1,0 +1,20 @@
+#include <stdlib.mxl>;
+
+int main() {
+  int[3:3] a;
+  float[3:3] b;
+
+  a = [| 1, 2, 3
+       | 1, 2, 3
+       | 1, 2, 3 |];
+
+  b = [| 1.0, 2.0, 3.0
+       | 1.0, 2.0, 3.0
+       | 1.0, 2.0, 3.0 |];
+
+  scalarMultiplyIntMatrix(@@a, a.rows, a.columns, 3);
+  scalarMultiplyFloatMatrix(@@b, b.rows, b.columns, 3.0);
+
+  printIntMatrix(@@a, a.rows, a.columns);
+  printFloatMatrix(@@b, b.rows, b.columns);
+}
