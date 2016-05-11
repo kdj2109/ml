@@ -130,26 +130,21 @@ void printFloatMatrix(float[][] x, int r, int c) {
 */
 
 void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
-  int len;
   int i;
   int k;
-  k = 1;
-  len = r * c * l;
+  int j;
 
-
-    for(i = 0; i < len; i= i + 1 ){
-        if (i != (c * l * k) - 1) {
-            printsl($x);
-            printssl(" ");
-            x = x.+;
-        } else {
-            printsl($x);
-            x = x.+;
-            k = k + 1;
-            prints("");
+    for(i = 0; i < r ; i= i + 1 ){
+        for(j = 0; j < c; j = j + 1){
+            for(k = 0; k < l; k = k + 1){
+                printsl($x);
+                printssl(" ");
+                x = x.+;
             }
-        }
+        } 
+            prints("");
     }
+}
 
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
@@ -611,3 +606,44 @@ void out(int[][][] m, int r, int c, int l) {
    prints("");
   }
 }
+
+void vertMean(int[][][] x, int r, int c, int l){
+    int i;
+    int j;
+    int k;
+    int t;
+    int b;
+    int temp;
+    int[][][] before;
+    int[][][] current;
+    int[][][] next;
+    int sum;
+    for (i = 1; i < c-1; i = i +1){
+        before = x;
+       for(j = 0; j<(i*l); j = j+1){
+            before = before.+;}
+        current = before;
+        next = before;
+        for(k = 0; k < c*l; k = k + 1){
+            current.+;
+            next.+;
+            next.+;}
+        for(t = 0; t<(r-2); t = t + 1){
+            for(b = 0; b < l; b = b + 1){
+                sum  = $before + $current + $next;
+                temp = (sum/3);
+                $before = temp;
+                before.+;
+                current.+;
+                next.+;
+            }
+             before = current;
+             current = next;
+             for(b = 0; b<(c-l+1); b= b+1){
+                next.+;}
+          }
+    }
+}
+
+
+
