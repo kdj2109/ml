@@ -133,11 +133,12 @@ void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
   int i;
   int k;
   int j;
-
+  int f;
     for(i = 0; i < r ; i= i + 1 ){
         for(j = 0; j < c; j = j + 1){
             for(k = 0; k < l; k = k + 1){
-                printsl($x);
+                f = $x;
+                printsl(f);
                 printssl(" ");
                 x = x.+;
             }
@@ -607,6 +608,17 @@ void out(int[][][] m, int r, int c, int l) {
   }
 }
 
+
+/*NAME: vertMean
+  ARGUMENTS: Pointer to Int Tuple Matrix (@@@variable_name), number of rows (int), 
+             number of columns (int), length of tuples (int)
+  EXECUTES: Iterates over an int tuple matrix and calculates the mean value for 
+            each integer and replaces the integer in the tuple of focus with this mean value.
+            The mean value of each integer is calculated by take the mean value of the int in question,
+            the corresponding integer in the row above, and the corresponding integer in the row below.
+  RETURNS: VOID
+ */  
+
 void vertMean(int[][][] x, int r, int c, int l){
     int i;
     int j;
@@ -617,30 +629,33 @@ void vertMean(int[][][] x, int r, int c, int l){
     int[][][] before;
     int[][][] current;
     int[][][] next;
+    int[][][] origin;
     int sum;
-    for (i = 1; i < c-1; i = i +1){
-        before = x;
+
+    origin = x;
+    for (i = 0; i < c-1; i = i +1){
+        before = origin;
        for(j = 0; j<(i*l); j = j+1){
             before = before.+;}
         current = before;
         next = before;
         for(k = 0; k < c*l; k = k + 1){
-            current.+;
-            next.+;
-            next.+;}
+           current =  current.+;
+           next = next.+;
+           next = next.+;}
         for(t = 0; t<(r-2); t = t + 1){
             for(b = 0; b < l; b = b + 1){
                 sum  = $before + $current + $next;
                 temp = (sum/3);
-                $before = temp;
-                before.+;
-                current.+;
-                next.+;
+                $current = temp;
+                before = before.+;   
+                current = current.+;
+                next = next.+;
             }
-             before = current;
-             current = next;
-             for(b = 0; b<(c-l+1); b= b+1){
-                next.+;}
+             for(b = 0; b<(c*(l)-2); b = b+1){
+                before = before.+;
+                current = current.+;
+                next = next.+;}
           }
     }
 }

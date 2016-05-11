@@ -1,0 +1,68 @@
+void vertMean(int[][][] x, int r, int c, int l){
+    int i;
+    int j;
+    int k;
+    int t;
+    int b;
+    int temp;
+    int[][][] before;
+    int[][][] current;
+    int[][][] next;
+    int[][][] origin;
+    int sum;
+
+    origin = x;
+    for (i = 0; i < c-1; i = i +1){
+        before = origin;
+       for(j = 0; j<(i*l); j = j+1){
+            before = before.+;}
+        current = before;
+        next = before;
+        for(k = 0; k < c*l; k = k + 1){
+           current =  current.+;
+           next = next.+;
+           next = next.+;}
+        for(t = 0; t<(r-2); t = t + 1){
+            for(b = 0; b < l; b = b + 1){
+                sum  = $before + $current + $next;
+                temp = (sum/3);
+                $current = temp;
+                before = before.+;
+                current = current.+;
+                next = next.+;
+            }
+             for(b = 0; b<(c*(l)-2); b = b+1){
+                before = before.+;
+                current = current.+;
+                next = next.+;}
+          }
+    }
+}
+
+int main(){
+     int[3][4:4] mat;
+      int j;
+      int i;
+      int k;
+      int l;
+      int len;
+      int[][][] pic;
+      len = 4*4;
+      mat = [|(2,3,4), (4,5,6), (9,7,5), (2,5,2)|(3,4,5),(9,8,7),(4,5,7),(6,3,2)|(9,5,1),(10,2,3),(6,4,2),(4,5,7)|(3,2,5),(6,7,8),(8,6,3),(4,3,2)|];
+      vertMean(@@@mat, mat.rows, mat.columns, 3);
+      pic = @@@mat;
+      for(j = 0; j < mat.rows; j = j + 1){
+          for( i = 0; i < mat.columns; i = i +1){
+              for(k = 0; k < 3; k = k+1){
+                  l = $pic;
+                  printsl(l);
+                  printssl(" ");
+                  pic = pic.+; 
+             }
+            printssl("  ");
+          }
+          prints("");
+        }
+  }
+ 
+
