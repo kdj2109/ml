@@ -69,7 +69,7 @@ prep.cmx:
 
 TARFILES = ast.ml codegen.ml Makefile ml.ml parser.mly README scanner.mll \
 	semant.ml testall.sh demo.mxl demo.sh exceptions.ml pretty.ml stdlib.mxl \
-	README file tests
+	README file tests demo2.mxl demo3.mxl prep.ml 
 
 ml.tar.gz : $(TARFILES)
 	cd .. && tar czf ml-llvm/ml.tar.gz \
