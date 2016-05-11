@@ -1,7 +1,7 @@
 (* Binop Exceptions *)
 
 exception UnsupportedBinaryOperationOnTypes of string * string
-exception UnsuppotedBinOp
+exception UnsupportedBinOp
 
 (* Unop Exceptions *)
 

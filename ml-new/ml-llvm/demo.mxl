@@ -1,0 +1,10 @@
+#include <stdlib.mxl>;
+
+int main() {
+  // Read in photo of edwards
+  img1 = open("file/edwards2.ppm");
+  bwIntTupleMatrix(@@@img1, img1.rows, img1.columns, img1.length);
+  out(@@@img1, img1.rows, img1.columns, img1.length);
+  free(img1);
+  return 0;
+}
