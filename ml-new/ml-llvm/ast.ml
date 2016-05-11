@@ -31,6 +31,7 @@ type expr =
   | Length of string
   | Rows of string
   | Columns of string
+  | Free of string
   | TupleReference of string
   | Dereference of string
   | MatrixReference of string
@@ -146,6 +147,7 @@ let rec string_of_expr = function
   | Length(s) -> s ^ "." ^ "length"
   | Rows(s) -> s ^ "." ^ "rows"
   | Columns(s) -> s ^ "." ^ "columns"
+  | Free(s) -> "free" ^ "(" ^ s ^ ")"
   | TupleReference(s) -> "@" ^ s
   | Dereference(s) -> "$" ^ s
   | MatrixReference(s) -> "@@" ^ s

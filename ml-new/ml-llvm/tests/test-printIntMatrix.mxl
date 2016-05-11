@@ -1,0 +1,9 @@
+#include <stdlib.mxl>;
+
+int main(){
+    int[3:2] mat;
+    mat = [|1,2|3,4|5,6|];
+    printIntMatrices(@@mat, mat.rows, mat.columns);
+    return 0;
+}
+    

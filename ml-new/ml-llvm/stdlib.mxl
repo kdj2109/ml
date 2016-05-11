@@ -1,20 +1,3 @@
-void bwIntTupleMatrix(int[][][] x, int r, int c, int l) {
-  int len;
-  int i;
-  int k;
-
-  len = r * c * l;
-  
-  /*
-  for(i = 0; i < len; i = i + 1) {
-    $x = $x + $y;
-    x = x.+;
-    y = y.+;
-  }
-  */
-}
-
-
 /* NAME: printFloatTuples
    ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
    EXECUTES: Prints the values of the tuple, each on a new line
@@ -40,7 +23,7 @@ void printFloatTuples(float[] x,  int len) {
   prints("]");
 }
 /* NAME: printIntTuples
-   ARGUMENTS: Pointer to int tuple (@varialbe_name) and tuple length
+   ARGUMENTS: Pointer to int tuple (@variable_name) and tuple length
    EXECUTES: Prints the values of the tuple, each on a new line
    RETURNS: VOID
 */
@@ -64,6 +47,7 @@ void printIntTuples(int[] x,  int len) {
   prints("]");
 }
 
+<<<<<<< HEAD
 /* NAME: printIntMatrices
    ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int) 
    EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
@@ -102,6 +86,8 @@ void printIntMatrices(int[][] x, int r, int c){
     }
 }
 
+=======
+>>>>>>> f25ed19166b145999fa8c544f491a65d0b0078ed
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
@@ -357,6 +343,7 @@ void addFloatMatrices(float[][] x, float[][] y, int r, int c) {
   }
 }
 
+<<<<<<< HEAD
 
 /* NAME: multiplyFloatMatrices
    ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
@@ -428,6 +415,47 @@ void subtractFloatMatrices(float[][] x, float[][] y, int r, int c) {
 
 
 
+=======
+/* NAME: bwIntTupleMatrix
+   ARGUMENTS: Pointer to float matrix (@@@x), number of rows(int), number of columns(int), length of tuple (int) number of rows (int), number of columns (int).
+   EXECUTES: Makes a matrix "black" and "white" by taking each int tuple, and getting the RGB average, and updated each element in the int tuple with calculated average.
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned.
+   NOTE: This is intended for an int tuple matrix where the tuple's length=3.
+*/
+
+void bwIntTupleMatrix(int[][][] x, int r, int c, int l) {
+  int len;
+  int i;
+  int j;
+  int  k;
+  int[3] pix;
+  int el1;
+  int el2;
+  int el3;
+  int avg;
+  int[][][] a;
+
+  len = r * c * l;
+
+  for (i = 0; i < len / 3; i = i + 1) {
+    a = x;
+    el1 = $a;
+    a = a.+;
+    el2 = $a;
+    a= a.+;
+    el3 = $a;
+    avg = (el1+el2+el3)/3;
+
+    $x=avg;
+    x = x.+;
+    $x =avg;
+    x = x.+;
+    $x = avg;
+    x = x.+;
+  }
+
+}
+>>>>>>> f25ed19166b145999fa8c544f491a65d0b0078ed
 
 
 /* NAME: addIntTupleMatrices

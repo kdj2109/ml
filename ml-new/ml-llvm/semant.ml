@@ -251,6 +251,9 @@ locals = []; body = [] } (StringMap.singleton "open"
   | Columns(s) -> (match (type_of_identifier s) with
                      MatrixType(_, _, _) -> DataType(Int)
                    | _ -> raise (Failure ("cannot get the rows of non-matrix datatype")))
+  | Free(s) -> (match (type_of_identifier s) with
+                  MatrixType(TupleType(_, _), _, _) -> DataType(Void)
+                | _ -> raise (Failure ("cannot free a non-matrix-tuple type")))
   | TupleReference(s) -> check_tuple_pointer_type (type_of_identifier s)
   | Dereference(s) -> pointer_type (type_of_identifier s)
   | MatrixReference(s) -> check_matrix_pointer_type (type_of_identifier s)

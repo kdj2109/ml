@@ -1,25 +1,55 @@
 #include <stdlib.mxl>;
 
+void bwIntTupMatrix(int[][][] x, int r, int c, int l) {
+  int len;
+  int i;
+  int j;
+  int  k;
+  int[3] pix;
+  int el1;
+  int el2;
+  int el3;
+  int avg;
+  int[][][] a;
+
+  len = r * c * l;
+
+  for (i = 0; i < len / 3; i = i + 1) {
+    a = x;
+    el1 = $a;
+    a = a.+;
+    el2 = $a;
+    a= a.+;
+    el3 = $a;
+    avg = (el1+el2+el3)/3;
+
+    $x=avg;
+    x = x.+;
+    $x =avg;
+    x = x.+;
+    $x = avg;
+    x = x.+;
+  }
+
+}
+
 int main() {
-	int[3][2:2] a;
-	int[3] c;
-	int i;
-	int j;
-	int k;
+  int[3][2:2] a;
+  int[3] c;
+  int i;
+  int j;
+  int k;
 
-	a = [| (1, 2, 3), (4, 5, 6)
-       | (1, 2, 3), (4, 5, 6) |];
+  a = [| (1, 2, 3), (4, 5, 6) | (1, 2, 3), (4, 5, 6) |];
 
-	bwIntTupleMatrix(@@@a, a.length);
-
-	for(i = 0; i < 2; i = i + 1) {
-		for (j = 0; j < 2; j = j + 1) {
-			for (k = 0; k < 3; k = k + 1) {
-				c = a[i:j];
-				print(c[k]);
-			}
-		}
-	}
-
-	return 0;
+  bwIntTupMatrix(@@@a, a.rows, a.columns, a.length);
+  for (i = 0; i < a.rows ; i = i + 1) {
+    for (j = 0; j < a.columns; j = j + 1) {
+      for (k = 0; k < a.length; k = k + 1) {
+        c=a[i:j];
+        print(c[k]);
+      }
+    }
+  }
+  return 0;
 }

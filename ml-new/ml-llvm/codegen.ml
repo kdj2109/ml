@@ -112,7 +112,13 @@ let translate (globals, functions) =
 	StringMap.add n local m in
 
       let add_local m (t, n) =
-	let local_var = L.build_alloca (ltype_of_typ t) n builder
+	let local_var =
+    (match t with
+       A.MatrixType(A.TupleType(_, l), r, c) -> if r * c * l > 1000
+                                                  then L.build_malloc (ltype_of_typ t) n builder
+                                                else
+                                                  L.build_alloca (ltype_of_typ t) n builder
+     | _ -> L.build_alloca (ltype_of_typ t) n builder)
 	in StringMap.add n local_var m in
 
       let formals = List.fold_left2 add_formal StringMap.empty fdecl.A.formals
@@ -213,6 +219,7 @@ let translate (globals, functions) =
       | A.Columns(s) -> (match (type_of_identifier s) with
                            A.MatrixType(_, _, c) -> L.const_int i32_t c
                          | _ -> raise ( InvalidUseOfColumns ))
+      | A.Free(s) -> L.build_free (lookup s) builder
       | A.TupleReference (s) -> build_tuple_argument s builder
       | A.Dereference (s) -> build_pointer_dereference s builder false
       | A.MatrixReference (s) -> build_matrix_argument s builder
