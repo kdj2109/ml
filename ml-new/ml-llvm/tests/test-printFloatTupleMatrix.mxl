@@ -1,0 +1,48 @@
+void printFloatTupleMatrix(float[][][] x, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      printssl("(");
+      for (k = 0; k < l; k = k + 1) {
+        if (k != l - 1) {
+          printfsl($x);
+          printssl(", ");
+          x = x.+;
+        } else {
+          printfsl($x);
+          printssl(")");
+        }
+      }
+      if (j != c - 1) {
+        printssl(", ");
+        x = x.+;
+      } else {
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+int main() {
+  float[3][2:2] a;
+
+  a = [| (1.0, 2.0, 3.0), (1.0, 2.0, 3.0)
+       | (2.0, 2.0, 2.0), (4.0, 4.0, 4.0) |];
+
+  printFloatTupleMatrix(@@@a, a.rows, a.columns, a.length);
+
+  return 0;
+}

@@ -1,0 +1,48 @@
+void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      printssl("(");
+      for (k = 0; k < l; k = k + 1) {
+        if (k != l - 1) {
+          printsl($x);
+          printssl(", ");
+          x = x.+;
+        } else {
+          printsl($x);
+          printssl(")");
+        }
+      }
+      if (j != c - 1) {
+        printssl(", ");
+        x = x.+;
+      } else {
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+int main() {
+  int[3][2:2] a;
+
+  a = [| (1, 2, 3), (1, 2, 3)
+       | (2, 2, 2), (4, 4, 4) |];
+
+  printIntTupleMatrix(@@@a, a.rows, a.columns, a.length);
+
+  return 0;
+}

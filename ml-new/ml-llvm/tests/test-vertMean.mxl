@@ -1,0 +1,29 @@
+#include <stdlib.mxl>;
+
+int main(){
+     int[3][4:4] mat;
+      int j;
+      int i;
+      int k;
+      int l;
+      int len;
+      int[][][] pic;
+      len = 4*4;
+      mat = [|(2,3,4), (4,5,6), (9,7,5), (2,5,2)|(3,4,5),(9,8,7),(4,5,7),(6,3,2)|(9,5,1),(10,2,3),(6,4,2),(4,5,7)|(3,2,5),(6,7,8),(8,6,3),(4,3,2)|];
+      vertMean(@@@mat, mat.rows, mat.columns, 3);
+      pic = @@@mat;
+      for(j = 0; j < mat.rows; j = j + 1){
+          for( i = 0; i < mat.columns; i = i +1){
+              for(k = 0; k < 3; k = k+1){
+                  l = $pic;
+                  printsl(l);
+                  printssl(" ");
+                  pic = pic.+; 
+             }
+            printssl("  ");
+          }
+          prints("");
+        }
+  }
+ 
+
