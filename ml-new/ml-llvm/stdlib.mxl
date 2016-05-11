@@ -151,9 +151,6 @@ void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
         }
     }
 
-
->>>>>>> 1c9549067ca51364f78afe009764d49b4fbc9caa
-
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
