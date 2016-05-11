@@ -1,0 +1,32 @@
+void printBoolTuple(bool[] x,  int len) {
+  int i;
+  bool b;
+
+  printssl("[");
+
+  for (i = 0; i < len; i = i + 1) {
+    b = $x;
+		if (b) {
+      printssl("true");
+    } else {
+      printssl("false");
+    }
+
+    if (i != len - 1) {
+      printssl(", ");
+    }
+
+	  x = x.+;
+  }
+
+  prints("]");
+}
+
+int main(){
+	bool[3] a;
+	a = [true, false, true];
+
+	printBoolTuple(@a, a.length);
+
+	return 0;
+}

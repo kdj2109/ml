@@ -1,0 +1,22 @@
+void printCharTuple(char[] x,  int len) {
+  int i;
+  char c;
+
+  for (i = 0; i < len; i = i + 1) {
+    c = $x;
+		printcsl(c);
+
+	  x = x.+;
+  }
+}
+
+int main() {
+  char[14] a;
+
+  a = ['H', 'e', 'l', 'l', 'o', ',',
+       ' ', 'W', 'o', 'r', 'l', 'd', '!', '\n'];
+
+  printCharTuple(@a, a.length);
+
+  return 0;
+}
