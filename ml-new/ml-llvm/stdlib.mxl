@@ -488,18 +488,18 @@ void threshHold(int[][][] x, int r, int c, int l, int[] lowerBounds, int[] upper
     el2 = $a;
     a= a.+;
     el3 = $a;
-
-    if (el1>rLower && el1<rUpper && el2>gLower && el2<gUpper && el3>bLower && el3<bUpper){
-      $x=0;
+     if (el1>rLower && el1<rUpper && el2>gLower && el2<gUpper && el3>bLower &&
+el3<bUpper){
       x = x.+;
-      $x =0;
       x = x.+;
-      $x = 0;
       x = x.+;
     }
     else {
+      $x=0;
       x = x.+;
+      $x=0;
       x = x.+;
+      $x=0;
       x = x.+;
     }
 
