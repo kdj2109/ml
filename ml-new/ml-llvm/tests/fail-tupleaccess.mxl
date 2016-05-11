@@ -1,0 +1,11 @@
+int main() {
+  int[3] x;
+  float y;
+  int z;
+
+  y = 0.0;
+
+  x = [1, 2, 3];
+  z = x[y];
+
+}

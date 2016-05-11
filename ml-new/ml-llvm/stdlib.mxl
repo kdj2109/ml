@@ -72,21 +72,32 @@ void printIntTuples(int[] x,  int len) {
 */
 
 
-void printIntMatrices(int [][] x, int r, int c){
-    int i;
+void printIntMatrices(int[][] x, int r, int c){
+    int len;
     int f;
-    int k;    
+    int k; 
+    int i;
+    i = 1;
+    
+    len = r * c;   
 
-    for(k = 0; k < c; k = k+1){
-        printssl("{ ");
+    printssl("{ ");
+    for(k = 0; k < len; k = k+1){
 
-        for (i = 0; i < r; i = i + 1){
-            f = $x;
-            printsl(f);
-            if(i != r-1) {
-                printssl(", ");
+        f = $x;
+        printsl(f);
+        x = x.+;
+    
+        if(k == ((i*c)-1)){
+            i = i + 1; 
+            prints(" }");
+            if(i != (r+1)){
+                printssl("{ ");
             }
-        prints(" }");
+         }
+
+        else{
+            printssl(", "); 
         }
     }
 }

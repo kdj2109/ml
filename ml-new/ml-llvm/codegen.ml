@@ -39,9 +39,8 @@ let translate (globals, functions) =
                                    A.Int    -> array_t i32_t size
                                  | A.Float  -> array_t float_t size
                                  | A.Char   -> array_t i8_t size
-                                 | A.String -> array_t (pointer_t i8_t) size
                                  | A.Bool   -> array_t i1_t size
-                                 | A.Void   -> array_t void_t size)
+                                 | _ -> raise (UnsupportedTupleType))
     | A.MatrixType(typ, size1, size2) -> (match typ with
                                             A.DataType(A.Int) -> array_t (array_t i32_t size2) size1
                                           | A.DataType(A.Float) -> array_t (array_t float_t size2) size1
@@ -52,13 +51,20 @@ let translate (globals, functions) =
                                                                         )
                                           | _ -> raise ( UnsupportedMatrixType )
                                          )
-    | A.TuplePointerType(t) | A.MatrixPointerType(t) | A.MatrixTuplePointerType(t) -> (match t with
-                                                                                         A.Int -> pointer_t i32_t
-                                                                                       | A.Float -> pointer_t float_t
-                                                                                       | A.Char -> pointer_t i8_t
-                                                                                       | A.String -> pointer_t (pointer_t i8_t)
-                                                                                       | A.Bool -> pointer_t i1_t
-                                                                                       | A.Void -> pointer_t void_t)
+    | A.TuplePointerType(t) -> (match t with
+                                 A.Int -> pointer_t i32_t
+                               | A.Float -> pointer_t float_t
+                               | A.Char -> pointer_t i8_t
+                               | A.Bool -> pointer_t i1_t
+                               | _ -> raise (IllegalPointerType))
+    | A.MatrixPointerType(t) -> (match t with
+                                   A.Int -> pointer_t i32_t
+                                 | A.Float -> pointer_t float_t
+                                 | _ -> raise (IllegalPointerType))
+    | A.MatrixTuplePointerType(t) -> (match t with
+                                         A.Int -> pointer_t i32_t
+                                       | A.Float -> pointer_t float_t
+                                       | _ -> raise (IllegalPointerType))
     in
 
   (* Declare each global variable; remember its value in a map *)
@@ -118,16 +124,16 @@ let translate (globals, functions) =
                    with Not_found -> StringMap.find n global_vars
     in
 
-    let check_function func =
+    let check_function =
       (* Type of each variable (global, formal, or local *)
         List.fold_left (fun m (t, n) -> StringMap.add n t m)
-        StringMap.empty (globals @ func.A.formals @ func.A.locals)
+        StringMap.empty (globals @ fdecl.A.formals @ fdecl.A.locals)
       in
 
-    let rec type_of_identifier s i =
-      let symbols = check_function (List.nth functions i) in
+    let type_of_identifier s =
+      let symbols = check_function in
       try StringMap.find s symbols
-      with Not_found -> type_of_identifier s (succ i)
+      with Not_found -> raise (Failure ("symbol not found"))
     in
 
     let get_tuple_type tuple =
@@ -196,15 +202,15 @@ let translate (globals, functions) =
                               )
       | A.MatrixAccess (s, e1, e2) -> let i1 = expr builder e1 and i2 = expr builder e2 in build_matrix_access s (L.const_int i32_t 0) i1 i2 builder false
       | A.PointerIncrement (s) ->  build_pointer_increment s builder false
-      | A.Length (s) -> (match (type_of_identifier s 0) with
+      | A.Length (s) -> (match (type_of_identifier s) with
                            A.TupleType(_, l) -> L.const_int i32_t l
                          | A.MatrixType(A.TupleType(_, l), _, _) -> L.const_int i32_t l
                          | _ -> raise ( InvalidUseOfLength )
                         )
-      | A.Rows(s) -> (match (type_of_identifier s 0) with
+      | A.Rows(s) -> (match (type_of_identifier s) with
                         A.MatrixType(_, r, _) -> L.const_int i32_t r
                       | _ -> raise ( InvalidUseOfRows ))
-      | A.Columns(s) -> (match (type_of_identifier s 0) with
+      | A.Columns(s) -> (match (type_of_identifier s) with
                            A.MatrixType(_, _, c) -> L.const_int i32_t c
                          | _ -> raise ( InvalidUseOfColumns ))
       | A.TupleReference (s) -> build_tuple_argument s builder
@@ -427,29 +433,24 @@ let translate (globals, functions) =
         A.DataType(A.Int) -> L.build_ret (L.const_int i32_t 0)
       | A.DataType(A.Float) -> L.build_ret (L.const_float float_t 0.0)
       | A.DataType(A.Char) -> L.build_ret (L.const_int i8_t 0)
-      | A.DataType(A.String) -> L.build_ret (L.const_string context "")
       | A.DataType(A.Bool) -> L.build_ret (L.const_int i1_t 0)
       | A.DataType(A.Void) -> L.build_ret_void
-      | A.TupleType(t, _) -> (match t with
-                                A.Int -> L.build_ret (L.const_array i32_t [| L.const_int i32_t 0 |])
-                              | A.Float -> L.build_ret (L.const_array float_t [| L.const_float float_t 0.0 |])
-                              | A.Char -> L.build_ret (L.const_array i8_t  [| L.const_int i8_t 0 |])
-                              | A.String -> L.build_ret (L.const_array (pointer_t i8_t) [| L.const_string context "" |])
-                              | A.Bool -> L.build_ret (L.const_array i1_t [| L.const_int i1_t 0 |])
-                              | A.Void -> L.build_ret_void)
-      | A.MatrixType(typ, _, _) -> L.build_ret (match typ with
-                                                    A.DataType(A.Float) -> let m= [[0.0;0.0];[0.0;0.0]] in let realOrder= List.map List.rev m in let i32Lists = List.map (List.map (L.const_float float_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array float_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t float_t (2)) arrayOfArrays
-                                                  | A.DataType(A.Int) -> let m= [[0;0];[0;0]] in let realOrder=List.map List.rev m in let i32Lists = List.map (List.map (L.const_int i32_t)) realOrder in let listOfArrays=List.map Array.of_list i32Lists in let i32ListOfArrays = List.map (L.const_array i32_t) listOfArrays in let arrayOfArrays=Array.of_list i32ListOfArrays in L.const_array (array_t i32_t (List.length (List.hd m))) arrayOfArrays
-                                                  | _ -> raise ( UnsupportedMatrixType )
-                                               )
-      | A.TuplePointerType(t) | A.MatrixPointerType(t) | A.MatrixTuplePointerType(t) -> (match t with
-                                                                                           A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
-                                                                                         | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
-                                                                                         | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
-                                                                                         | A.String -> L.build_ret (L.const_pointer_null (pointer_t (pointer_t i8_t)))
-                                                                                         | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
-                                                                                         | A.Void -> L.build_ret_void)
+      | A.TuplePointerType(t) -> (match t with
+                                   A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                                 | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                                 | A.Char -> L.build_ret (L.const_pointer_null (pointer_t i8_t))
+                                 | A.Bool -> L.build_ret (L.const_pointer_null (pointer_t i1_t))
+                                 | _ -> raise (IllegalReturnType))
+      | A.MatrixPointerType(t) -> (match t with
+                                     A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                                   | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                                   | _ -> raise (IllegalReturnType))
+      | A.MatrixTuplePointerType(t) -> (match t with
+                                           A.Int -> L.build_ret (L.const_pointer_null (pointer_t i32_t))
+                                         | A.Float -> L.build_ret (L.const_pointer_null (pointer_t float_t))
+                                         | _ -> raise (IllegalReturnType))
 
+      | _ -> raise (IllegalReturnType)
     )
   in
 
