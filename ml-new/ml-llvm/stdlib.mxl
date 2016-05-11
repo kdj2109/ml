@@ -83,6 +83,39 @@ void printIntMatrix(int[][] x, int r, int c) {
 
   prints(" |]");
 }
+
+
+
+/* NAME: printIntTupMatrix
+   ARGUMENTS: Pointer to int tuple matrix (@@@x), number of rows (int), number of columns (int), length of tuple (int)
+   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and formatted with ppm output in mind 
+   RETURNS: void
+*/
+
+void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
+  int len;
+  int i;
+  int k;
+  k = 1;
+  len = r * c * l;
+
+
+    for(i = 0; i < len; i= i + 1 ){
+        if (i != (c * l * k) - 1) {
+            printsl($x);
+            printssl(" ");
+            x = x.+;
+        } else {
+            printsl($x);
+            x = x.+;
+            k = k + 1;
+            prints("");
+            }
+        }
+    }
+
+
+
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)

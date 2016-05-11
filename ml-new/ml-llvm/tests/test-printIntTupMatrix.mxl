@@ -3,6 +3,6 @@
 int main() {
     int[3][3:3] pic;
     pic = [|(10,20,30),(20,30,40),(30,20,10)|(4,2,8),(3,2,8),(4,8,9)|(1,10,20), (80,21,87), (22,80,9)|];
-    printIntTupleMatrices(@@@pic, pic.rows, pic.columns, 3);
+    printIntTupleMatrix(@@@pic, pic.rows, pic.columns, 3);
     return 0;
 }
