@@ -595,10 +595,10 @@ void out(int[][][] m, int r, int c, int l) {
   int k;
 
   prints("P3");
-  prints("255");
   printsl(r);
   printssl(" ");
   print(c);
+  prints("255");
 
   for (i = 0; i < r; i = i + 1) {
    for (j = 0; j < c; j = j + 1) {
