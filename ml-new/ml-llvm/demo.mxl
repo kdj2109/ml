@@ -1,9 +1,13 @@
 #include <stdlib.mxl>;
 
 int main() {
-  // Read in photo of edwards
-  img1 = open("file/edwards2.ppm");
-  bwIntTupleMatrix(@@@img1, img1.rows, img1.columns, img1.length);
+  int[3] lowers;
+  int[3] uppers;
+  img1 = open("file/edwards_demo.ppm");
+  lowers=[170, 90, 80];
+  uppers=[255, 200, 190];
+  threshHold(@@@img1, img1.rows, img1.columns, img1.length, @lowers,@uppers);
+  //bwIntTupleMatrix(@@@img1, img1.rows, img1.columns, img1.length);
   out(@@@img1, img1.rows, img1.columns, img1.length);
   free(img1);
   return 0;
