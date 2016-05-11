@@ -1,0 +1,94 @@
+void threshHold(int[][][] x, int r, int c, int l, int[] lowerBounds, int[] upperBounds) {
+  int len;
+  int i;
+  int j;
+  int  k;
+  int[3] pix;
+  int el1;
+  int el2;
+  int el3;
+  int avg;
+  int[][][] a;
+  int rLower;
+  int gLower;
+  int bLower;
+  int rUpper;
+  int gUpper;
+  int bUpper;
+
+  rLower=$lowerBounds;
+  lowerBounds=lowerBounds.+;
+  gLower=$lowerBounds;
+  lowerBounds=lowerBounds.+;
+  bLower=$lowerBounds;
+
+  rUpper=$upperBounds;
+  upperBounds=upperBounds.+;
+  gUpper=$upperBounds;
+  upperBounds=upperBounds.+;
+  bUpper=$upperBounds;  
+
+  len = r * c * l;
+
+
+  for (i = 0; i < len / 3; i = i + 1) {
+    a = x;
+    el1 = $a;
+    a = a.+;
+    el2 = $a;
+    a= a.+;
+    el3 = $a;
+
+    if (el1>rLower && el1<rUpper && el2>gLower && el2<gUpper && el3<bUpper && el3>bLower){
+      $x=0;
+      x = x.+;
+      $x =0;
+      x = x.+;
+      $x = 0;
+      x = x.+;
+    }
+    else {
+      x = x.+;
+      x = x.+;
+      x = x.+;
+    }
+
+  }
+
+}
+
+int main(){
+  int[3][3:2] img1;
+  int[3] medOne;
+  int[3] medTwo;
+  int[3] lowers;
+	int[3] uppers;
+  int a;
+  int b;
+  int c;
+  int d;
+  int e;
+  int f; 
+  img1 = [| (200,220,100), (255,255,255)| (255,255,255), (255,200,200)| (255,255,255), (255,255,255) |];
+  lowers=[96, 41, 21];
+	uppers=[230, 240, 250];
+  threshHold(@@@img1, img1.rows, img1.columns, img1.length, @lowers,@uppers);
+
+
+  medOne=img1[0:0];
+  medTwo=img1[1:1];
+  a=medOne[0];
+  b=medOne[1];
+  c=medOne[2];
+  d=medTwo[0];
+  e=medTwo[1];
+  f=medTwo[2];
+  print(a);
+  print(b);
+  print(c);
+  print(d);
+  print(e);
+  print(f);
+
+  return 0;
+}

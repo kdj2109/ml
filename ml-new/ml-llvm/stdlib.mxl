@@ -444,6 +444,73 @@ void divideFloatMatrices(float[][] x, float[][] y, int r, int c) {
   }
 }
 
+/* NAME: threshHold
+   ARGUMENTS: Pointer to tuple matrix (@@@x), number of rows (int), number of columns (int),
+              length of tuple(int), pointer to tuple with lowerbound values (@lowerBounds),
+              pointer to tuple with upperbound values
+   EXECUTES: If the red, green, and blue elements are all within the ranges for the tuples
+              (red bound, green bound, blue bound) then all values are set to 0 (ie black pixel)
+   RETURNS: VOID; the first matrix passed in is updated in memory; nothing is returned
+*/
+void threshHold(int[][][] x, int r, int c, int l, int[] lowerBounds, int[] upperBounds) {
+  int len;
+  int i;
+  int j;
+  int  k;
+  int[3] pix;
+  int el1;
+  int el2;
+  int el3;
+  int avg;
+  int[][][] a;
+  int rLower;
+  int gLower;
+  int bLower;
+  int rUpper;
+  int gUpper;
+  int bUpper;
+
+  rLower=$lowerBounds;
+  lowerBounds=lowerBounds.+;
+  gLower=$lowerBounds;
+  lowerBounds=lowerBounds.+;
+  bLower=$lowerBounds;
+
+  rUpper=$upperBounds;
+  upperBounds=upperBounds.+;
+  gUpper=$upperBounds;
+  upperBounds=upperBounds.+;
+  bUpper=$upperBounds;  
+
+  len = r * c * l;
+
+
+  for (i = 0; i < len / 3; i = i + 1) {
+    a = x;
+    el1 = $a;
+    a = a.+;
+    el2 = $a;
+    a= a.+;
+    el3 = $a;
+
+    if (el1>rLower && el1<rUpper && el2>gLower && el2<gUpper && el3>bLower && el3<bUpper){
+      $x=0;
+      x = x.+;
+      $x =0;
+      x = x.+;
+      $x = 0;
+      x = x.+;
+    }
+    else {
+      x = x.+;
+      x = x.+;
+      x = x.+;
+    }
+
+  }
+
+}
+
 
 /* NAME: subtractFloatMatrices
    ARGUMENTS: Pointer to float matrix (@@x), pointer to float matrix (@@y)
