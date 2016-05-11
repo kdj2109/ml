@@ -6,7 +6,7 @@ Length is the length of the tuples being passed in.
 
 */
 
-void addIntTuples(int[] x, int[] y, int len) {
+void addIntTuple(int[] x, int[] y, int len) {
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -24,7 +24,7 @@ int main() {
 	a = [1, 2, 3];
 	b = [1, 2, 3];
 
-  addIntTuples(@a, @b, a.length); // Add b to a -> change a
+  addIntTuple(@a, @b, a.length); // Add b to a -> change a
 
 	for (i = 0; i < a.length; i = i + 1) {
 		print(a[i]);

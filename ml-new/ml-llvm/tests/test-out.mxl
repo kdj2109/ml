@@ -1,0 +1,33 @@
+void out(int[][][] m, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  prints("P3");
+  prints("255");
+  printsl(r);
+  printssl(" ");
+  print(c);
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      for (k = 0; k < l; k = k + 1) {
+        printsl($m);
+        printssl(" ");
+        m = m.+;
+      }
+    }
+    prints("");
+  }
+}
+
+int main() {
+  int[3][2:2] x;
+
+  x = [| (255, 0, 0), (0, 255, 255)
+       | (0, 255, 0), (255, 0, 255) |];
+
+  out(@@@x, x.rows, x.columns, x.length);
+
+  return 0;
+}
