@@ -32,7 +32,15 @@ Run() {
     }
 }
 
-    Run "$ML"  "demo.mxl" ">" "demo.ll" &&
+ 	Run "$ML"  "demo.mxl" ">" "demo.ll" &&
     Run "$LLC" "-filetype=obj" "demo.ll" ">" "demo.o" &&
-    Run "$GPP" "demo.o" ">" "a.out" &&
+    Run "$GPP" "demo.o" ">" "a1.out" &&
     Run "./a.out" ">" "demo.ppm"
+    Run "$ML"  "demo2.mxl" ">" "demo2.ll" &&
+    Run "$LLC" "-filetype=obj" "demo2.ll" ">" "demo2.o" &&
+    Run "$GPP" "demo2.o" ">" "a2.out" &&
+    Run "./a.out" ">" "demo2.ppm" &&
+    Run "$ML"  "demo3.mxl" ">" "demo3.ll" &&
+    Run "$LLC" "-filetype=obj" "demo3.ll" ">" "demo3.o" &&
+    Run "$GPP" "demo3.o" ">" "a3.out" &&
+    Run "./a.out" ">" "demo3.ppm"

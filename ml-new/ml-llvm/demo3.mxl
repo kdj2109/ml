@@ -1,0 +1,9 @@
+#include <stdlib.mxl>;
+
+int main() {
+  img1 = open("file/edwards_demo.ppm");
+  bwIntTupleMatrix(@@@img1, img1.rows, img1.columns, img1.length);
+  out(@@@img1, img1.rows, img1.columns, img1.length);
+  free(img1);
+  return 0;
+}

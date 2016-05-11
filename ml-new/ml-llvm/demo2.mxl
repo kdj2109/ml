@@ -1,0 +1,55 @@
+#include <stdlib.mxl>;
+
+
+
+void scaleUp (int[][][] x, int[][][] y, int rX, int cX, int rY, int cY, int l){
+  int rFactor;
+  int cFactor;
+  int a;
+  int b;
+  int i;
+  int k;
+  int j;
+  int[][][] pointer;
+  int[][][] startOfTuple;
+
+  rFactor=rY/rX;
+  cFactor=cY/cX;
+
+
+  for (a=0; a<rX; a=a+1){
+    for (i=0; i<rFactor; i=i+1){
+    //create a new pointer starting at first column at this row of i every time I think maybe
+      startOfTuple=x;
+      for (b=0; b<cX; b=b+1){
+        for (j=0; j<cFactor; j=j+1){
+          pointer=startOfTuple;
+          for (k=0; k<l; k=k+1){
+            $y=$pointer;
+            y=y.+;
+            pointer=pointer.+;
+          }
+        }
+        for (k=0; k<l; k=k+1){
+          startOfTuple=startOfTuple.+;
+        } 
+      }
+    }
+    x=pointer;
+  }
+
+
+} 
+
+int main() {
+	int[3][16:32] y;
+
+  // Read in photo of boxes
+  img1 = open("file/pic1.ppm");
+
+  scaleUp(@@@img1,@@@y,img1.columns,img1.rows,y.rows,y.columns,3);
+  out(@@@y, y.columns, y.rows, y.length);
+  return 0;
+}
+
+

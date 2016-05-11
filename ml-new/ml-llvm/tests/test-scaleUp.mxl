@@ -1,0 +1,54 @@
+#include <stdlib.mxl>;
+void scaleUp (int[][][] x, int[][][] y, int rX, int cX, int rY, int cY, int l){
+  int rFactor;
+  int cFactor;
+  int a;
+  int b;
+  int i;
+  int k;
+  int j;
+  int[][][] pointer;
+  int[][][] startOfTuple;
+
+  rFactor=rY/rX;
+  cFactor=cY/cX;
+
+
+  for (a=0; a<rX; a=a+1){
+    for (i=0; i<rFactor; i=i+1){
+    //create a new pointer starting at first column at this row of i every time I think maybe
+      startOfTuple=x;
+      for (b=0; b<cX; b=b+1){
+        for (j=0; j<cFactor; j=j+1){
+          pointer=startOfTuple;
+          for (k=0; k<l; k=k+1){
+            $y=$pointer;
+            y=y.+;
+            pointer=pointer.+;
+          }
+        }
+        for (k=0; k<l; k=k+1){
+          startOfTuple=startOfTuple.+;
+        } 
+      }
+    }
+    x=pointer;
+  }
+
+
+} 
+
+
+
+int main(){
+    int[3][5:2] mat;
+    int[3][10:4] y;
+    mat=[|(1,2,3),(1,2,3)|(200,10,20),(1,2,3)| (200,10,20),(1,77,3) |(200,10,20),(1,88,3) |(200,10,20),(1,2,99)|];
+
+
+
+  scaleUp(@@@mat,@@@y,mat.rows,mat.columns,y.rows,y.columns,3);
+  out(@@@y, y.rows, y.columns, y.length);
+
+    return 0;
+}

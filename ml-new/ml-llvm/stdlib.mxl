@@ -123,29 +123,7 @@ void printFloatMatrix(float[][] x, int r, int c) {
   prints(" |]");
 }
 
-/* NAME: printIntTupMatrix
-   ARGUMENTS: Pointer to int tuple matrix (@@@x), number of rows (int), number of columns (int), length of tuple (int)
-   EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and formatted with ppm output in mind
-   RETURNS: void
-*/
 
-void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
-  int i;
-  int k;
-  int j;
-  int f;
-    for(i = 0; i < r ; i= i + 1 ){
-        for(j = 0; j < c; j = j + 1){
-            for(k = 0; k < l; k = k + 1){
-                f = $x;
-                printsl(f);
-                printssl(" ");
-                x = x.+;
-            }
-        } 
-            prints("");
-    }
-}
 
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
@@ -675,6 +653,133 @@ void out(int[][][] m, int r, int c, int l) {
   }
 }
 
+/* NAME: printIntTupleMatrix
+   ARGUMENTS: Pointer to int tuple matrix (@@@m), int rows, int columns, int length
+   EXECUTES: Prints an int tuple matrix
+   RETURNS: VOID */
+void printIntTupleMatrix(int[][][] x, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      printssl("(");
+      for (k = 0; k < l; k = k + 1) {
+        if (k != l - 1) {
+          printsl($x);
+          printssl(", ");
+          x = x.+;
+        } else {
+          printsl($x);
+          printssl(")");
+        }
+      }
+      if (j != c - 1) {
+        printssl(", ");
+        x = x.+;
+      } else {
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+/* NAME: printFloatTupleMatrix
+   ARGUMENTS: Pointer to float tuple matrix (@@@m), int rows, int columns, int length
+   EXECUTES: Prints a float tuple matrix
+   RETURNS: VOID */
+void printFloatTupleMatrix(float[][][] x, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  printssl("[| ");
+
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      printssl("(");
+      for (k = 0; k < l; k = k + 1) {
+        if (k != l - 1) {
+          printfsl($x);
+          printssl(", ");
+          x = x.+;
+        } else {
+          printfsl($x);
+          printssl(")");
+        }
+      }
+      if (j != c - 1) {
+        printssl(", ");
+        x = x.+;
+      } else {
+        if (i != r - 1) {
+          prints("");
+        }
+      }
+    }
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+    x = x.+;
+  }
+
+  prints(" |]");
+}
+
+/* NAME: printCharTuple
+   ARGUMENTS: Pointer to char tuple (@m), int length
+   EXECUTES: Prints a tuple of chars
+   RETURNS: VOID */
+void printCharTuple(char[] x,  int len) {
+  int i;
+  char c;
+
+  for (i = 0; i < len; i = i + 1) {
+    c = $x;
+    printcsl(c);
+
+    x = x.+;
+  }
+}
+
+/* NAME: printBoolTuple
+   ARGUMENTS: Pointer to bool tuple (@m), int length
+   EXECUTES: Prints a tuple of bools
+   RETURNS: VOID */
+void printBoolTuple(bool[] x,  int len) {
+  int i;
+  bool b;
+
+  printssl("[");
+
+  for (i = 0; i < len; i = i + 1) {
+    b = $x;
+    if (b) {
+      printssl("true");
+    } else {
+      printssl("false");
+    }
+
+    if (i != len - 1) {
+      printssl(", ");
+    }
+
+    x = x.+;
+  }
+
+  prints("]");
+}
 
 /*NAME: vertMean
   ARGUMENTS: Pointer to Int Tuple Matrix (@@@variable_name), number of rows (int), 
