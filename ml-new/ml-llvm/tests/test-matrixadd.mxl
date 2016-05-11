@@ -12,19 +12,21 @@ void addIntMatrices(int[][] x, int[][] y, int r, int c) {
 }
 
 int main() {
-	int[3:4] a;
-	int[3:4] b;
-	int i;
-	int j;
 
-	a = [| 1, 2, 3, 4 | 3, 4, 5, 6 | 7, 8, 9, 8 |];
-	b = [| 5, 7, 3, 4 | 9, 15, 7, 8 | 1, 2, 3, 4 |];
+
+   int[3:4] a;
+   int[3:4] b;
+   int i;
+   int j;
+
+   a = [| 1, 2, 3, 4 | 3, 4, 5, 6 | 7, 8, 9, 8 |];
+   b = [| 5, 7, 3, 4 | 9, 15, 7, 8 | 1, 2, 3, 4 |];
 
 
 	addIntMatrices(@@a, @@b, a.rows, a.columns);
 
-	for(i = 0; i < 3; i = i + 1) {
-		for (j = 0; j < 4; j = j + 1) {
+	for(i = 0; i < a.rows; i = i + 1) {
+		for (j = 0; j < a.columns; j = j + 1) {
 			print(a[i:j]);
 		}
 	}
