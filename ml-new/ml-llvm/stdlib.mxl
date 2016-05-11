@@ -208,3 +208,15 @@ int detThree(int[][] x){
   
   return sum;
 }
+
+/* NAME: out
+   ARGUMENTS: Pointer to int tuple matrix (@@@x), int rows, int columns.
+   EXECUTES: Writes an int tuple matrix out to an image, in the format of a  P3 ppm file.
+   RETURNS: VOID
+   NOTE: Only accepts int tuple matrix because P3 ppm file is composed of pixels.
+void out(int[][][] m, int r, int c) {
+  prints("P3);
+  prints("255");
+}
+
+*/
