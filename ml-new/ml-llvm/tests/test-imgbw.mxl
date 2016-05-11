@@ -9,7 +9,7 @@ int main(){
   for (r = 0; r < m1.rows ; r = r + 1) {
     for (c = 0; c < m1.columns; c = c + 1) {
       pix=m1[r:c];
-      printIntTuples(@pix, 3);
+      printIntTuple(@pix, 3);
     }
   }
   return 0;

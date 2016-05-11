@@ -1,9 +1,9 @@
-/* NAME: printFloatTuples
+/* NAME: printFloatTuple
    ARGUMENTS: Pointer to float tuple (@variable_name) and tuple length
    EXECUTES: Prints the values of the tuple, each on a new line
    RETURNS: VOID
 */
-void printFloatTuples(float[] x,  int len) {
+void printFloatTuple(float[] x,  int len) {
   int i;
   float f;
 
@@ -22,12 +22,12 @@ void printFloatTuples(float[] x,  int len) {
 
   prints("]");
 }
-/* NAME: printIntTuples
+/* NAME: printIntTuple
    ARGUMENTS: Pointer to int tuple (@variable_name) and tuple length
    EXECUTES: Prints the values of the tuple, each on a new line
    RETURNS: VOID
 */
-void printIntTuples(int[] x,  int len) {
+void printIntTuple(int[] x,  int len) {
   int i;
   int f;
 
@@ -47,44 +47,42 @@ void printIntTuples(int[] x,  int len) {
   prints("]");
 }
 
-/* NAME: printIntMatrices
-   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int) 
+/* NAME: printIntMatrix
+   ARGUMENTS: Pointer to int matrix (@@x), number of rows (int), number of columns (int)
    EXECUTES: Prints the values of the contents of the matrix. Each row on a new line and each
-             row surrounded by brackets {}.
-    RETURNS: void
+             row ([|...|]).
+   RETURNS: void
 */
 
+void printIntMatrix(int[][] x, int r, int c) {
+  int len;
+  int i;
+  int j;
 
-void printIntMatrices(int[][] x, int r, int c){
-    int len;
-    int f;
-    int k; 
-    int i;
-    i = 1;
-    
-    len = r * c;   
+  len = r * c;
 
-    printssl("{ ");
-    for(k = 0; k < len; k = k+1){
+  printssl("[| ");
 
-        f = $x;
-        printsl(f);
+  for (i = 0; i < r; i = i + 1) {
+    for (j = 0; j < c; j = j + 1) {
+      if (j != c - 1) {
+        printsl($x);
+        printssl(", ");
         x = x.+;
-    
-        if(k == ((i*c)-1)){
-            i = i + 1; 
-            prints(" }");
-            if(i != (r+1)){
-                printssl("{ ");
-            }
-         }
-
-        else{
-            printssl(", "); 
+      } else {
+        printsl($x);
+        if (i != r - 1) {
+          prints("");
         }
+      }
     }
-}
+    if (i != r - 1) {
+      printssl(" | ");
+    }
+  }
 
+  prints(" |]");
+}
 /* NAME: addIntTuples
    ARGUMENTS: Pointer to int tuple (@x), Pointer to int tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
@@ -109,7 +107,6 @@ void addIntTuples(int[] x, int[] y, int len) {
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void subtractIntTuples(int[] x, int[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -126,7 +123,6 @@ void subtractIntTuples(int[] x, int[] y, int len) {
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void multiplyIntTuples(int[] x, int[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -143,7 +139,6 @@ void multiplyIntTuples(int[] x, int[] y, int len) {
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void divideIntTuples(int[] x, int[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -157,11 +152,10 @@ void divideIntTuples(int[] x, int[] y, int len) {
 /* NAME: addFloatTuples
    ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
-   EXECUTES: Add the contents of y to the contents of x; updating x in memory 
+   EXECUTES: Add the contents of y to the contents of x; updating x in memory
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void addFloatTuples(float[] x, float[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -174,11 +168,10 @@ void addFloatTuples(float[] x, float[] y, int len) {
 /* NAME: subtractFloatTuples
    ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
-   EXECUTES: Subtract the contents of y from the contents of x; updating x in memory 
+   EXECUTES: Subtract the contents of y from the contents of x; updating x in memory
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void subtractFloatTuples(float[] x, float[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -192,11 +185,10 @@ void subtractFloatTuples(float[] x, float[] y, int len) {
 /* NAME: multiplyFloatTuples
    ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
-   EXECUTES: Multiply the contents of y by the contents of x; updating x in memory 
+   EXECUTES: Multiply the contents of y by the contents of x; updating x in memory
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void multiplyFloatTuples(float[] x, float[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -210,11 +202,10 @@ void multiplyFloatTuples(float[] x, float[] y, int len) {
 /* NAME: divideFloatTuples
    ARGUMENTS: Pointer to float tuple (@x), Pointer to float tuple (@y),
    	          tuple length (tuples must be of the same length, so length of x or y can be passed in)
-   EXECUTES: Divide the contents of x by the contents of y; updating x in memory; toss remainder 
+   EXECUTES: Divide the contents of x by the contents of y; updating x in memory; toss remainder
    RETURNS: VOID; the first tuple variable is updated in memory; nothing is returned
 */
 void divideFloatTuples(float[] x, float[] y, int len) {
-
 	int i;
 
 	for (i = 0; i < len; i = i + 1) {
@@ -408,7 +399,7 @@ void subtractFloatMatrices(float[][] x, float[][] y, int r, int c) {
   }
 }
 
-/*Scalar Operations*/
+/* Scalar Operations */
 
 /* NAME: bwIntTupleMatrix
    ARGUMENTS: Pointer to float matrix (@@@x), number of rows(int), number of columns(int), length of tuple (int) number of rows (int), number of columns (int).
@@ -450,18 +441,6 @@ void bwIntTupleMatrix(int[][][] x, int r, int c, int l) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* NAME: detThree
    ARGUMENTS: Pointer to int matrix (@@x)
    EXECUTES: Calculates the determinant of a 3x3 matrix using Sarrus's rule
@@ -498,20 +477,35 @@ int detThree(int[][] x){
   i = $x;
 
   sum = (a * e * i) + (b * f * g) + (c * d * h) - (c * e * g) - (a * f * h) - (b * d * i);
-  
+
   return sum;
 }
 
 
 /* NAME: out
-   ARGUMENTS: Pointer to int tuple matrix (@@@x), int rows, int columns.
+   ARGUMENTS: Pointer to int tuple matrix (@@@m), int rows, int columns, int length
    EXECUTES: Writes an int tuple matrix out to an image, in the format of a  P3 ppm file.
    RETURNS: VOID
-   NOTE: Only accepts int tuple matrix because P3 ppm file is composed of pixels.
-void out(int[][][] m, int r, int c) {
-  prints("P3);
+   NOTE: Only accepts int tuple matrix because P3 ppm file is composed of pixels. */
+void out(int[][][] m, int r, int c, int l) {
+  int i;
+  int j;
+  int k;
+
+  prints("P3");
   prints("255");
+  printsl(r);
+  printssl(" ");
+  print(c);
+
+  for (i = 0; i < r; i = i + 1) {
+   for (j = 0; j < c; j = j + 1) {
+     for (k = 0; k < l; k = k + 1) {
+       printsl($m);
+       printssl(" ");
+       m = m.+;
+     }
+   }
+   prints("");
+  }
 }
-
-*/
-
